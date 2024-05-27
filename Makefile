@@ -6,7 +6,7 @@
 #    By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/05/27 11:59:17 by tlassere         ###   ########.fr        #
+#    Updated: 2024/05/27 12:03:38 by tlassere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ OBJS			::= $(SOURCES:.cpp=.o)
 HEADERS			::= headers/
 HEADERS_CONTENT	::= $(HEADERS)$(NAME).hpp 
 CXXFLAGS		::= -Wall -Wextra -Werror -std=c++98
+CXX				::= c++
 
 all: $(NAME)
 
