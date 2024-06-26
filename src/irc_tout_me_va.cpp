@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/27 01:02:33 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/27 01:27:50 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(void)
 	struct sockaddr_in	address;
 
 	int	bclient;
+	int	bopt;
 
 	if (protocol)
 	{
@@ -41,9 +42,12 @@ int	main(void)
 	// SOCK_STREAM permet de creer un flue binaire n
 	socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	std::cout << socket_fd << std::endl;
+	bopt = 1;
 	if (socket_fd != -1)
 	{
-		if (!setsockopt(socket_fd, protocol->p_proto, SO_REUSEADDR | SO_REUSEPORT, NULL, 0))
+		std::cout << "tcp val " << protocol->p_proto << std::endl;
+		std::cout << "socket fd: " << socket_fd << std::endl;
+		if (!setsockopt(socket_fd, protocol->p_proto, SO_REUSEADDR | SO_REUSEPORT, &bopt, sizeof(bopt))) // j'ai un problem avec ca
 		{
 			std::memset(&address, 0, sizeof(address));
 			address.sin_family = AF_INET;
