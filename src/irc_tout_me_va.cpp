@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/28 16:17:05 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/28 18:26:32 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <netinet/tcp.h>
 #include <stdio.h>
+#include <vector>
 
 #define SIZE_QUEUE 100
 
@@ -81,39 +82,72 @@ static int	ft_socket_bind(int const socket_fd)
 	return (status);
 }
 
+static void	ft_add_client(int const socket_fd, std::vector<int>& client)
+{
+	int	new_clien;
+	
+	new_clien = accept(socket_fd, NULL, 0);
+	// a changer car la c'est pour du test
+	if (new_clien != -1)
+	{
+		client.push_back(new_clien);
+		std::cout << "client fd: " << new_clien << std::endl;
+	}
+}
+
+static void	ft_free_client(std::vector<int>& client)
+{
+	std::vector<int>::iterator it;
+
+	it = client.begin();
+	while (it != client.end())
+	{
+		if (*it != -1)
+			close(*it);
+		it++;
+	}
+	client.clear();
+}
+
+static void	ft_get_message(std::vector<int> const& client)
+{
+	bool	stopwhile;
+	char	buffer[10000] = {0};
+	std::vector<int>::const_iterator it;
+
+	it = client.begin();
+	stopwhile = 1;
+	while (it != client.end())
+	{
+		recv(*it, buffer, 10000, MSG_DONTWAIT);
+		//std::cout << "recv: "  << recv(*it, buffer, 10000, 0) << std::endl;
+		send(*it, buffer, 10000, 0);
+		std::cout << buffer;
+		it++;
+	}
+}
+
 int	main(void)
 {
 	int	socket_fd;
+	std::vector<int>	client;
 
-	int	bclient;
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flue binaire n
-	//socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	socket_fd = socket(AF_INET, SOCK_STREAM, 0);
+	socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	//socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socket_fd != -1)
 	{
 		if (ft_setsoket(socket_fd) == SUCCESS
 			&& ft_socket_bind(socket_fd) == SUCCESS)
 		{
-			bclient = accept(socket_fd, NULL, 0);
-			std::cout << "client fd: " << bclient << std::endl;
-
-			bool	stopwhile;
-			stopwhile = 1;
-			while (stopwhile)
+			while (client.size() <= 3)
 			{
-				char	buffer[10000] = {0};
-				//std::cout << "recv: "  << recv(bclient, buffer, 10000, MSG_DONTWAIT) << std::endl;
-				std::cout << "recv: "  << recv(bclient, buffer, 10000, 0) << std::endl;
-				send(bclient, buffer, 10000, 0);
-				if (!std::strcmp(buffer, "stop\n") || buffer[0] == '\0')
-					stopwhile = 0;
-				std::cout << buffer << std::endl;
+				ft_add_client(socket_fd, client);
+				ft_get_message(client);
 			}
-			if (bclient != -1)
-				close(bclient);
-			bclient = 0;
-			std::cout << "biyrisrana =" << std::endl;
+			ft_free_client(client);
+			std::cout << "ah" << std::endl;
 		}
 		close(socket_fd);
 	}
