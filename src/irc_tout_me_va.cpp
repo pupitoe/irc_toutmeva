@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/27 01:27:50 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/28 02:47:32 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <netdb.h>
 #include <cstring>
 #include <errno.h>
+#include <netinet/tcp.h>
 
 #define SIZE_QUEUE 100
 
@@ -47,12 +48,16 @@ int	main(void)
 	{
 		std::cout << "tcp val " << protocol->p_proto << std::endl;
 		std::cout << "socket fd: " << socket_fd << std::endl;
-		if (!setsockopt(socket_fd, protocol->p_proto, SO_REUSEADDR | SO_REUSEPORT, &bopt, sizeof(bopt))) // j'ai un problem avec ca
+		if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &bopt, sizeof(bopt)))
+			std::cout << "nike les adress en wait ah ah" << std::endl;
+		if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &bopt, sizeof(bopt)))
+			std::cout << "nike les port en wait" << std::endl;
+		if (!setsockopt(socket_fd, IPPROTO_TCP, TCP_NODELAY, &bopt, sizeof(bopt)))
 		{
 			std::memset(&address, 0, sizeof(address));
 			address.sin_family = AF_INET;
-			address.sin_port = 6969;
-			address.sin_addr.s_addr = INADDR_LOOPBACK;
+			address.sin_port = htons(6969);
+			address.sin_addr.s_addr = htonl(INADDR_ANY);
 			// pour donner une address et un port a notre socket
 			if (!bind(socket_fd, (struct sockaddr *)&address, sizeof(address)))
 			{
@@ -68,7 +73,10 @@ int	main(void)
 					std::cout << "fail listen" << std::endl;
 			}
 			else
+			{
 				std::cout << "fail to bind" << std::endl;
+				std::cout << "errno -> " << errno << std::endl;
+			}
 		}
 		else
 		{
