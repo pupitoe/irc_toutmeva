@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/28 02:47:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/28 03:27:28 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,18 @@
 int	main(void)
 {
 	int	socket_fd;
-	struct protoent *protocol = getprotobyname("tcp");
 	struct sockaddr_in	address;
 
 	int	bclient;
 	int	bopt;
 
-	if (protocol)
-	{
-		std::cout << protocol->p_name << std::endl;
-		std::cout << protocol->p_proto << std::endl;
-		//std::cout << protocol->p_aliases[1] << std::endl;
-	}
-	else
-		std::cout << "t nul" << std::endl;
-	
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flue binaire n
 	socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	std::cout << socket_fd << std::endl;
+	std::cout << "socket fd: " << socket_fd << std::endl;
 	bopt = 1;
 	if (socket_fd != -1)
 	{
-		std::cout << "tcp val " << protocol->p_proto << std::endl;
-		std::cout << "socket fd: " << socket_fd << std::endl;
 		if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &bopt, sizeof(bopt)))
 			std::cout << "nike les adress en wait ah ah" << std::endl;
 		if (setsockopt(socket_fd, SOL_SOCKET, SO_REUSEPORT, &bopt, sizeof(bopt)))
@@ -56,15 +44,28 @@ int	main(void)
 		{
 			std::memset(&address, 0, sizeof(address));
 			address.sin_family = AF_INET;
-			address.sin_port = htons(6969);
-			address.sin_addr.s_addr = htonl(INADDR_ANY);
+			address.sin_port = htons(6969); // verifier pourquoi faire ca en detail
+			address.sin_addr.s_addr = htonl(INADDR_ANY); // ca aussi ducoup
 			// pour donner une address et un port a notre socket
 			if (!bind(socket_fd, (struct sockaddr *)&address, sizeof(address)))
 			{
 				if (!listen(socket_fd, SIZE_QUEUE))
 				{
 					bclient = accept(socket_fd, NULL, 0);
-					std::cout << bclient << std::endl;
+					std::cout << "client fd: " << bclient << std::endl;
+
+					bool	stopwhile;
+
+					stopwhile = 1;
+					while (stopwhile)
+					{
+						char	buffer[100] = {0};
+						recv(bclient, buffer, 100, 0);
+						send(bclient, buffer, 100, 0);
+						if (!std::strcmp(buffer, "stop\n") || buffer[0] == '\0')
+							stopwhile = 0;
+						std::cout << buffer << std::endl;
+					}
 					if (bclient != -1)
 						close(bclient);
 					bclient = 0;
