@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 00:53:28 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 02:35:05 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 15:04:09 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ void	ft_get_message(std::vector<int>& client)
 				if (FD_ISSET(*it, &rfds))
 				{
 					ft_get_message_recv(*it);
-					//std::cout << "FD_ISSET: " << FD_ISSET(*it, &rfds) << std::endl;
 				}
 				it++;
 			}
