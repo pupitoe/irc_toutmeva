@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 01:12:04 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 01:15:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	handler(int)
 
 int	main(void)
 {
-	int	socket_fd;
+	int					socket_fd;
 	std::vector<int>	client;
 
 	signal(SIGINT, &handler);

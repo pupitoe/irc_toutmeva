@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 00:53:28 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 01:10:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 02:35:05 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,22 +84,66 @@ void	ft_free_client(std::vector<int>& client)
 	client.clear();
 }
 
-void	ft_get_message(std::vector<int> const& client)
+static void	ft_get_message_recv(int const client_fd)
 {
-	bool	stopwhile;
 	int		ret_recv;
-	char	buffer[10000] = {0};
-	std::vector<int>::const_iterator it;
+	char	buffer[1000] = {0};
 
+	ret_recv = recv(client_fd, buffer, 1000, MSG_DONTWAIT);
+	if (ret_recv > 0)
+		send(client_fd, buffer, 1000, 0); // s'il send alors qu'il n'y a pas de connection ca fait tout crash
+	std::cout << buffer;
+}
+
+static int	ft_get_max_fds(std::vector<int> const& client)
+{
+	std::vector<int>::const_iterator	it;
+	int									max_fd;
+	
+	max_fd = -1;
 	it = client.begin();
-	stopwhile = 1;
 	while (it != client.end())
 	{
-		recv(6, buffer, 10000, MSG_DONTWAIT);
-		ret_recv = recv(*it, buffer, 10000, MSG_DONTWAIT);
-		if (ret_recv > 0)
-			send(*it, buffer, 10000, 0); // s'il send alors qu'il n'y a pas de connection ca fait tout crash
-		std::cout << buffer;
+		if (max_fd < *it)
+			max_fd = *it;
 		it++;
+	}
+	max_fd++;
+	return (max_fd);
+}
+
+// pour check si le client est fermer il faut just utiliser recv et check son retour de valeur
+void	ft_get_message(std::vector<int>& client)
+{
+	std::vector<int>::const_iterator	it;
+	int									max_fd;
+	fd_set								rfds;
+	struct timeval						tv;
+	
+	max_fd = ft_get_max_fds(client);
+	it = client.begin();
+	if (max_fd)
+	{
+		tv.tv_sec = 0;
+		tv.tv_usec = 0;
+		FD_ZERO(&rfds);
+		while (it != client.end())
+		{
+			FD_SET(*it, &rfds);
+			it++;
+		}
+		it = client.begin();
+		if (select(max_fd, &rfds, NULL, NULL, &tv) > 0)
+		{
+			while (it != client.end())
+			{
+				if (FD_ISSET(*it, &rfds))
+				{
+					ft_get_message_recv(*it);
+					//std::cout << "FD_ISSET: " << FD_ISSET(*it, &rfds) << std::endl;
+				}
+				it++;
+			}
+		}
 	}
 }
