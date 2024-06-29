@@ -6,14 +6,15 @@
 #    By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/06/12 16:38:36 by tlassere         ###   ########.fr        #
+#    Updated: 2024/06/29 01:10:59 by tlassere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			::= ircserv
 SOURCES_PATH 	::= src/
-SOURCES_MAIN	::= $(SOURCES_PATH)irc_tout_me_va
-SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(buffer).cpp)
+SOURCES_UTIL	::= ft_socket ft_error
+SOURCES_MAIN	::= irc_tout_me_va $(SOURCES_UTIL)
+SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(SOURCES_PATH)$(buffer).cpp)
 OBJS			::= $(SOURCES:.cpp=.o)
 HEADERS			::= header/
 HEADERS_CONTENT	::= $(HEADERS)irc_tout_me_va.hpp 
