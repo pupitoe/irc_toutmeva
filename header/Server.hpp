@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 16:19:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:05:39 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ class	Server
 		
 		void	searchClient(void);
 		void	clientRecv(void);
+		
+		void	eraseClient(void);
 };
 
 #endif

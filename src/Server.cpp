@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 17:59:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:13:27 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,4 +123,24 @@ void	Server::clientRecv(void)
 			}
 		}
 	}
+}
+
+void	Server::eraseClient(void)
+{
+	std::map<int, Client>::iterator	it;
+	std::map<int, Client>::iterator	itNext;
+
+	it = this->_clientList.begin();
+	while (it != this->_clientList.end())
+	{
+		itNext = it;
+		itNext++;
+		if (it->second.getTerminate() == true)
+		{
+			std::cout << "client: " << it->first << "; closed" << std::endl;
+			this->deletClient(it->first);
+		}
+		it = itNext;
+	}
+	
 }
