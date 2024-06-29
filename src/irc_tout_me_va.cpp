@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 01:15:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 16:26:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,27 +28,16 @@ void	handler(int)
 
 int	main(void)
 {
-	int					socket_fd;
-	std::vector<int>	client;
+	Server				server;
 
 	signal(SIGINT, &handler);
-	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
-	// SOCK_STREAM permet de creer un flue binaire n
-	socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	//socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socket_fd != -1)
+	if (server.getStatus() == SUCCESS)
 	{
-		if (ft_setsoket(socket_fd) == SUCCESS
-			&& ft_socket_bind(socket_fd) == SUCCESS)
+		while (!g_exiting)
 		{
-			while (!g_exiting)
-			{
-				ft_add_client(socket_fd, client);
-				ft_get_message(client);
-			}
-			ft_free_client(client);
+			server.searchClient();
+			server.clientRecv();
 		}
-		close(socket_fd);
 	}
 	return (0);
 }

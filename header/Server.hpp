@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 15:39:47 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 16:19:42 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,21 @@
 # include <map>
 # include <utility>
 # include <unistd.h>
+
 # include "Client.hpp"
+# include "irc_tout_me_va.hpp"
+# include "ft_socket.hpp"
 
 class	Server
 {
 	private:
 		fd_set					_rfds;
 		std::map<int, Client>	_clientList;
+		
+		int						_socket_fd;
+		int						_status_server;
+
+		void	clientRecvMessage(int const client_fd, Client& client_content);
 
 	public:
 		Server(void);
@@ -35,6 +43,10 @@ class	Server
 		void	addClient(int const fd);
 		void	deletClient(int const fd);
 		
+		int		getStatus(void) const;
+		
+		void	searchClient(void);
+		void	clientRecv(void);
 };
 
 #endif
