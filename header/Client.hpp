@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   irc_tout_me_va.hpp                                 :+:      :+:    :+:   */
+/*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/27 12:00:34 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 15:43:10 by tlassere         ###   ########.fr       */
+/*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
+/*   Updated: 2024/06/29 15:38:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRCSERV_HPP
-# define IRCSERV_HPP
+#ifndef CLIENT_HPP
+# define CLIENT_HPP
 
-# define SUCCESS 0
-# define FAIL 1
-# include "Server.hpp"
-# include "Client.hpp"
+class	Client
+{
+	private:
+		bool	_terminate_connection;
+
+	public:
+		Client(void);
+		~Client(void);
+		
+		bool	getTerminate(void) const;
+		void	changeTerminate(void);
+};
 
 #endif
