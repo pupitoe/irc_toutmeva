@@ -6,17 +6,17 @@
 #    By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/05/27 12:03:38 by tlassere         ###   ########.fr        #
+#    Updated: 2024/06/12 16:38:36 by tlassere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			::= ircserv
-SOURCES_PATH 	::= sources/
-SOURCES_O		::= $(SOURCES_PATH)$(NAME)
-SOURCES			::= $(foreach buffer, $(SOURCES_O), $(buffer).cpp)
+SOURCES_PATH 	::= src/
+SOURCES_MAIN	::= $(SOURCES_PATH)irc_tout_me_va
+SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(buffer).cpp)
 OBJS			::= $(SOURCES:.cpp=.o)
-HEADERS			::= headers/
-HEADERS_CONTENT	::= $(HEADERS)$(NAME).hpp 
+HEADERS			::= header/
+HEADERS_CONTENT	::= $(HEADERS)irc_tout_me_va.hpp 
 CXXFLAGS		::= -Wall -Wextra -Werror -std=c++98
 CXX				::= c++
 
