@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 16:21:45 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/29 17:33:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,16 @@ void	Server::clientRecv(void)
 	fd_set							buffer_rfds;
 	struct timeval					tv;
 	
-	it = this->_clientList.begin();
 	if (this->_clientList.size() > 0)
 	{
 		tv.tv_sec = 0;
 		tv.tv_usec = 0;
 		buffer_rfds = this->_rfds;
-		if (select((this->_clientList.end() - 1)->first + 1, &buffer_rfds, NULL, NULL, &tv) > 0)
+		it = this->_clientList.end();
+		it--;
+		if (select(it->first + 1, &buffer_rfds, NULL, NULL, &tv) > 0)
 		{
+			it = this->_clientList.begin();
 			while (it != this->_clientList.end())
 			{
 				if (FD_ISSET(it->first, &buffer_rfds))
