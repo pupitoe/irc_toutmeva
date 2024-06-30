@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 21:06:08 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/06/30 22:03:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,6 @@ int	main(int argc, char **argv)
 	
 	Server	server(argv[2], port);
 	
-	
-/*	Server				server;
-
 	signal(SIGINT, &handler);
 	if (server.getStatus() == SUCCESS)
 	{
@@ -61,6 +58,6 @@ int	main(int argc, char **argv)
 			server.clientRecv();
 			server.eraseClient();
 		}
-	}*/
+	}
 	return (0);
 }
