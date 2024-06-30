@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 20:14:48 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/06/30 21:06:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,17 @@ void	handler(int)
 	g_exiting = 1;
 }
 
+bool	is_number(char *str){
+	int	i = 0;
+
+	while (str[i]){
+		if (str[i] < 48 || str[i] > 57)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 int	main(int argc, char **argv)
 {
 	int	port;
@@ -34,9 +45,8 @@ int	main(int argc, char **argv)
 		std::cout << "Usage : ./ircserv <port> <password>" << std::endl;
 		return (0);
 	}
-	port = std::atoi(argv[1]); // Do we have to test the port there ?
+	port = is_number(argv[1]) ? std::atoi(argv[1]) : -1;
 	
-	std::cout << "THE " << port << std::endl;
 	Server	server(argv[2], port);
 	
 	
