@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 19:08:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 19:28:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,19 @@ int		Server::getStatus(void) const
 void	Server::clientRecvMessage(int const client_fd, Client& client_content)
 {
 	int		ret_recv;
-	char	buffer[1000] = {0};
+	char	buffer[SIZE_MESSAGE_BUFFER + 1] = {0};
 
-	ret_recv = recv(client_fd, buffer, 1000, MSG_DONTWAIT);
-	// return the message only if the connection is still open (otherwise it crashes)
-	if (ret_recv > 0)
-		send(client_fd, buffer, 1000, 0);
-	else
-		client_content.terminateConnection();
-	std::cout << buffer;
+	ret_recv = SIZE_MESSAGE_BUFFER;
+	while (ret_recv == SIZE_MESSAGE_BUFFER)
+	{
+		ret_recv = recv(client_fd, buffer, SIZE_MESSAGE_BUFFER, MSG_DONTWAIT);
+		// return the message only if the connection is still open (otherwise it crashes)
+		if (ret_recv > 0)
+			send(client_fd, buffer, std::strlen(buffer), 0);
+		else if (ret_recv == 0)
+			client_content.terminateConnection();
+		std::cout << buffer;
+	}
 }
 
 void	Server::clientRecv(void)

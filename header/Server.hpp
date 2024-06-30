@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 18:47:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 19:28:27 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
 # include "ft_socket.hpp"
+
+# define SIZE_MESSAGE_BUFFER 1024
 
 class	Server
 {
