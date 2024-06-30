@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 17:25:50 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/06/30 20:14:48 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,13 @@ int	main(int argc, char **argv)
 {
 	int	port;
 	
-	if (argc != 3 || argv[1] == NULL){
+	if (argc != 3){
 		std::cout << "Usage : ./ircserv <port> <password>" << std::endl;
 		return (0);
 	}
 	port = std::atoi(argv[1]); // Do we have to test the port there ?
 	
+	std::cout << "THE " << port << std::endl;
 	Server	server(argv[2], port);
 	
 	

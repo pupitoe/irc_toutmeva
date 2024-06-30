@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 17:03:53 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/06/30 20:15:33 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <map>
 # include <utility>
 # include <unistd.h>
+# include <string>
 
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"

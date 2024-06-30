@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 17:18:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/06/30 20:54:26 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,22 @@ Server::Server(void)
 		this->_status_server = SUCCESS;
 }
 
+/*
+* List of available port can be found on wikipedia.
+* We can't use values under 1024 because rights.
+* */ 
+bool	port_is_valid(int p){
+	return (p == 194 || (p >= 6665 && p <= 6669));
+}
+
 Server::Server(char *psw, int port) : _password(psw), _port(port)
 {
 	FD_ZERO(&this->_rfds);
 	this->_status_server = FAIL;
+	if (!port_is_valid(_port)){
+		std::cerr << "Port invalid" << std::endl;
+		return ;
+	}
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
 	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
