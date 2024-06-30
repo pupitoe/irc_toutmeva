@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 18:49:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 19:08:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ void	Server::addClient(int const fd)
 
 void	Server::searchClient(void)
 {
-	int	new_clien;
+	int	new_client;
 	
 	if (this->_status_server == SUCCESS)
 	{
-		new_clien = accept(this->_socket_fd, NULL, 0);
-		if (new_clien != -1)
+		new_client = accept(this->_socket_fd, NULL, 0);
+		if (new_client != -1)
 		{
-			this->addClient(new_clien);
-			std::cout << "client fd: " << new_clien << std::endl;
+			this->addClient(new_client);
+			std::cout << "client fd: " << new_client << std::endl;
 		}
 	}
 }
