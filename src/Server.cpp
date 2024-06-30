@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 19:13:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 17:45:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ fd_set	Server::getFdSet(void) const
 
 Client&	Server::getClient(int const fd)
 {
-	return (this->_clientList[fd]);
+	return (this->_clientList.find(fd)->second);
 }
 
 void	Server::addClient(int const fd)
@@ -53,7 +53,7 @@ void	Server::addClient(int const fd)
 	{
 		// add the new client fd to the table
 		FD_SET(fd, &this->_rfds);
-		this->_clientList.insert(std::pair<int, Client>(fd, Client()));
+		this->_clientList.insert(std::pair<int, Client>(fd, Client(fd)));
 	}
 }
 
@@ -99,7 +99,7 @@ void	Server::clientRecvMessage(int const client_fd, Client& client_content)
 	if (ret_recv > 0)
 		send(client_fd, buffer, 1000, 0);
 	else
-		client_content.changeTerminate();
+		client_content.terminateConnection();
 	std::cout << buffer;
 }
 
@@ -141,12 +141,11 @@ void	Server::eraseClient(void)
 	{
 		itNext = it;
 		itNext++;
-		if (it->second.getTerminate() == true)
+		if (it->second.getStatusClient() == CS_TERMINATED)
 		{
 			std::cout << "client: " << it->first << "; closed" << std::endl;
 			this->deletClient(it->first);
 		}
 		it = itNext;
 	}
-	
 }
