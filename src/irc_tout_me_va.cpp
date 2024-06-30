@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc_tout_me_va.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 18:09:27 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 17:25:50 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,20 @@ void	handler(int)
 	g_exiting = 1;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	Server				server;
+	int	port;
+	
+	if (argc != 3 || argv[1] == NULL){
+		std::cout << "Usage : ./ircserv <port> <password>" << std::endl;
+		return (0);
+	}
+	port = std::atoi(argv[1]); // Do we have to test the port there ?
+	
+	Server	server(argv[2], port);
+	
+	
+/*	Server				server;
 
 	signal(SIGINT, &handler);
 	if (server.getStatus() == SUCCESS)
@@ -39,6 +50,6 @@ int	main(void)
 			server.clientRecv();
 			server.eraseClient();
 		}
-	}
+	}*/
 	return (0);
 }

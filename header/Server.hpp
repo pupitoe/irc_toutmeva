@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 18:05:39 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 17:03:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@
 class	Server
 {
 	private:
+		std::string				_password;
+		int						_port;
+		
 		fd_set					_rfds;
 		std::map<int, Client>	_clientList;
 		
@@ -35,6 +38,7 @@ class	Server
 
 	public:
 		Server(void);
+		Server(char *psw, int port);
 		~Server(void);
 
 		fd_set	getFdSet(void) const;
