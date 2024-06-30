@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 19:08:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 18:47:09 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class	Server
 	private:
 		// the complete fds table
 		fd_set					_rfds;
-		std::map<int, Client>	_clientList;
+		std::map<int, Client *>	_clientList;
 		
 		int						_socket_fd;
 		int						_status_server;
@@ -39,11 +39,11 @@ class	Server
 		~Server(void);
 
 		fd_set	getFdSet(void) const;
-		Client&	getClient(int const fd);
+		Client	*getClient(int const fd);
 
 		void	addClient(int const fd);
 		void	deletClient(int const fd);
-		
+
 		int		getStatus(void) const;
 		
 		void	searchClient(void);

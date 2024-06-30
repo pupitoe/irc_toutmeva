@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 17:45:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 18:49:49 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ Server::Server(void)
 Server::~Server(void)
 {
 	while (this->_clientList.begin() != this->_clientList.end())
-	{
-		close(this->_clientList.begin()->first);
-		this->_clientList.erase(this->_clientList.begin());
-	}
+		this->deletClient(this->_clientList.begin()->first);
 	if (this->_socket_fd != -1)
 		close(_socket_fd);
 }
@@ -41,19 +38,32 @@ fd_set	Server::getFdSet(void) const
 	return (this->_rfds);
 }
 
-Client&	Server::getClient(int const fd)
+Client	*Server::getClient(int const fd)
 {
-	return (this->_clientList.find(fd)->second);
+	Client	*buffer;
+
+	buffer = NULL;
+	if (this->_clientList.find(fd) != this->_clientList.end())
+		buffer = this->_clientList.find(fd)->second;
+	return (buffer);
 }
 
 void	Server::addClient(int const fd)
 {
+	Client	*buffer;
+
 	if (this->_status_server == SUCCESS
 		&& this->_clientList.find(fd) == this->_clientList.end())
 	{
-		// add the new client fd to the table
-		FD_SET(fd, &this->_rfds);
-		this->_clientList.insert(std::pair<int, Client>(fd, Client(fd)));
+		buffer = new (std::nothrow) Client(fd);
+		if (buffer)
+		{
+			// add the new client fd to the table
+			FD_SET(fd, &this->_rfds);
+			this->_clientList.insert(std::pair<int, Client *>(fd, buffer));
+		}
+		else
+			close(fd);
 	}
 }
 
@@ -79,6 +89,7 @@ void	Server::deletClient(int const fd)
 	{
 		// remove the client from the table
 		FD_CLR(fd, &this->_rfds);
+		delete this->_clientList[fd];
 		close(fd);
 		this->_clientList.erase(fd);
 	}
@@ -105,7 +116,7 @@ void	Server::clientRecvMessage(int const client_fd, Client& client_content)
 
 void	Server::clientRecv(void)
 {
-	std::map<int, Client>::iterator	it;
+	std::map<int, Client*>::iterator	it;
 	fd_set							buffer_rfds;
 	struct timeval					tv;
 	
@@ -124,7 +135,7 @@ void	Server::clientRecv(void)
 			{
 				// to check if the requested fd is in the list
 				if (FD_ISSET(it->first, &buffer_rfds))
-					this->clientRecvMessage(it->first, it->second);
+					this->clientRecvMessage(it->first, *it->second);
 				it++;
 			}
 		}
@@ -133,15 +144,15 @@ void	Server::clientRecv(void)
 
 void	Server::eraseClient(void)
 {
-	std::map<int, Client>::iterator	it;
-	std::map<int, Client>::iterator	itNext;
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	itNext;
 
 	it = this->_clientList.begin();
 	while (it != this->_clientList.end())
 	{
 		itNext = it;
 		itNext++;
-		if (it->second.getStatusClient() == CS_TERMINATED)
+		if (it->second->getStatusClient() == CS_TERMINATED)
 		{
 			std::cout << "client: " << it->first << "; closed" << std::endl;
 			this->deletClient(it->first);
