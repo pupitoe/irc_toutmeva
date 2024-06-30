@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 17:47:52 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 21:08:10 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,39 @@ void	Client::setUserFullName(std::string const& str)
 void	Client::setServerName(std::string const& str)
 {
 	this->_serverName = str;
+}
+
+std::string const&	Client::getCommandBuffer(void) const
+{
+	return (this->_bufferCommand);
+}
+
+std::string	Client::getCommand(void)
+{
+	std::string	cmd;
+
+	if (this->getCommandValible())
+	{
+		cmd = this->_bufferCommand.substr(0,
+			this->_bufferCommand.find_first_of('\n'));
+		this->_bufferCommand = this->_bufferCommand.c_str()
+			+ this->_bufferCommand.find_first_of('\n') + 1;
+	}
+	else
+	{
+		cmd = this->_bufferCommand;
+		this->_bufferCommand = "";
+	}
+	return (cmd);
+}
+
+bool	Client::getCommandValible(void)
+{
+	return (this->_bufferCommand.find_first_of('\n')
+		< this->_bufferCommand.length());
+}
+
+void	Client::addCommandBuffer(char const *cmd)
+{
+	this->_bufferCommand += cmd;
 }

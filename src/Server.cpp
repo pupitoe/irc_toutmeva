@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 19:28:18 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 21:08:41 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int		Server::getStatus(void) const
 	return (this->_status_server);
 }
 
-void	Server::clientRecvMessage(int const client_fd, Client& client_content)
+void	Server::clientRecvMessage(int const client_fd, Client& client)
 {
 	int		ret_recv;
 	char	buffer[SIZE_MESSAGE_BUFFER + 1] = {0};
@@ -111,18 +111,23 @@ void	Server::clientRecvMessage(int const client_fd, Client& client_content)
 		ret_recv = recv(client_fd, buffer, SIZE_MESSAGE_BUFFER, MSG_DONTWAIT);
 		// return the message only if the connection is still open (otherwise it crashes)
 		if (ret_recv > 0)
-			send(client_fd, buffer, std::strlen(buffer), 0);
+		{
+			//send(client_fd, buffer, std::strlen(buffer), 0);
+			client.addCommandBuffer(buffer);
+		}
 		else if (ret_recv == 0)
-			client_content.terminateConnection();
-		std::cout << buffer;
+			client.terminateConnection();
+		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
+	while (client.getCommandValible())
+		std::cout << "cmd: " << client.getCommand() << std::endl;
 }
 
 void	Server::clientRecv(void)
 {
 	std::map<int, Client*>::iterator	it;
-	fd_set							buffer_rfds;
-	struct timeval					tv;
+	fd_set								buffer_rfds;
+	struct timeval						tv;
 	
 	if (this->_clientList.size() > 0)
 	{
