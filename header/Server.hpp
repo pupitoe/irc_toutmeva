@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
 /*   Updated: 2024/06/30 21:10:18 by tlassere         ###   ########.fr       */
@@ -17,6 +17,7 @@
 # include <map>
 # include <utility>
 # include <unistd.h>
+# include <string>
 
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
@@ -27,7 +28,10 @@
 class	Server
 {
 	private:
-		// the complete fds table
+		std::string				_password;
+		int						_port;
+    
+    // the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client *>	_clientList;
 		
@@ -38,6 +42,7 @@ class	Server
 
 	public:
 		Server(void);
+		Server(char *psw, int port);
 		~Server(void);
 
 		fd_set	getFdSet(void) const;
