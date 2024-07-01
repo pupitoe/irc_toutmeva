@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/01 17:11:59 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:25:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,6 +207,7 @@ void	Server::useSelect(void)
 
 void	Server::execut(void)
 {
+	this->useSelect();
 	this->searchClient();
 	this->clientRecv();
 	this->eraseClient();
