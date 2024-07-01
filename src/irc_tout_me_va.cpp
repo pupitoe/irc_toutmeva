@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 
-#include "signal.h"
+#include <signal.h>
 
 int	g_exiting = 0;
 
