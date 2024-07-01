@@ -16,6 +16,7 @@ Server::Server(void)
 {
 	_port = 6969;
 	_password = "1234";
+	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
 	this->_status_server = FAIL;
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
@@ -76,6 +77,7 @@ void	Server::addClient(int const fd)
 	if (this->_status_server == SUCCESS
 		&& this->_clientList.find(fd) == this->_clientList.end())
 	{
+		// add the new client fd to the table
 		FD_SET(fd, &this->_rfds);
 		this->_clientList.insert(std::pair<int, Client>(fd, Client()));
 	}
@@ -101,6 +103,7 @@ void	Server::deletClient(int const fd)
 	if ( this->_status_server == SUCCESS
 		&& this->_clientList.find(fd) != this->_clientList.end())
 	{
+		// remove the client from the table
 		FD_CLR(fd, &this->_rfds);
 		close(fd);
 		this->_clientList.erase(fd);
@@ -118,8 +121,9 @@ void	Server::clientRecvMessage(int const client_fd, Client& client_content)
 	char	buffer[1000] = {0};
 
 	ret_recv = recv(client_fd, buffer, 1000, MSG_DONTWAIT);
+	// return the message only if the connection is still open (otherwise it crashes)
 	if (ret_recv > 0)
-		send(client_fd, buffer, 1000, 0); // s'il send alors qu'il n'y a pas de connection ca fait tout crash
+		send(client_fd, buffer, 1000, 0);
 	else
 		client_content.changeTerminate();
 	std::cout << buffer;
@@ -138,11 +142,13 @@ void	Server::clientRecv(void)
 		buffer_rfds = this->_rfds;
 		it = this->_clientList.end();
 		it--;
+		// find out who has communicated
 		if (select(it->first + 1, &buffer_rfds, NULL, NULL, &tv) > 0)
 		{
 			it = this->_clientList.begin();
 			while (it != this->_clientList.end())
 			{
+				// to check if the requested fd is in the list
 				if (FD_ISSET(it->first, &buffer_rfds))
 					this->clientRecvMessage(it->first, it->second);
 				it++;

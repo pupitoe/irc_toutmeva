@@ -28,7 +28,8 @@ class	Server
 	private:
 		std::string				_password;
 		int						_port;
-		
+    
+    // the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client>	_clientList;
 		
