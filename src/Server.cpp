@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 22:01:02 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:44:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,4 +194,11 @@ void	Server::eraseClient(void)
 		}
 		it = itNext;
 	}
+}
+
+void	Server::execut(void)
+{
+	this->searchClient();
+	this->clientRecv();
+	this->eraseClient();
 }

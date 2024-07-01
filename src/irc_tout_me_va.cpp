@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc_tout_me_va.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 22:03:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:44:31 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,7 @@ int	main(int argc, char **argv)
 	if (server.getStatus() == SUCCESS)
 	{
 		while (!g_exiting)
-		{
-			server.searchClient();
-			server.clientRecv();
-			server.eraseClient();
-		}
+			server.execut();
 	}
 	return (0);
 }
