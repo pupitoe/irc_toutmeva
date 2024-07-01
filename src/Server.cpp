@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 19:13:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 22:01:02 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,40 @@
 
 Server::Server(void)
 {
+	_port = 6969;
+	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
 	this->_status_server = FAIL;
-	// to create a communication point (AF_INET is the IPV4 protocol)
-	// SOCK_STREAM creates a binary flue n
+	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
+	// SOCK_STREAM permet de creer un flux binaire n
 	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
 	if (this->_socket_fd != -1 && ft_setsoket(this->_socket_fd) == SUCCESS
-			&& ft_socket_bind(this->_socket_fd) == SUCCESS)
+			&& ft_socket_bind(this->_socket_fd, _port) == SUCCESS)
+		this->_status_server = SUCCESS;
+}
+
+/*
+* List of available port can be found on wikipedia.
+* We can't use values under 1024 because rights.
+* */ 
+bool	port_is_valid(int p) {
+	return (p == 194 || (p >= 6665 && p <= 6669));
+}
+
+Server::Server(char *psw, int port) : _password(psw), _port(port)
+{
+	FD_ZERO(&this->_rfds);
+	this->_status_server = FAIL;
+	if (!port_is_valid(_port)){
+		std::cerr << "Port invalid" << std::endl;
+		return ;
+	}
+	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
+	// SOCK_STREAM permet de creer un flux binaire n
+	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	if (this->_socket_fd != -1 && ft_setsoket(this->_socket_fd) == SUCCESS
+			&& ft_socket_bind(this->_socket_fd, _port) == SUCCESS)
 		this->_status_server = SUCCESS;
 }
 

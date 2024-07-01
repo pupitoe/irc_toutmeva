@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_socket.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 00:53:39 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 17:42:27 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 22:00:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@
 # define SIZE_QUEUE 100
 
 int		ft_setsoket(int const socket_fd);
-int		ft_socket_bind(int const socket_fd);
+int		ft_socket_bind(int const socket_fd, int port);
 
 #endif

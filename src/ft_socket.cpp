@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_socket.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 00:53:28 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 19:10:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/06/30 21:59:54 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_setsoket(int const socket_fd)
 	return (status);
 }
 
-int	ft_socket_bind(int const socket_fd)
+int	ft_socket_bind(int const socket_fd, int port)
 {
 	int					status;
 	struct sockaddr_in	address;
@@ -46,7 +46,7 @@ int	ft_socket_bind(int const socket_fd)
 	status = SUCCESS;
 	std::memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
-	address.sin_port = htons(6969); // verifier pourquoi faire ca en detail htons
+	address.sin_port = htons(port); // verifier pourquoi faire ca en detail htons
 	address.sin_addr.s_addr = htonl(INADDR_ANY); // ca aussi ducoup
 	if (socket_fd != -1)
 	{
