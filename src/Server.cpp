@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/01 16:44:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:11:59 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,27 +152,16 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 void	Server::clientRecv(void)
 {
 	std::map<int, Client*>::iterator	it;
-	fd_set								buffer_rfds;
-	struct timeval						tv;
 	
 	if (this->_clientList.size() > 0)
 	{
-		tv.tv_sec = 0;
-		tv.tv_usec = 0;
-		buffer_rfds = this->_rfds;
-		it = this->_clientList.end();
-		it--;
-		// find out who has communicated
-		if (select(it->first + 1, &buffer_rfds, NULL, NULL, &tv) > 0)
+		it = this->_clientList.begin();
+		while (it != this->_clientList.end())
 		{
-			it = this->_clientList.begin();
-			while (it != this->_clientList.end())
-			{
-				// to check if the requested fd is in the list
-				if (FD_ISSET(it->first, &buffer_rfds))
-					this->clientRecvMessage(it->first, *it->second);
-				it++;
-			}
+			// to check if the requested fd is in the list
+			if (FD_ISSET(it->first, &this->_rfds_read))
+				this->clientRecvMessage(it->first, *it->second);
+			it++;
 		}
 	}
 }
@@ -193,6 +182,26 @@ void	Server::eraseClient(void)
 			this->deletClient(it->first);
 		}
 		it = itNext;
+	}
+}
+
+void	Server::useSelect(void)
+{
+	std::map<int, Client*>::iterator	buffer;
+	struct timeval						tv;
+	
+	if (this->_clientList.size() > 0)
+	{
+		tv.tv_sec = 0;
+		tv.tv_usec = 0;
+		this->_rfds_read = this->_rfds;
+		this->_rfds_write = this->_rfds;
+		this->_rfds_error = this->_rfds;
+		buffer = this->_clientList.end();
+		buffer--;
+		// find out who has communicated
+		select(buffer->first + 1, &this->_rfds_read,
+			&this->_rfds_write, &this->_rfds_error, &tv);
 	}
 }
 
