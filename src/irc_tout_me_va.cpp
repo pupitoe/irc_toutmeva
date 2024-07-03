@@ -6,16 +6,14 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 22:03:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:01:48 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <irc_tout_me_va.hpp>
 #include <ft_error.hpp>
-#include <ft_socket.hpp>
 #include <iostream>
 #include <vector>
-
 #include <signal.h>
 
 int	g_exiting = 0;

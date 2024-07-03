@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc_tout_me_va.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:00:34 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/29 15:43:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:09:29 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 # define SUCCESS 0
 # define FAIL 1
+# include "IRCSocket.hpp"
 # include "Server.hpp"
 # include "Client.hpp"
+# include <cstdlib>
 
 #endif

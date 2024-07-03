@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 22:01:02 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:17:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,8 @@ Server::Server(void)
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
 	this->_status_server = FAIL;
-	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
-	// SOCK_STREAM permet de creer un flux binaire n
-	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (this->_socket_fd != -1 && ft_setsoket(this->_socket_fd) == SUCCESS
-			&& ft_socket_bind(this->_socket_fd, _port) == SUCCESS)
-		this->_status_server = SUCCESS;
+	this->_socket = new IRCSocket(_port);
+	this->_status_server = SUCCESS;
 }
 
 /*
@@ -45,18 +41,15 @@ Server::Server(char *psw, int port) : _password(psw), _port(port)
 	}
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
-	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (this->_socket_fd != -1 && ft_setsoket(this->_socket_fd) == SUCCESS
-			&& ft_socket_bind(this->_socket_fd, _port) == SUCCESS)
-		this->_status_server = SUCCESS;
+	this->_socket = new IRCSocket(_port);
+	this->_status_server = SUCCESS;
 }
 
 Server::~Server(void)
 {
 	while (this->_clientList.begin() != this->_clientList.end())
 		this->deletClient(this->_clientList.begin()->first);
-	if (this->_socket_fd != -1)
-		close(_socket_fd);
+	delete (_socket);
 }
 
 fd_set	Server::getFdSet(void) const
@@ -99,7 +92,7 @@ void	Server::searchClient(void)
 	
 	if (this->_status_server == SUCCESS)
 	{
-		new_client = accept(this->_socket_fd, NULL, 0);
+		new_client = accept(this->_socket->getSocketFd(), NULL, 0);
 		if (new_client != -1)
 		{
 			this->addClient(new_client);

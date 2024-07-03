@@ -6,36 +6,38 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 21:10:18 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:20:13 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-# include <sys/socket.h>
 # include <map>
 # include <utility>
 # include <unistd.h>
 # include <string>
 
+# include "IRCSocket.hpp"
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
-# include "ft_socket.hpp"
 
 # define SIZE_MESSAGE_BUFFER 1024
+
+class IRCSocket;
 
 class	Server
 {
 	private:
 		std::string				_password;
 		int						_port;
+
+		IRCSocket				*_socket;
     
     // the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client *>	_clientList;
 		
-		int						_socket_fd;
 		int						_status_server;
 
 		void	clientRecvMessage(int const client_fd, Client& client);

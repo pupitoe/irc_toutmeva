@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_socket.cpp                                      :+:      :+:    :+:   */
+/*   IRCSocket.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/29 00:53:28 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 21:59:54 by ggiboury         ###   ########.fr       */
+/*   Created: 2024/07/03 15:13:31 by ggiboury          #+#    #+#             */
+/*   Updated: 2024/07/03 17:25:36 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <ft_socket.hpp>
+#include "IRCSocket.hpp"
 
-int	ft_setsoket(int const socket_fd)
-{
+int	ft_setsocket(int const socket_fd) {
 	int	status;
 	int	active_opt;
 
@@ -38,8 +37,7 @@ int	ft_setsoket(int const socket_fd)
 	return (status);
 }
 
-int	ft_socket_bind(int const socket_fd, int port)
-{
+int	ft_socket_bind(int const socket_fd, int port) {
 	int					status;
 	struct sockaddr_in	address;
 
@@ -58,4 +56,28 @@ int	ft_socket_bind(int const socket_fd, int port)
 	}
 	ft_error_print(status);
 	return (status);
+}
+
+IRCSocket::IRCSocket(int port) throw (IRCSocket::SocketFailedToCreate, IRCSocket::SocketPortInvalid) {
+	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+    if (this->_socket_fd == -1 || ft_setsocket(this->_socket_fd) == FAIL
+        || ft_socket_bind(this->_socket_fd, port) == FAIL)
+        throw (IRCSocket::SocketFailedToCreate());
+    ;
+}
+
+IRCSocket::~IRCSocket(void) {
+    close(this->_socket_fd);
+}
+
+int IRCSocket::getSocketFd(void) const {
+    return (_socket_fd);
+}
+
+const char	*IRCSocket::SocketFailedToCreate::what(void) const throw () {
+	return ("Failed to create socket");
+}
+
+const char	*IRCSocket::SocketPortInvalid::what(void) const throw () {
+	return ("Port is invalid");
 }
