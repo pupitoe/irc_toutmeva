@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:41 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/03 17:17:38 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/04 11:40:13 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <exception>
 
 # include "irc_tout_me_va.hpp" // SUCCESS/FAIL VAR
-# include "ft_error.hpp"//fixing dependencies
+# include "ft_error.hpp"
 
 # define SIZE_QUEUE 100
 
@@ -31,17 +31,16 @@ class   IRCSocket{
         IRCSocket(void);
         
     public:
-
-        IRCSocket(int port) throw (IRCSocket::SocketFailedToCreate, IRCSocket::SocketPortInvalid);
+        IRCSocket(int port) throw (IRCSocket::FailedToCreate, IRCSocket::PortInvalid);
         ~IRCSocket(void);
 
         int getSocketFd(void) const;
 
     // Exceptions
-    class SocketFailedToCreate : public std::exception{
+    class FailedToCreate : public std::exception{
         const char  *what(void) const throw();  
     };
-    class SocketPortInvalid : public std::exception{
+    class PortInvalid : public std::exception{
         const char  *what(void) const throw();  
     };
 };

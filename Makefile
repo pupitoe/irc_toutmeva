@@ -6,13 +6,13 @@
 #    By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/07/03 17:05:30 by ggiboury         ###   ########.fr        #
+#    Updated: 2024/07/04 11:42:09 by ggiboury         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			::= ircserv
 SOURCES_PATH 	::= src/
-SOURCES_UTIL	::= ft_error Server Client IRCSocket
+SOURCES_UTIL	::= ft_error IRCSocket Server Client 
 SOURCES_MAIN	::= irc_tout_me_va $(SOURCES_UTIL)
 SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(SOURCES_PATH)$(buffer).cpp)
 OBJS			::= $(SOURCES:.cpp=.o)

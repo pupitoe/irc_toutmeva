@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:31 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/03 17:25:36 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/04 11:20:42 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,21 @@ int	ft_socket_bind(int const socket_fd, int port) {
 	return (status);
 }
 
-IRCSocket::IRCSocket(int port) throw (IRCSocket::SocketFailedToCreate, IRCSocket::SocketPortInvalid) {
+/*
+* List of available port can be found on wikipedia.
+* We can't use values under 1024 because rights.
+* */ 
+bool	port_is_valid(int p) {
+	return (p == 194 || (p >= 6665 && p <= 6669));
+}
+
+IRCSocket::IRCSocket(int port) throw (IRCSocket::FailedToCreate, IRCSocket::PortInvalid) {
+	if (!port_is_valid(port))
+		throw (IRCSocket::PortInvalid());
 	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
     if (this->_socket_fd == -1 || ft_setsocket(this->_socket_fd) == FAIL
         || ft_socket_bind(this->_socket_fd, port) == FAIL)
-        throw (IRCSocket::SocketFailedToCreate());
+        throw (IRCSocket::FailedToCreate());
     ;
 }
 
@@ -74,10 +84,10 @@ int IRCSocket::getSocketFd(void) const {
     return (_socket_fd);
 }
 
-const char	*IRCSocket::SocketFailedToCreate::what(void) const throw () {
+const char	*IRCSocket::FailedToCreate::what(void) const throw () {
 	return ("Failed to create socket");
 }
 
-const char	*IRCSocket::SocketPortInvalid::what(void) const throw () {
+const char	*IRCSocket::PortInvalid::what(void) const throw () {
 	return ("Port is invalid");
 }

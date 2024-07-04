@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/03 17:20:13 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/04 11:42:51 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ class	Server
 {
 	private:
 		std::string				_password;
-		int						_port;
 
-		IRCSocket				*_socket;
+		IRCSocket				_socket;
     
     // the complete fds table
 		fd_set					_rfds;
