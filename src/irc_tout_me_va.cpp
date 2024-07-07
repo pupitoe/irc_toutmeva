@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   irc_tout_me_va.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/03 16:01:48 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:03:41 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <irc_tout_me_va.hpp>
+# include <Server.hpp>
 #include <ft_error.hpp>
 #include <iostream>
 #include <vector>

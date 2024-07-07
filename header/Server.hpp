@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/04 11:42:51 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/04 14:03:26 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,14 @@
 
 # include <map>
 # include <utility>
-# include <unistd.h>
 # include <string>
 
 # include "IRCSocket.hpp"
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
+# include "IRCSocket.hpp"
 
 # define SIZE_MESSAGE_BUFFER 1024
-
-class IRCSocket;
 
 class	Server
 {
