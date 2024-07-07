@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:41 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/04 14:03:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:02:26 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 # define SIZE_QUEUE 100
 
-class   IRCSocket{
+class   IRCSocket {
     private:
 		int _socket_fd;
 
@@ -38,10 +38,11 @@ class   IRCSocket{
         int getSocketFd(void) const;
 
     // Exceptions
-    class FailedToCreate : public std::exception{
+    class FailedToCreate : public std::exception {
         const char  *what(void) const throw();  
     };
-    class PortInvalid : public std::exception{
+
+    class PortInvalid : public std::exception {
         const char  *what(void) const throw();  
     };
 };
