@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/07 18:11:01 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:15:34 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int argc, char **argv)
 {
 	int	port;
 	
-	if (argc != 3){
+	if (argc != 3) {
 		std::cout << "Usage : ./ircserv <port> <password>" << std::endl;
 		return (0);
 	}
