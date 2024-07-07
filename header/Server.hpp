@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/04 14:03:26 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/01 17:03:32 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,26 @@ class	Server
 
 		IRCSocket				_socket;
     
-    // the complete fds table
+		// the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client *>	_clientList;
+
+		fd_set					_rfds_read;
+		fd_set					_rfds_write;
+		fd_set					_rfds_error;
 		
 		int						_status_server;
 
 		void	clientRecvMessage(int const client_fd, Client& client);
+		
+		void	addClient(int const fd);
+		void	deletClient(int const fd);
+
+		void	searchClient(void);
+		void	clientRecv(void);
+		void	eraseClient(void);
+
+		void	useSelect(void);
 
 	public:
 		Server(void);
@@ -47,15 +60,9 @@ class	Server
 		fd_set	getFdSet(void) const;
 		Client	*getClient(int const fd);
 
-		void	addClient(int const fd);
-		void	deletClient(int const fd);
-
 		int		getStatus(void) const;
-		
-		void	searchClient(void);
-		void	clientRecv(void);
-		
-		void	eraseClient(void);
+
+		void	execut(void);
 };
 
 #endif

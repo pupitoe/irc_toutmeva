@@ -52,11 +52,7 @@ int	main(int argc, char **argv)
 	if (server.getStatus() == SUCCESS)
 	{
 		while (!g_exiting)
-		{
-			server.searchClient();
-			server.clientRecv();
-			server.eraseClient();
-		}
+			server.execut();
 	}
 	return (0);
 }
