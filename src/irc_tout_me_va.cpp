@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/04 14:03:41 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:15:34 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,25 @@ int	main(int argc, char **argv)
 {
 	int	port;
 	
-	if (argc != 3){
+	if (argc != 3) {
 		std::cout << "Usage : ./ircserv <port> <password>" << std::endl;
 		return (0);
 	}
 	port = is_number(argv[1]) ? std::atoi(argv[1]) : -1;
-	
-	Server	server(argv[2], port);
-	
-	signal(SIGINT, &handler);
-	if (server.getStatus() == SUCCESS)
+	try
 	{
-		while (!g_exiting)
-			server.execut();
+		Server	server(argv[2], port);
+		
+		signal(SIGINT, &handler);
+		if (server.getStatus() == SUCCESS)
+		{
+			while (!g_exiting)
+				server.execut();
+		}
+		return (0);
 	}
-	return (0);
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 }

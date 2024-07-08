@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:41 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/04 14:03:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:20:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,30 @@
 
 # define SIZE_QUEUE 100
 
-class   IRCSocket{
-    private:
+class   IRCSocket {
+	private:
 		int _socket_fd;
 
-        IRCSocket(void);
-        
-    public:
-        IRCSocket(int port) throw (IRCSocket::FailedToCreate, IRCSocket::PortInvalid);
-        ~IRCSocket(void);
+		IRCSocket(void);
+		
+		int 	ft_setsocket(int const socket_fd);
+		int 	ft_socket_bind(int const socket_fd, int port);
+		bool	port_is_valid(int p);
+	public:
+		IRCSocket(int port) throw (IRCSocket::FailedToCreate,
+			IRCSocket::PortInvalid);
+		~IRCSocket(void);
 
-        int getSocketFd(void) const;
+		int getSocketFd(void) const;
 
-    // Exceptions
-    class FailedToCreate : public std::exception{
-        const char  *what(void) const throw();  
-    };
-    class PortInvalid : public std::exception{
-        const char  *what(void) const throw();  
-    };
+	// Exceptions
+	class FailedToCreate : public std::exception {
+		const char	*what(void) const throw();  
+	};
+
+	class PortInvalid : public std::exception {
+		const char	*what(void) const throw();  
+	};
 };
 
 #endif

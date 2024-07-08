@@ -6,13 +6,13 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/01 17:25:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:09:59 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(void) : _socket(0){
+Server::Server(void) : _socket(0) {
 	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
