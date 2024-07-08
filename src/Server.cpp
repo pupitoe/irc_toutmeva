@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/07 18:09:59 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:39:01 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,11 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.terminateConnection();
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
-	while (client.getCommandValible())
-		std::cout << "cmd: " << client.getCommand() << std::endl;
+	while (client.getCommandValible()){
+		// std::cout << "cmd: " << client.getCommand() << std::endl;
+		// std::cout << "cmd: " << client.getCommand() << std::endl;
+		this->parse(client.getCommand());
+	}
 }
 
 void	Server::clientRecv(void)
@@ -186,5 +189,10 @@ void	Server::execut(void)
 	this->useSelect();
 	this->searchClient();
 	this->clientRecv();
+	// this->sendBack();
 	this->eraseClient();
+}
+
+void	Server::parse(std::string cmd) {
+	
 }

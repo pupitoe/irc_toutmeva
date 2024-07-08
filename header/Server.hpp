@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/01 17:03:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:41:42 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string>
 
 # include "IRCSocket.hpp"
+# include "IRCParser.hpp"
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
 # include "IRCSocket.hpp"
@@ -31,6 +32,8 @@ class	Server
 
 		IRCSocket				_socket;
     
+		IRCParser				_parser;
+		
 		// the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client *>	_clientList;
@@ -63,6 +66,7 @@ class	Server
 		int		getStatus(void) const;
 
 		void	execut(void);
+		void	parse(std::string cmd);
 };
 
 #endif
