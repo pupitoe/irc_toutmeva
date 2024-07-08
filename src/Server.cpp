@@ -6,57 +6,33 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/01 17:25:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/07 18:09:59 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Server.hpp>
+#include "Server.hpp"
 
-Server::Server(void)
-{
-	_port = 6969;
+Server::Server(void) : _socket(0) {
 	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
 	this->_status_server = FAIL;
-	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
-	// SOCK_STREAM permet de creer un flux binaire n
-	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (this->_socket_fd != -1 && ft_setsoket(this->_socket_fd) == SUCCESS
-			&& ft_socket_bind(this->_socket_fd, _port) == SUCCESS)
-		this->_status_server = SUCCESS;
+	this->_status_server = SUCCESS;
 }
 
-/*
-* List of available port can be found on wikipedia.
-* We can't use values under 1024 because rights.
-* */ 
-bool	port_is_valid(int p) {
-	return (p == 194 || (p >= 6665 && p <= 6669));
-}
-
-Server::Server(char *psw, int port) : _password(psw), _port(port)
+Server::Server(char *psw, int port) : _password(psw), _socket(port)
 {
 	FD_ZERO(&this->_rfds);
 	this->_status_server = FAIL;
-	if (!port_is_valid(_port)){
-		std::cerr << "Port invalid" << std::endl;
-		return ;
-	}
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
-	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (this->_socket_fd != -1 && ft_setsoket(this->_socket_fd) == SUCCESS
-			&& ft_socket_bind(this->_socket_fd, _port) == SUCCESS)
-		this->_status_server = SUCCESS;
+	this->_status_server = SUCCESS;
 }
 
 Server::~Server(void)
 {
 	while (this->_clientList.begin() != this->_clientList.end())
 		this->deletClient(this->_clientList.begin()->first);
-	if (this->_socket_fd != -1)
-		close(_socket_fd);
 }
 
 fd_set	Server::getFdSet(void) const
@@ -99,7 +75,7 @@ void	Server::searchClient(void)
 	
 	if (this->_status_server == SUCCESS)
 	{
-		new_client = accept(this->_socket_fd, NULL, 0);
+		new_client = accept(this->_socket.getSocketFd(), NULL, 0);
 		if (new_client != -1)
 		{
 			this->addClient(new_client);
