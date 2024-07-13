@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/08 16:39:01 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/13 20:49:06 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 	}
 	while (client.getCommandValible()){
 		// std::cout << "cmd: " << client.getCommand() << std::endl;
-		// std::cout << "cmd: " << client.getCommand() << std::endl;
+		std::cout << "cmd: " << client.getCommand() << std::endl;
 		this->parse(client.getCommand());
 	}
 }
@@ -194,5 +194,5 @@ void	Server::execut(void)
 }
 
 void	Server::parse(std::string cmd) {
-	
+	(void) cmd;
 }

@@ -1,30 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IRCParser.hpp                                      :+:      :+:    :+:   */
+/*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/08 16:44:30 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 20:15:56 by ggiboury         ###   ########.fr       */
+/*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
+/*   Updated: 2024/07/13 21:13:28 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef IRCPARSER_HPP
-# define IRCPARSER_HPP
+#ifndef COMMAND_HPP
+# define COMMAND_HPP
 
 # include <string>
+# include <exception>
 
-class IRCParser {
+
+enum type {ERR, CONNEXION, CHANNEL};
+
+
+/*
+* Polymorphic class
+* */
+class Command{
 
 	private :
-	
-	public :
-		IRCParser(void);
-		~IRCParser(void);
+		enum type	_type;
+		std::string	_msg;
 
-		bool	commandIsValid(char *str);
-		void	parse(std::string str);
+	public :
+		Command(char *msg) throw (Command::UnrecognizedType);
+		~Command(void);
+
+		enum type getType(void) const;
+		
+		class UnrecognizedType : public std::exception {
+			const char	*what(void) const throw();
+		};
 };
 
 # endif

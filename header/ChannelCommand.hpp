@@ -1,33 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IRCParser.cpp                                      :+:      :+:    :+:   */
+/*   ChannelCommand.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/09 16:02:01 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 20:49:27 by ggiboury         ###   ########.fr       */
+/*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
+/*   Updated: 2024/07/13 21:11:39 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <IRCParser.hpp>
+#ifndef CHANNELCOMMAND_HPP
+# define CHANNELCOMMAND_HPP
 
-IRCParser::IRCParser(void) {
-	
-}
+# include <Command.hpp>
 
-IRCParser::~IRCParser(void) {
-	
-}
+class ChannelCommand : protected Command {
 
+};
 
-bool    IRCParser::commandIsValid(char *str) {
-    if (str == NULL)
-        return (false);
-    return (true);
-}
-
-void    IRCParser::parse(std::string str){
-    // write()
-    (void) str;
-}
+#endif
