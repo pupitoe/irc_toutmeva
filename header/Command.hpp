@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 21:13:28 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/14 16:15:37 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Command{
 		std::string	_msg;
 
 	public :
-		Command(char *msg) throw (Command::UnrecognizedType);
+		Command(std::string msg) throw (Command::UnrecognizedType);
 		~Command(void);
 
 		enum type getType(void) const;
@@ -39,5 +39,7 @@ class Command{
 			const char	*what(void) const throw();
 		};
 };
+
+std::ostream   &operator<<(std::ostream &, Command const &);
 
 # endif
