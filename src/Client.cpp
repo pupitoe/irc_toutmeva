@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 21:08:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:03:03 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ Client::Client(int const client_fd): _client_fd(client_fd)
 	this->_status_connection = CS_NOTHING;
 	std::cout << "client created: " << client_fd << std::endl;
 	(void)this->_client_fd;
+	;
 }
 
+#include <algorithm>
 Client::~Client(void)
 {
+	std::for_each(this->requests.begin(), this->requests.end(), [] (Command *c) {delete c;});
 }
 
 int	Client::getStatusClient(void) const
@@ -92,4 +95,8 @@ bool	Client::getCommandValible(void)
 void	Client::addCommandBuffer(char const *cmd)
 {
 	this->_bufferCommand += cmd;
+}
+
+void	Client::addRequest(Command c){
+		this->requests->add();
 }

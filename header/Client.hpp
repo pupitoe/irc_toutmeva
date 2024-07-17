@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 20:32:33 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:02:58 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
+# include <vector>
 # include <string>
+
+# include <Command.hpp>
 
 enum	CStatus
 {
@@ -38,7 +41,9 @@ class	Client
 		std::string	_serverName;
 
 		std::string	_bufferCommand;
-
+		
+		std::vector<Command*> requests;
+		
 	public:
 		Client(int const client_fd);
 		~Client(void);
@@ -57,6 +62,8 @@ class	Client
 		std::string			getCommand(void);
 		bool				getCommandValible(void);
 		void				addCommandBuffer(char const *cmd);
+
+		void				addRequest(Command c);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/08 16:41:42 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:42:03 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class	Server
 		int		getStatus(void) const;
 
 		void	execut(void);
-		void	parse(std::string cmd);
+		void	parse(std::string cmd, Client &c);
 };
 
 #endif

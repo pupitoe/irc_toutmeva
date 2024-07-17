@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 14:31:53 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 15:42:30 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,13 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.terminateConnection();
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
+	std::cout << "buffer client: " << client.getCommandBuffer() << std::endl;
+	std::string tkt;
 	while (client.getCommandValible()){
 		// std::cout << "cmd: " << client.getCommand() << std::endl;
-		std::cout << "cmd: " << client.getCommand() << std::endl;
-		this->parse(client.getCommand());
+		tkt = client.getCommand();		
+		std::cout << "cmd: " << tkt << std::endl;
+		this->parse(tkt, client);
 	}
 }
 
@@ -195,7 +198,7 @@ void	Server::execut(void)
 
 # include <Command.hpp>
 
-void	Server::parse(std::string cmd) {
+void	Server::parse(std::string cmd, Client &c) {
 	try{
 		Command	test(cmd);
 		std::cout << test << std::endl;	
