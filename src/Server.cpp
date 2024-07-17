@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/14 16:10:19 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:31:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,11 @@ void	Server::execut(void)
 # include <Command.hpp>
 
 void	Server::parse(std::string cmd) {
-	Command	test(cmd);
-
-	std::cout << test << std::endl;
+	try{
+		Command	test(cmd);
+		std::cout << test << std::endl;	
+	}
+	catch (std::exception &e){
+		std::cout << e.what() << std::endl;
+	}
 }

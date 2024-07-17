@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/14 16:15:37 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:18:33 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <exception>
 
 
-enum type {ERR, CONNEXION, CHANNEL};
+enum type {ERR, EMPTY, CONNEXION, CHANNEL};
 
 
 /*

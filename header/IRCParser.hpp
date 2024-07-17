@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 16:44:30 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 20:15:56 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:36:14 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 # define IRCPARSER_HPP
 
 # include <string>
+
+/**
+ * @brief  Transform the message input into cmds executable by the server
+ * @note   
+ * @retval None
+ */
 
 class IRCParser {
 
