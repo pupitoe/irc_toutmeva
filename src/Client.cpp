@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:03:03 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:21:59 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,19 @@ Client::Client(int const client_fd): _client_fd(client_fd)
 	this->_status_connection = CS_NOTHING;
 	std::cout << "client created: " << client_fd << std::endl;
 	(void)this->_client_fd;
-	;
 }
 
-#include <algorithm>
 Client::~Client(void)
 {
-	std::for_each(this->requests.begin(), this->requests.end(), [] (Command *c) {delete c;});
+	std::vector<Command*>::iterator it = this->requests.begin();
+	std::vector<Command*>::iterator ite = this->requests.end();
+	while (it != ite){
+		delete (*it);
+		it++;
+	}
 }
 
-int	Client::getStatusClient(void) const
+int	Client::getStatusClient(void) const 
 {
 	return (this->_status_connection);
 }
@@ -98,5 +101,6 @@ void	Client::addCommandBuffer(char const *cmd)
 }
 
 void	Client::addRequest(Command c){
-		this->requests->add();
+	Command *new_com = new Command(c);
+	this->requests.push_back(new_com);
 }

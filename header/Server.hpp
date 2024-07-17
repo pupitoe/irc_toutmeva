@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 15:42:03 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:23:50 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
 # include "IRCSocket.hpp"
+# include "Command.hpp"
 
 # define SIZE_MESSAGE_BUFFER 1024
 

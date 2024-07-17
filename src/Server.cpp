@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 15:42:30 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:23:09 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,12 +196,11 @@ void	Server::execut(void)
 	this->eraseClient();
 }
 
-# include <Command.hpp>
-
 void	Server::parse(std::string cmd, Client &c) {
 	try{
 		Command	test(cmd);
-		std::cout << test << std::endl;	
+		std::cout << test << std::endl;
+		c.addRequest(cmd);
 	}
 	catch (std::exception &e){
 		std::cout << e.what() << std::endl;

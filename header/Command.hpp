@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/17 14:18:33 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:16:29 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@ class Command{
 
 	public :
 		Command(std::string msg) throw (Command::UnrecognizedType);
+		Command(Command const &);
 		~Command(void);
 
+		std::string	getMsg(void) const;
 		enum type getType(void) const;
 		
 		class UnrecognizedType : public std::exception {

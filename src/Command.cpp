@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/17 14:27:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:30:16 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 #include <iostream>
 
 static enum type guessType(std::string msg) {
-	if (msg.compare(0, 5, "PASS ", 5) == 0 || msg.compare(0, 5, "NICK ") == 0
-		|| msg.compare(0, 5, "USER ") == 0 || msg.compare(0, msg.length(), "CAP LS") == 0)
+	if (msg.compare(0, 5, "PASS ", 5) || msg.compare(0, 5, "NICK ")
+		|| msg.compare(0, 5, "USER ") || msg.compare(0, 4, "CAP "))
 		return (CONNEXION);
-	else if (msg.compare(0, 5, "JOIN ", 5) == 0 || msg.compare(0, 5, "PART  ", 5) == 0
-		|| msg.compare(0, 5, "PART ", 5) == 0 || msg.compare(0, 5, "PART  ", 5) == 0)
+	else if (msg.compare(0, 5, "JOIN ", 5) || msg.compare(0, 5, "PART  ", 5)
+		|| msg.compare(0, 5, "TOPIC ", 6) || msg.compare(0, 5, "NAMES  ", 6)
+		|| msg.compare(0, 5, "LIST ", 5) || msg.compare(0, 5, "INVITE ", 7)
+		|| msg.compare(0, 5, "KICK ", 5))
 		return (CHANNEL);
 	else if (msg.empty())
 		return (EMPTY);
@@ -32,14 +34,22 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType){
 }
 
 
+Command::Command(Command const &ref) : _type(ref.getType()), _msg(ref.getMsg()){
+		
+}
+
 Command::~Command(void){
 
 }
 
+std::string	Command::getMsg(void) const {
+	return (_msg);	
+}
+
+
 enum type   Command::getType(void) const {
 	return (_type);
 }
-
 
 const char  *Command::UnrecognizedType::what(void) const throw() {
 	return ("Type of command received invalid.");
