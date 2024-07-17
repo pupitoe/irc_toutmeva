@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 21:11:39 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:58:23 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 
 # include <Command.hpp>
 
-class ChannelCommand : protected Command {
+class ChannelCommand : public Command {
 
+    public :
+        ChannelCommand(std::string msg);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:19:31 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:48:22 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ class	Client
 		bool				getCommandValible(void);
 		void				addCommandBuffer(char const *cmd);
 
-		void				addRequest(Command c);
+		void				addRequest(Command *c);
 };
 
 #endif

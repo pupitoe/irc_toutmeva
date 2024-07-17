@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 21:11:06 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:01:06 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 # define CONNEXIONCOMMAND_HPP
 
 # include <Command.hpp>
+# include <string>
 
-class ConnexionCommand : protected Command {
+class ConnexionCommand : public Command {
 
+    public :
+        ConnexionCommand(std::string msg);
 };
 
 #endif

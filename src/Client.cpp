@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:21:59 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 16:48:21 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void	Client::addCommandBuffer(char const *cmd)
 	this->_bufferCommand += cmd;
 }
 
-void	Client::addRequest(Command c){
-	Command *new_com = new Command(c);
-	this->requests.push_back(new_com);
+void	Client::addRequest(Command *c){
+	this->requests.push_back(c);
 }

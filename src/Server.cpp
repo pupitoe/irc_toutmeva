@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:23:09 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/17 17:09:26 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,10 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.terminateConnection();
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
-	std::cout << "buffer client: " << client.getCommandBuffer() << std::endl;
 	std::string tkt;
 	while (client.getCommandValible()){
-		// std::cout << "cmd: " << client.getCommand() << std::endl;
 		tkt = client.getCommand();		
-		std::cout << "cmd: " << tkt << std::endl;
+		// std::cout << "cmd: " << tkt << std::endl;
 		this->parse(tkt, client);
 	}
 }
@@ -196,11 +194,34 @@ void	Server::execut(void)
 	this->eraseClient();
 }
 
+static enum type guessType(std::string msg) {
+	if (msg.compare(0, 5, "PASS ", 5) || msg.compare(0, 5, "NICK ")
+		|| msg.compare(0, 5, "USER ") || msg.compare(0, 4, "CAP "))
+		return (CONNEXION);
+	else if (msg.compare(0, 5, "JOIN ", 5) || msg.compare(0, 5, "PART  ", 5)
+		|| msg.compare(0, 5, "TOPIC ", 6) || msg.compare(0, 5, "NAMES  ", 6)
+		|| msg.compare(0, 5, "LIST ", 5) || msg.compare(0, 5, "INVITE ", 7)
+		|| msg.compare(0, 5, "KICK ", 5))
+		return (CHANNEL);
+	else if (msg.empty())
+		return (EMPTY);
+	return (ERR);
+}
+
 void	Server::parse(std::string cmd, Client &c) {
 	try{
-		Command	test(cmd);
-		std::cout << test << std::endl;
-		c.addRequest(cmd);
+		Command	*rqst = NULL;
+		enum type t = guessType(cmd);
+		if (t == ERR)
+			throw (Command::UnrecognizedType());
+		else if (t == CONNEXION){
+			rqst = new ConnexionCommand(cmd);
+		}
+		else if (t == CHANNEL){
+			rqst = new ChannelCommand(cmd);
+		}
+		std::cout << *rqst << std::endl;
+		c.addRequest(rqst);
 	}
 	catch (std::exception &e){
 		std::cout << e.what() << std::endl;
