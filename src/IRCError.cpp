@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/20 15:45:31 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:01:41 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,3 +16,7 @@ IRCError::~IRCError(void) throw() {
     
 }
 
+
+const char    *IRCError::NeedMoreParams::what(void) const throw() {
+    return ("<client> <command> : NotEnough parameters");
+}

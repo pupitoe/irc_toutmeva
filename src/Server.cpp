@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 17:09:26 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/20 18:09:21 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 	std::string tkt;
 	while (client.getCommandValible()){
 		tkt = client.getCommand();		
-		// std::cout << "cmd: " << tkt << std::endl;
+		std::cout << "!cmd: " << tkt << std::endl;
 		this->parse(tkt, client);
 	}
 }
@@ -185,18 +185,37 @@ void	Server::useSelect(void)
 	}
 }
 
+void	Server::parseInput(void) {
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	ite;
+	Client								*client;
+
+	it = this->_clientList.begin();
+	ite = this->_clientList.end();
+	while (it != ite){
+		std::string tkt;
+		client = it->second;
+		while (client->getCommandValible()){
+			tkt = client->getCommand();		
+			std::cout << "!cmd: " << tkt << std::endl;
+			this->parse(tkt, *client);
+		}
+		it++;
+	}
+}
 void	Server::execut(void)
 {
 	this->useSelect();
 	this->searchClient();
 	this->clientRecv();
+	this->parseInput();
 	// this->sendBack();
 	this->eraseClient();
 }
 
 static enum type guessType(std::string msg) {
-	if (msg.compare(0, 5, "PASS ", 5) || msg.compare(0, 5, "NICK ")
-		|| msg.compare(0, 5, "USER ") || msg.compare(0, 4, "CAP "))
+	if (!msg.compare(0, 5, "PASS ", 5)|| !msg.compare(0, 5, "NICK ")
+		|| !msg.compare(0, 5, "USER ") || !msg.compare(0, 4, "CAP "))
 		return (CONNEXION);
 	else if (msg.compare(0, 5, "JOIN ", 5) || msg.compare(0, 5, "PART  ", 5)
 		|| msg.compare(0, 5, "TOPIC ", 6) || msg.compare(0, 5, "NAMES  ", 6)
@@ -212,6 +231,7 @@ void	Server::parse(std::string cmd, Client &c) {
 	try{
 		Command	*rqst = NULL;
 		enum type t = guessType(cmd);
+		std::cout << t << std::endl;
 		if (t == ERR)
 			throw (Command::UnrecognizedType());
 		else if (t == CONNEXION){
@@ -222,6 +242,9 @@ void	Server::parse(std::string cmd, Client &c) {
 		}
 		std::cout << *rqst << std::endl;
 		c.addRequest(rqst);
+	}
+	catch (IRCError &e){ // probleme dans l'execution ici, sous typage obligatoire ??
+		std::cout << "Error a executer" << std::endl << e.what() << std::endl; 
 	}
 	catch (std::exception &e){
 		std::cout << e.what() << std::endl;

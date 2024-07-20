@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/17 17:07:50 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:23:21 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,17 @@
 # include <string>
 # include <exception>
 
-enum type {ERR, EMPTY, CONNEXION, CHANNEL};
-
+enum type {
+	ERR,
+	EMPTY,
+	CONNEXION,
+	CHANNEL
+};
 
 /*
 * Polymorphic class
 * */
-class Command{
+class Command {
 
 	private :
 		enum type	_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut

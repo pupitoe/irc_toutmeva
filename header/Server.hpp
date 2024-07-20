@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/20 15:40:28 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:47:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ class	Server
 
 		void	searchClient(void);
 		void	clientRecv(void);
+		void	parseInput(void);
 		void	eraseClient(void);
 
 		void	useSelect(void);
