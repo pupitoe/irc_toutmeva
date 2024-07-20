@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ConnexionCommand.hpp                               :+:      :+:    :+:   */
+/*   IRCError.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/20 15:44:04 by ggiboury         ###   ########.fr       */
+/*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
+/*   Updated: 2024/07/20 15:45:31 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONNEXIONCOMMAND_HPP
-# define CONNEXIONCOMMAND_HPP
+#include <IRCError.hpp>
 
-# include <Command.hpp>
-# include <IRCError.hpp>
-# include <string>
+IRCError::~IRCError(void) throw() {
+    
+}
 
-class ConnexionCommand : public Command {
-
-    public :
-        ConnexionCommand(std::string msg) throw (IRCError::NeedMoreParams);
-};
-
-#endif

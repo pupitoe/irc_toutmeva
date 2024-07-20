@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:49:02 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/20 15:40:28 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "Command.hpp"
 # include "ConnexionCommand.hpp"
 # include "ChannelCommand.hpp"
+# include "IRCError.hpp"
 
 # define SIZE_MESSAGE_BUFFER 1024
 
