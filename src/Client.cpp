@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:48:21 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:07:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ Client::Client(int const client_fd): _client_fd(client_fd)
 	(void)this->_client_fd;
 }
 
-Client::~Client(void)
-{
-	std::vector<Command*>::iterator it = this->requests.begin();
-	std::vector<Command*>::iterator ite = this->requests.end();
-	while (it != ite){
-		delete (*it);
-		it++;
+Client::~Client(void) {
+	Command	*c;
+	
+	while (this->requests.empty()){
+		c = this->requests.front();
+		this->requests.pop();
+		delete (c);
 	}
 }
 
@@ -100,6 +100,20 @@ void	Client::addCommandBuffer(char const *cmd)
 	this->_bufferCommand += cmd;
 }
 
-void	Client::addRequest(Command *c){
-	this->requests.push_back(c);
+void	Client::addRequest(Command *c) {
+	this->requests.push(c);
+}
+
+bool	Client::hasRequest(void) {
+	return (!this->requests.empty());
+}
+
+Command	*Client::nextRequest(void) {
+	Command *rqst;
+	
+	if (this->requests.empty())
+		return (NULL);
+	rqst = this->requests.front();
+	this->requests.pop();
+	return (rqst);
 }

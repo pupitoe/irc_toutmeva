@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/21 17:38:45 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:22:20 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ Server::Server(void) : _socket(0) {
 	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
-	this->_status_server = FAIL;
 	this->_status_server = SUCCESS;
 }
 
 Server::Server(char *psw, int port) : _password(psw), _socket(port)
 {
 	FD_ZERO(&this->_rfds);
-	this->_status_server = FAIL;
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
 	this->_status_server = SUCCESS;
@@ -209,7 +207,7 @@ void	Server::execut(void)
 	this->searchClient();
 	this->clientRecv();
 	this->parseInput();
-	// this->sendBack();
+	this->executeRequests();
 	this->eraseClient();
 }
 
@@ -252,5 +250,26 @@ void	Server::parse(std::string cmd, Client &c) {
 	}
 	catch (...){
 		std::cout << "Unhandled exception" << std::endl;
+	}
+}
+
+void	Server::executeRequests(void) {
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	ite;
+	Client								*client;
+	Command								*rqst;
+	
+	it = this->_clientList.begin();
+	ite = this->_clientList.end();
+	//Creer une fonction foreach pour les clients ?
+	while (it != ite) {
+		client = it->second;
+		while (client->hasRequest()) {
+			rqst = client->nextRequest();
+			rqst->execute(this);
+			if (true)
+				delete (rqst);
+		}
+		it++;
 	}
 }

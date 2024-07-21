@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/21 17:30:28 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:24:56 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ class ConnexionCommand : public Command {
 
     public :
         ConnexionCommand(std::string msg) throw (IRCError::NeedMoreParams);
+        ~ConnexionCommand(void);
 };
 
 #endif

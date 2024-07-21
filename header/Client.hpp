@@ -6,14 +6,14 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/17 16:48:22 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/21 18:23:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-# include <vector>
+# include <queue>
 # include <string>
 
 # include <Command.hpp>
@@ -27,6 +27,8 @@ enum	CStatus
 	CS_SETPASS = 1 << 3,
 	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER | CS_SETPASS
 };
+
+class Command;
 
 class	Client
 {
@@ -42,7 +44,7 @@ class	Client
 
 		std::string	_bufferCommand;
 		
-		std::vector<Command*> requests;
+		std::queue<Command*> requests;
 		
 	public:
 		Client(int const client_fd);
@@ -64,6 +66,8 @@ class	Client
 		void				addCommandBuffer(char const *cmd);
 
 		void				addRequest(Command *c);
+		bool				hasRequest(void);
+		Command				*nextRequest(void);
 };
 
 #endif
