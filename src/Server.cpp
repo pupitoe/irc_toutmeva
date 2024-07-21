@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/20 18:09:21 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:38:45 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,19 +214,20 @@ void	Server::execut(void)
 }
 
 static enum type guessType(std::string msg) {
-	if (!msg.compare(0, 5, "PASS ", 5)|| !msg.compare(0, 5, "NICK ")
-		|| !msg.compare(0, 5, "USER ") || !msg.compare(0, 4, "CAP "))
+	if (!msg.compare(0, 5, "PASS ", 5)|| !msg.compare(0, 5, "NICK ", 5)
+		|| !msg.compare(0, 5, "USER ", 5) || !msg.compare(0, 4, "CAP ", 4))
 		return (CONNEXION);
-	else if (msg.compare(0, 5, "JOIN ", 5) || msg.compare(0, 5, "PART  ", 5)
-		|| msg.compare(0, 5, "TOPIC ", 6) || msg.compare(0, 5, "NAMES  ", 6)
-		|| msg.compare(0, 5, "LIST ", 5) || msg.compare(0, 5, "INVITE ", 7)
-		|| msg.compare(0, 5, "KICK ", 5))
+	else if (!msg.compare(0, 5, "JOIN ", 5) || !msg.compare(0, 5, "PART ", 5)
+		|| !msg.compare(0, 5, "TOPIC ", 6) || !msg.compare(0, 5, "NAMES  ", 6)
+		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 5, "INVITE ", 7)
+		|| !msg.compare(0, 5, "KICK ", 5))
 		return (CHANNEL);
 	else if (msg.empty())
 		return (EMPTY);
 	return (ERR);
 }
 
+// Maybe I'll vhave to separate the exception handler from the parsing
 void	Server::parse(std::string cmd, Client &c) {
 	try{
 		Command	*rqst = NULL;
@@ -243,10 +244,13 @@ void	Server::parse(std::string cmd, Client &c) {
 		std::cout << *rqst << std::endl;
 		c.addRequest(rqst);
 	}
-	catch (IRCError &e){ // probleme dans l'execution ici, sous typage obligatoire ??
-		std::cout << "Error a executer" << std::endl << e.what() << std::endl; 
+	catch (IRCError::NeedMoreParams &e) {
+		std::cout << e.what() << std::endl;
 	}
 	catch (std::exception &e){
 		std::cout << e.what() << std::endl;
+	}
+	catch (...){
+		std::cout << "Unhandled exception" << std::endl;
 	}
 }

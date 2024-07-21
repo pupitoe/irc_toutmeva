@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/20 15:53:57 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:28:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,21 @@ class IRCError : public std::exception {
 
     public :
         virtual ~IRCError(void) throw(); // Verifier ce que c'est !
+        virtual const char  *what() const throw() = 0;
 
     class NeedMoreParams {
-        const char  *what(void) const throw();
+        public :
+            const char  *what(void) const throw();
     };
     
     class Passwdmismatch {
-        const char  *what(void) const throw();
+        public :
+            const char  *what(void) const throw();
     };
     
     class AlreadyRegistered {
-        const char  *what(void) const throw();
+        public :
+            const char  *what(void) const throw();
     };
 };
 
