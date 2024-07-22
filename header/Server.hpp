@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/21 18:09:35 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:39:09 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <string>
 
 # include "IRCSocket.hpp"
-# include "IRCParser.hpp"
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
 # include "IRCSocket.hpp"
@@ -35,9 +34,7 @@ class	Server
 		std::string				_password;
 
 		IRCSocket				_socket;
-    
-		IRCParser				_parser;
-		
+    		
 		// the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client *>	_clientList;
