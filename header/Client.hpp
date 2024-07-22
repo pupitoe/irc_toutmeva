@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/21 18:23:32 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:18:13 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ enum	CStatus
 	CS_SETPASS = 1 << 3,
 	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER | CS_SETPASS
 };
-
-class Command;
 
 class	Client
 {

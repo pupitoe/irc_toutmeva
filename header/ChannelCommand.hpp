@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/21 18:24:44 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:08:15 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ class ChannelCommand : public Command {
     public :
         ChannelCommand(std::string msg);
         ~ChannelCommand(void);
+
+        int execute(int socket);
 };
 
 #endif

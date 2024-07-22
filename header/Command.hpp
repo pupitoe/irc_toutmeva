@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/21 18:22:47 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:17:59 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include <string>
 # include <exception>
 
-# include <Server.hpp>
-
 enum type {
 	ERR,
 	EMPTY,
@@ -25,7 +23,6 @@ enum type {
 	CHANNEL
 };
 
-class Server;
 /*
 * Polymorphic class
 * */
@@ -33,19 +30,18 @@ class Command {
 
 	private :
 		enum type	_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
-
 	protected :
 		std::string	_msg;
 
 	public :
 		Command(std::string msg) throw (Command::UnrecognizedType);
 		Command(Command const &);
-		virtual ~Command(void) = 0;
+		virtual ~Command(void);
 
 		std::string	getMsg(void) const;
 		enum type getType(void) const;
 
-		virtual int	execute(Server *);
+		virtual int	execute(int socket) = 0;
 		
 		class UnrecognizedType : public std::exception {
 			const char	*what(void) const throw();

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/21 18:22:20 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:17:58 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,7 @@ void	Server::eraseClient(void)
 	}
 }
 
-void	Server::useSelect(void)
-{
+void	Server::useSelect(void) {
 	std::map<int, Client*>::iterator	buffer;
 	struct timeval						tv;
 	
@@ -201,8 +200,8 @@ void	Server::parseInput(void) {
 		it++;
 	}
 }
-void	Server::execut(void)
-{
+
+void	Server::execut(void) {
 	this->useSelect();
 	this->searchClient();
 	this->clientRecv();
@@ -225,7 +224,7 @@ static enum type guessType(std::string msg) {
 	return (ERR);
 }
 
-// Maybe I'll vhave to separate the exception handler from the parsing
+// Maybe I'll have to separate the exception handler from the parsing
 void	Server::parse(std::string cmd, Client &c) {
 	try{
 		Command	*rqst = NULL;
@@ -266,7 +265,7 @@ void	Server::executeRequests(void) {
 		client = it->second;
 		while (client->hasRequest()) {
 			rqst = client->nextRequest();
-			rqst->execute(this);
+			rqst->execute(it->first);
 			if (true)
 				delete (rqst);
 		}

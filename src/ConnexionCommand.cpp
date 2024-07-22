@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/21 17:39:34 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:18:02 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,13 @@ ConnexionCommand::ConnexionCommand(std::string msg)
 	if (!msg.compare(0, 5, "PASS ", 5)){
 		test_password(msg.c_str() + 5);
 	}
+}
+
+ConnexionCommand::~ConnexionCommand(void) {
+	
+}
+
+int	ConnexionCommand::execute(int socket) {
+	(void) socket;
+	return (0);
 }
