@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:27:05 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:56:04 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,6 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.terminateConnection();
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
-	std::string tkt;
-	while (client.getCommandValible()){
-		tkt = client.getCommand();		
-		std::cout << "!cmd: " << tkt << std::endl;
-		this->parse(tkt, client);
-	}
 }
 
 void	Server::clientRecv(void)
@@ -232,22 +226,20 @@ void	Server::parse(std::string cmd, Client &c) {
 		std::cout << t << std::endl;
 		if (t == ERR)
 			throw (Command::UnrecognizedType());
-		else if (t == CONNEXION){
+		else if (t == CONNEXION)
 			rqst = new ConnexionCommand(cmd);
-		}
-		else if (t == CHANNEL){
+		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
-		}
 		std::cout << *rqst << std::endl;
 		c.addRequest(rqst);
 	}
 	catch (IRCError::NeedMoreParams &e) {
 		std::cout << e.what() << std::endl;
 	}
-	catch (std::exception &e){
+	catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
 	}
-	catch (...){
+	catch (...) {
 		std::cout << "Unhandled exception" << std::endl;
 	}
 }
