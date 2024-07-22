@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/06/30 21:08:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:26:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@ Client::Client(int const client_fd): _client_fd(client_fd)
 	(void)this->_client_fd;
 }
 
-Client::~Client(void)
-{
+Client::~Client(void) {
+	Command	*c;
+	
+	while (this->requests.empty()){
+		c = this->requests.front();
+		this->requests.pop();
+		delete (c);
+	}
 }
 
-int	Client::getStatusClient(void) const
+int	Client::getStatusClient(void) const 
 {
 	return (this->_status_connection);
 }
@@ -92,4 +98,22 @@ bool	Client::getCommandValible(void)
 void	Client::addCommandBuffer(char const *cmd)
 {
 	this->_bufferCommand += cmd;
+}
+
+void	Client::addRequest(Command *c) {
+	this->requests.push(c);
+}
+
+bool	Client::hasRequest(void) {
+	return (!this->requests.empty());
+}
+
+Command	*Client::nextRequest(void) {
+	Command *rqst;
+	
+	if (this->requests.empty())
+		return (NULL);
+	rqst = this->requests.front();
+	this->requests.pop();
+	return (rqst);
 }

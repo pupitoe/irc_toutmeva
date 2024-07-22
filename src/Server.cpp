@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/07 18:09:59 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:56:04 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ Server::Server(void) : _socket(0) {
 	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
-	this->_status_server = FAIL;
 	this->_status_server = SUCCESS;
 }
 
 Server::Server(char *psw, int port) : _password(psw), _socket(port)
 {
 	FD_ZERO(&this->_rfds);
-	this->_status_server = FAIL;
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
 	this->_status_server = SUCCESS;
@@ -121,8 +119,6 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.terminateConnection();
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
-	while (client.getCommandValible())
-		std::cout << "cmd: " << client.getCommand() << std::endl;
 }
 
 void	Server::clientRecv(void)
@@ -161,8 +157,7 @@ void	Server::eraseClient(void)
 	}
 }
 
-void	Server::useSelect(void)
-{
+void	Server::useSelect(void) {
 	std::map<int, Client*>::iterator	buffer;
 	struct timeval						tv;
 	
@@ -181,10 +176,91 @@ void	Server::useSelect(void)
 	}
 }
 
-void	Server::execut(void)
-{
+void	Server::parseInput(void) {
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	ite;
+	Client								*client;
+
+	it = this->_clientList.begin();
+	ite = this->_clientList.end();
+	while (it != ite){
+		std::string tkt;
+		client = it->second;
+		while (client->getCommandValible()){
+			tkt = client->getCommand();		
+			std::cout << "!cmd: " << tkt << std::endl;
+			this->parse(tkt, *client);
+		}
+		it++;
+	}
+}
+
+void	Server::execut(void) {
 	this->useSelect();
 	this->searchClient();
 	this->clientRecv();
+	this->parseInput();
+	this->executeRequests();
 	this->eraseClient();
+}
+
+static enum type guessType(std::string msg) {
+	if (!msg.compare(0, 5, "PASS ", 5)|| !msg.compare(0, 5, "NICK ", 5)
+		|| !msg.compare(0, 5, "USER ", 5) || !msg.compare(0, 4, "CAP ", 4))
+		return (CONNEXION);
+	else if (!msg.compare(0, 5, "JOIN ", 5) || !msg.compare(0, 5, "PART ", 5)
+		|| !msg.compare(0, 5, "TOPIC ", 6) || !msg.compare(0, 5, "NAMES  ", 6)
+		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 5, "INVITE ", 7)
+		|| !msg.compare(0, 5, "KICK ", 5))
+		return (CHANNEL);
+	else if (msg.empty())
+		return (EMPTY);
+	return (ERR);
+}
+
+// Maybe I'll have to separate the exception handler from the parsing
+void	Server::parse(std::string cmd, Client &c) {
+	try{
+		Command	*rqst = NULL;
+		enum type t = guessType(cmd);
+		std::cout << t << std::endl;
+		if (t == ERR)
+			throw (Command::UnrecognizedType());
+		else if (t == CONNEXION)
+			rqst = new ConnexionCommand(cmd);
+		else if (t == CHANNEL)
+			rqst = new ChannelCommand(cmd);
+		std::cout << *rqst << std::endl;
+		c.addRequest(rqst);
+	}
+	catch (IRCError::NeedMoreParams &e) {
+		std::cout << e.what() << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
+	catch (...) {
+		std::cout << "Unhandled exception" << std::endl;
+	}
+}
+
+void	Server::executeRequests(void) {
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	ite;
+	Client								*client;
+	Command								*rqst;
+	
+	it = this->_clientList.begin();
+	ite = this->_clientList.end();
+	//Creer une fonction foreach pour les clients ?
+	while (it != ite) {
+		client = it->second;
+		while (client->hasRequest()) {
+			rqst = client->nextRequest();
+			rqst->execute(it->first);
+			if (true)
+				delete (rqst);
+		}
+		it++;
+	}
 }
