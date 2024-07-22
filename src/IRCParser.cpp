@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCParser.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 16:02:01 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/13 20:49:27 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:26:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@ IRCParser::~IRCParser(void) {
 	
 }
 
-
 bool    IRCParser::commandIsValid(char *str) {
     if (str == NULL)
         return (false);
     return (true);
 }
 
-void    IRCParser::parse(std::string str){
+void    IRCParser::parse(std::string str) {
     // write()
     (void) str;
 }
