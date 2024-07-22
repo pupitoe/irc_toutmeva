@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:44:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:57:22 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class	Server
 		std::string				_password;
 
 		IRCSocket				_socket;
-    		
+
 		// the complete fds table
 		fd_set					_rfds;
 		std::map<int, Client *>	_clientList;
@@ -42,7 +42,7 @@ class	Server
 		fd_set					_rfds_read;
 		fd_set					_rfds_write;
 		fd_set					_rfds_error;
-		
+
 		int						_status_server;
 
 		void	clientRecvMessage(int const client_fd, Client& client);
