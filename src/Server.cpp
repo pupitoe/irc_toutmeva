@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/23 22:08:44 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 00:03:27 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ Server::~Server(void)
 {
 	while (this->_clientList.begin() != this->_clientList.end())
 		this->deletClient(this->_clientList.begin()->first);
+	while (this->_channels.begin() != this->_channels.end())
+	{
+		delete (this->_channels.begin()->second);
+		this->_channels.erase(this->_channels.begin());
+		this->deletClient(this->_clientList.begin()->first);
+	}
 }
 
 fd_set	Server::getFdSet(void) const
