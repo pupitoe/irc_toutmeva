@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:41 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/07 18:20:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:13:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <cstring>
 # include <exception>
 # include <unistd.h>
+# include <algorithm>
 
 # include "irc_tout_me_va.hpp" // SUCCESS/FAIL VAR
 # include "ft_error.hpp"

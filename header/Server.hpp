@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:57:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/23 22:11:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include "ConnexionCommand.hpp"
 # include "ChannelCommand.hpp"
 # include "IRCError.hpp"
+# include <Channel.hpp>
 
 # define SIZE_MESSAGE_BUFFER 1024
 
@@ -45,6 +46,8 @@ class	Server
 
 		int						_status_server;
 
+		std::map<std::string, Channel *>	_channels;
+
 		void	clientRecvMessage(int const client_fd, Client& client);
 
 		void	addClient(int const fd);
@@ -58,6 +61,8 @@ class	Server
 
 		void	useSelect(void);
 
+		bool	channelExist(std::string const& channelName) const;
+
 	public:
 		Server(void);
 		Server(char *psw, int port);
@@ -70,6 +75,8 @@ class	Server
 
 		void	execut(void);
 		void	parse(std::string cmd, Client &c);
+		
+		int		join_channel(Client* user_rqts, std::string const& channelName);
 };
 
 #endif
