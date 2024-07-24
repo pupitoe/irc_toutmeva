@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 18:07:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:35:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ static enum type guessType(std::string msg) {
 // Maybe I'll have to separate the exception handler from the parsing
 // elever les new
 void	Server::parse(std::string cmd, Client &c) {
-	try{
+	try {
 		Command	*rqst = NULL;
 		enum type t = guessType(cmd);
 		std::cout << t << std::endl;
@@ -256,6 +256,5 @@ void	Server::executeRequests(Client& client, Command *rqst) {
 		rqst->execute(&client, this->_channels);
 	else
 		rqst->execute(client.getFd());
-
 	delete (rqst);
 }

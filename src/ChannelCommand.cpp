@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 20:13:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:16:28 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	ChannelCommand::join(Client *client,
 	while (i < 100 && getPart(channels_name, i).empty() == 0)
 	{
 		std::cout << getPart(channels_name, i) << " with key: '" << getPart(channels_key, i) << "'"<< std::endl;
+		
 		i++;
 	}
 	(void)channels;
