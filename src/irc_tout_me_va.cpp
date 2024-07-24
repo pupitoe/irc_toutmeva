@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   irc_tout_me_va.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:26:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:46:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ bool	is_number(char *str){
 int	main(int argc, char **argv)
 {
 	int	port;
+	// Remplacer les catch par des nombre a l'instantiation des classes errors
+	try{
+		ConnexionCommand test("PASS 	q\r q q\n	   les amis   		     :test qpwkpqw");
+	}
+	catch(IRCError &e){
+		std::cout << e.what() << std::endl;
+	}
+	return (0);
 	
 	if (argc != 3) {
 		std::cout << "Usage : ./ircserv <port> <password>" << std::endl;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:00:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:44:29 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 class ConnexionCommand : public Command {
 
     public :
-        ConnexionCommand(std::string msg) throw (IRCError::NeedMoreParams);
+        ConnexionCommand(std::string msg) throw (IRCError);
         ~ConnexionCommand(void);
 
         int execute(int socket);

@@ -3,19 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:40:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:49:48 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Command.hpp>
 #include <iostream>
 
-Command::Command(std::string msg) throw (Command::UnrecognizedType) :
+#include <sstream>
+
+Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) :
 	_msg(msg) {
-		this->_type = EMPTY;
+	//parsing
+	if (msg.length() < MESSAGES_LIMIT)
+		throw (IRCError(ERR_INPUTTOOLONG));
+	std::cout << "Debut" <<std::endl;
+	
+	std::stringstream test(msg);
+	std::string word;
+	while (test >> word){
+		std::cout << word << std::endl;
+	}
+	
+	this->_type = EMPTY;
 }
 
 Command::Command(Command const &ref) : _msg(ref.getMsg()),

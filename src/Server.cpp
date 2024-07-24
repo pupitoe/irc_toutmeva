@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 20:35:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:47:34 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ void	Server::parse(std::string cmd, Client &c) {
 		std::cout << *rqst << std::endl;
 		this->executeRequests(c, rqst);
 	}
-	catch (IRCError::NeedMoreParams &e) {
+	catch (IRCError &e) {
 		std::cout << e.what() << std::endl;
 	}
 	catch (std::exception &e) {

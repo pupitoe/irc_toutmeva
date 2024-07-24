@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/22 15:36:45 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:53:59 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,28 @@
 # define IRCERROR_HPP
 
 # include <exception>
+
+# define ERR_INPUTTOOLONG		417
+# define ERR_NEEDMOREPARAMS		461
+
 // Don't forget to see if everything is correctly used.
 class IRCError : public std::exception {
 
-	public :
-		virtual ~IRCError(void) throw();
-		virtual const char  *what() const throw() = 0;
+	private :
+		int	_err;
 
-		class NeedMoreParams {
+		IRCError(void);
+		
+	public :
+		IRCError(int err);
+		~IRCError(void) throw();
+		IRCError(IRCError const &);
+
+		int		getErr(void) const;
+
+		const char  *what(void) const throw();
+
+		/*class NeedMoreParams {
 			public :
 				const char	*what(void) const throw();
 		};
@@ -35,6 +49,11 @@ class IRCError : public std::exception {
 			public :
 				const char	*what(void) const throw();
 		};
+
+		class InputTooLong {
+			public :
+				const char	*what(void) const throw();
+		};*/
 };
 
 #endif
