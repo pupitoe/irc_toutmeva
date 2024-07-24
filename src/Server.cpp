@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 17:06:54 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:07:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,7 @@ static enum type guessType(std::string msg) {
 }
 
 // Maybe I'll have to separate the exception handler from the parsing
+// elever les new
 void	Server::parse(std::string cmd, Client &c) {
 	try{
 		Command	*rqst = NULL;
@@ -251,8 +252,6 @@ void	Server::parse(std::string cmd, Client &c) {
 
 void	Server::executeRequests(Client& client, Command *rqst) {
 	//Creer une fonction foreach pour les clients ?
-	std::cout << "hello word" << std::endl;
-	std::cout << rqst->getType() << std::endl;
 	if (rqst->getType() == CHANNEL)
 		rqst->execute(&client, this->_channels);
 	else

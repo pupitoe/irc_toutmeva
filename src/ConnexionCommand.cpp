@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:38:52 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:08:04 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <iostream>
 
 static void	test_password(const char *str) {
+	std::cout << "test" << std::endl;
 	if (str == NULL || *str == 0){
 		throw (IRCError::NeedMoreParams());
 	}
