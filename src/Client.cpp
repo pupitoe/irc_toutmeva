@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 16:59:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:42:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,18 @@ bool	Client::getCommandValible(void)
 void	Client::addCommandBuffer(char const *cmd)
 {
 	this->_bufferCommand += cmd;
+}
+
+void	Client::addRPLBuffer(std::string const& rpl)
+{
+	this->_bufferRPL += rpl;
+}
+
+std::string	Client::getRPL(void)
+{
+	std::string buffer;
+
+	buffer = this->_bufferRPL;
+	this->_bufferRPL = "";
+	return (buffer);
 }

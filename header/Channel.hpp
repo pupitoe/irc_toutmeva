@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/23 23:51:41 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:23:22 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ enum	retChannel
 	ECHAN_BAD_ALLOC = 2,
 	ECHAN_ALREADY_REGISTERED,
 	ECHAN_NOT_REGISTERED,
+	ERR_NEEDMOREPARAMS,
+	ERR_NOSUCHCHANNEL,
+	ERR_TOOMANYCHANNELS,
+	ERR_BADCHANNELKEY,
+	ERR_BANNEDFROMCHAN,
+	ERR_CHANNELISFULL,
+	ERR_INVITEONLYCHAN,
+	ERR_BADCHANMASK,
+	RPL_TOPIC,
+	RPL_TOPICWHOTIME,
+	RPL_NAMREPLY,
+	RPL_ENDOFNAMES,
 
 
 	GOOD_REGISTER,

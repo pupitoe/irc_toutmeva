@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 20:16:28 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:03:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,41 @@ static std::string getPart(std::string str, size_t pos)
 	return (ret);
 }
 
+int	ChannelCommand::channelFormating(std::string const& name)
+{
+	int	status;
+
+	status = ERR_NOSUCHCHANNEL;
+	if (name.length() > 0 &&  name[0] == '#' && name.find_first_of(' ')
+		> name.length())
+		status = SUCCESS;
+	return (status);
+}
 
 int ChannelCommand::execute(int socket) {
 	(void) socket;
 	return (0);
 }
 
+
+void	ChannelCommand::errorMessage(int error, Client *client)
+{
+	switch (error)
+	{
+	case ERR_NEEDMOREPARAMS:
+		client->addRPLBuffer("<client> <command> :Not enough parameters\n");
+		break;
+	case ERR_NOSUCHCHANNEL:
+		client->addRPLBuffer("<client> <channel> :No such channel\n");
+	default:
+		break;
+	}
+}
+
 int	ChannelCommand::join(Client *client,
 	std::map<std::string, Channel *>& channels, std::stringstream& ss)
 {
+	int			status;
 	size_t		i;
 	std::string	channels_name;
 	std::string	channels_key;
@@ -58,11 +84,15 @@ int	ChannelCommand::join(Client *client,
 	while (i < 100 && getPart(channels_name, i).empty() == 0)
 	{
 		std::cout << getPart(channels_name, i) << " with key: '" << getPart(channels_key, i) << "'"<< std::endl;
-		
+		status = this->channelFormating(getPart(channels_name, i));
+		if (status == SUCCESS)
+			client->addRPLBuffer("holla le tu as rejoin un super serveur\n");
+		this->errorMessage(status, client);
 		i++;
 	}
+	if (channels_name.empty())
+		this->errorMessage(ERR_NEEDMOREPARAMS, client);
 	(void)channels;
-	(void)client;
 	return (0);
 }
 
