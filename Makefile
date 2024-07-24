@@ -6,7 +6,7 @@
 #    By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/07/23 22:34:28 by tlassere         ###   ########.fr        #
+#    Updated: 2024/07/24 22:26:00 by tlassere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(SOURCES_PATH)$(buffer).cpp)
 OBJS			::= $(SOURCES:.cpp=.o)
 HEADERS			::= header/
 HEADERS_CONTENT	::= $(HEADERS)irc_tout_me_va.hpp 
-CXXFLAGS		::= -Wall -Wextra -Werror -std=c++98
+CXXFLAGS		::= -Wall -Wextra -Werror -std=c++98 -g3
 CXX				::= c++
 
 all: $(NAME)

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 21:42:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:22:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ std::string	Client::getRPL(void)
 	std::string buffer;
 
 	buffer = this->_bufferRPL;
-	this->_bufferRPL = "";
+	this->_bufferRPL.clear();
 	return (buffer);
+}
+
+std::string const&	Client::getRPLBuffer(void) const
+{
+	return (this->_bufferRPL);
 }

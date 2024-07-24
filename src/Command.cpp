@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:40:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:39:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,6 @@ const char	*Command::UnrecognizedType::what(void) const throw() {
 };
 
 std::ostream	&operator<<(std::ostream &out, Command const &c) {
-	std::string str = c.getMsg().substr(0, 5);
-	return (out << str);
+	out << c.getMsg().substr(0, 5);
+	return (out);
 }

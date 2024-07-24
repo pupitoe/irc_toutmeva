@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 20:35:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 22:41:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,20 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.addCommandBuffer(buffer);
 		}
 		else if (ret_recv == 0)
+		{
+			//FD_CLR(client_fd, &this->_rfds_read);
 			client.terminateConnection();
+		}
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
+}
+
+void	Server::clientSendMessage(int const client_fd, Client& client)
+{
+	std::string	buffer;
+
+	buffer = client.getRPL();
+	send(client_fd, buffer.c_str(), buffer.length(), 0);
 }
 
 void	Server::clientRecv(void)
@@ -139,6 +150,24 @@ void	Server::clientRecv(void)
 			// to check if the requested fd is in the list
 			if (FD_ISSET(it->first, &this->_rfds_read))
 				this->clientRecvMessage(it->first, *it->second);
+			it++;
+		}
+	}
+}
+
+void	Server::clientSend(void)
+{
+	std::map<int, Client*>::iterator	it;
+	
+	if (this->_clientList.size() > 0)
+	{
+		it = this->_clientList.begin();
+		while (it != this->_clientList.end())
+		{
+			// to check if the requested fd is in the list
+			if (it->second->getRPLBuffer().empty() == false &&
+				FD_ISSET(it->first, &this->_rfds_write))
+				this->clientSendMessage(it->first, *it->second);
 			it++;
 		}
 	}
@@ -196,6 +225,7 @@ void	Server::parseInput(void) {
 			tkt = client->getCommand();		
 			std::cout << "!cmd: " << tkt << std::endl;
 			this->parse(tkt, *client);
+			std::cout << "bijour" << std::endl;
 		}
 		it++;
 	}
@@ -207,6 +237,7 @@ void	Server::execut(void) {
 	this->clientRecv();
 	this->parseInput();
 	this->eraseClient();
+	this->clientSend();
 }
 
 static enum type guessType(std::string msg) {
@@ -236,8 +267,11 @@ void	Server::parse(std::string cmd, Client &c) {
 			rqst = new ConnexionCommand(cmd);
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
-		std::cout << *rqst << std::endl;
-		this->executeRequests(c, rqst);
+		if (rqst)
+		{
+			std::cout << *rqst << std::endl;
+			this->executeRequests(c, rqst);
+		}
 	}
 	catch (IRCError::NeedMoreParams &e) {
 		std::cout << e.what() << std::endl;
