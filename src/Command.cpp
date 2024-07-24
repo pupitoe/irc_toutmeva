@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/22 15:47:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:40:32 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 Command::Command(std::string msg) throw (Command::UnrecognizedType) :
 	_msg(msg) {
-
+		this->_type = EMPTY;
 }
 
-Command::Command(Command const &ref) : _type(ref.getType()),
-	_msg(ref.getMsg()) {
+Command::Command(Command const &ref) : _msg(ref.getMsg()),
+	_type(ref.getType()) {
 
 }
 

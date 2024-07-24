@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:56:04 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:35:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@ Server::~Server(void)
 {
 	while (this->_clientList.begin() != this->_clientList.end())
 		this->deletClient(this->_clientList.begin()->first);
+	while (this->_channels.begin() != this->_channels.end())
+	{
+		delete (this->_channels.begin()->second);
+		this->_channels.erase(this->_channels.begin());
+		this->deletClient(this->_clientList.begin()->first);
+	}
 }
 
 fd_set	Server::getFdSet(void) const
@@ -200,7 +206,6 @@ void	Server::execut(void) {
 	this->searchClient();
 	this->clientRecv();
 	this->parseInput();
-	this->executeRequests();
 	this->eraseClient();
 }
 
@@ -219,8 +224,9 @@ static enum type guessType(std::string msg) {
 }
 
 // Maybe I'll have to separate the exception handler from the parsing
+// elever les new
 void	Server::parse(std::string cmd, Client &c) {
-	try{
+	try {
 		Command	*rqst = NULL;
 		enum type t = guessType(cmd);
 		std::cout << t << std::endl;
@@ -231,7 +237,7 @@ void	Server::parse(std::string cmd, Client &c) {
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
 		std::cout << *rqst << std::endl;
-		c.addRequest(rqst);
+		this->executeRequests(c, rqst);
 	}
 	catch (IRCError::NeedMoreParams &e) {
 		std::cout << e.what() << std::endl;
@@ -244,23 +250,11 @@ void	Server::parse(std::string cmd, Client &c) {
 	}
 }
 
-void	Server::executeRequests(void) {
-	std::map<int, Client*>::iterator	it;
-	std::map<int, Client*>::iterator	ite;
-	Client								*client;
-	Command								*rqst;
-	
-	it = this->_clientList.begin();
-	ite = this->_clientList.end();
+void	Server::executeRequests(Client& client, Command *rqst) {
 	//Creer une fonction foreach pour les clients ?
-	while (it != ite) {
-		client = it->second;
-		while (client->hasRequest()) {
-			rqst = client->nextRequest();
-			rqst->execute(it->first);
-			if (true)
-				delete (rqst);
-		}
-		it++;
-	}
+	if (rqst->getType() == CHANNEL)
+		rqst->execute(&client, this->_channels);
+	else
+		rqst->execute(client.getFd());
+	delete (rqst);
 }

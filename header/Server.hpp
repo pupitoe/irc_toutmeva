@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:57:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:54:07 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
 # include "IRCSocket.hpp"
-# include "Command.hpp"
+# include "IRCError.hpp"
 # include "ConnexionCommand.hpp"
 # include "ChannelCommand.hpp"
-# include "IRCError.hpp"
+# include <Channel.hpp>
 
 # define SIZE_MESSAGE_BUFFER 1024
 
@@ -45,6 +45,8 @@ class	Server
 
 		int						_status_server;
 
+		std::map<std::string, Channel *>	_channels;
+
 		void	clientRecvMessage(int const client_fd, Client& client);
 
 		void	addClient(int const fd);
@@ -53,10 +55,12 @@ class	Server
 		void	searchClient(void);
 		void	clientRecv(void);
 		void	parseInput(void);
-		void	executeRequests(void);
+		void	executeRequests(Client& client, Command *rqst);
 		void	eraseClient(void);
 
 		void	useSelect(void);
+
+		bool	channelExist(std::string const& channelName) const;
 
 	public:
 		Server(void);
@@ -70,6 +74,8 @@ class	Server
 
 		void	execut(void);
 		void	parse(std::string cmd, Client &c);
+		
+		int		join_channel(Client* user_rqts, std::string const& channelName);
 };
 
 #endif

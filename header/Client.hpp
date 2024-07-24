@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/22 15:18:13 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:58:52 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include <queue>
 # include <string>
-
-# include <Command.hpp>
 
 enum	CStatus
 {
@@ -42,13 +40,12 @@ class	Client
 
 		std::string	_bufferCommand;
 		
-		std::queue<Command*> requests;
-		
 	public:
 		Client(int const client_fd);
 		~Client(void);
 		
 		int		getStatusClient(void) const;
+		int		getFd(void) const;
 		void	terminateConnection(void);
 
 		void	setNickName(std::string const& str);
@@ -62,10 +59,6 @@ class	Client
 		std::string			getCommand(void);
 		bool				getCommandValible(void);
 		void				addCommandBuffer(char const *cmd);
-
-		void				addRequest(Command *c);
-		bool				hasRequest(void);
-		Command				*nextRequest(void);
 };
 
 #endif
