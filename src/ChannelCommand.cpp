@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:09:28 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:35:26 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 ChannelCommand::ChannelCommand(std::string msg) : Command(msg) {
 	//TODO Verifier ici les cmmd;
 	this->_type = CHANNEL;
+	std::cout << "channel creation" << std::endl;
 }
 
 ChannelCommand::~ChannelCommand(void) {

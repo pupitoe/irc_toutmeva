@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:01:14 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:38:52 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	test_password(const char *str) {
 
 ConnexionCommand::ConnexionCommand(std::string msg)
 	throw (IRCError::NeedMoreParams) : Command(msg) {
+	this->_type = CONNEXION;
 	if (!msg.compare(0, 5, "PASS ", 5)){
 		test_password(msg.c_str() + 5);
 	}

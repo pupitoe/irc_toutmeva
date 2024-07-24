@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 17:10:06 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:36:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ class Command {
 		virtual ~Command(void);
 
 		std::string	getMsg(void) const;
-		enum type getType(void) const;
+		virtual enum type getType(void) const;
 
 		virtual int	execute(int socket) = 0;
 		virtual int	execute(Client *client,
