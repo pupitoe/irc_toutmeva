@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/22 15:25:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:00:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class ChannelCommand : public Command {
         ~ChannelCommand(void);
 
         int execute(int socket);
+		int	execute(Client *client, std::map<std::string, Channel *>& channels);
 };
 
 #endif

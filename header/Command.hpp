@@ -6,15 +6,20 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/22 15:25:28 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:10:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMAND_HPP
 # define COMMAND_HPP
 
+class Command;
+
 # include <string>
 # include <exception>
+# include <map>
+# include <sstream>
+# include "Channel.hpp"
 
 enum type {
 	ERR,
@@ -28,10 +33,9 @@ enum type {
 * */
 class Command {
 
-	private :
-		enum type	_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
 	protected :
 		std::string	_msg;
+		enum type	_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
 
 	public :
 		Command(std::string msg) throw (Command::UnrecognizedType);
@@ -42,7 +46,9 @@ class Command {
 		enum type getType(void) const;
 
 		virtual int	execute(int socket) = 0;
-		
+		virtual int	execute(Client *client,
+			std::map<std::string, Channel *>& channels) = 0;
+
 		class UnrecognizedType : public std::exception {
 			const char	*what(void) const throw();
 		};

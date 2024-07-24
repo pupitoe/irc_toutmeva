@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/22 15:26:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:01:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,10 @@ ConnexionCommand::~ConnexionCommand(void) {
 
 int	ConnexionCommand::execute(int socket) {
 	(void) socket;
+	return (0);
+}
+
+int	ConnexionCommand::execute(Client *, std::map<std::string, Channel *>&)
+{
 	return (0);
 }

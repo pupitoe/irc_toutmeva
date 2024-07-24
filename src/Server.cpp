@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 00:03:27 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/24 17:06:54 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,6 @@ void	Server::execut(void) {
 	this->searchClient();
 	this->clientRecv();
 	this->parseInput();
-	this->executeRequests();
 	this->eraseClient();
 }
 
@@ -237,7 +236,7 @@ void	Server::parse(std::string cmd, Client &c) {
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
 		std::cout << *rqst << std::endl;
-		c.addRequest(rqst);
+		this->executeRequests(c, rqst);
 	}
 	catch (IRCError::NeedMoreParams &e) {
 		std::cout << e.what() << std::endl;
@@ -250,23 +249,14 @@ void	Server::parse(std::string cmd, Client &c) {
 	}
 }
 
-void	Server::executeRequests(void) {
-	std::map<int, Client*>::iterator	it;
-	std::map<int, Client*>::iterator	ite;
-	Client								*client;
-	Command								*rqst;
-	
-	it = this->_clientList.begin();
-	ite = this->_clientList.end();
+void	Server::executeRequests(Client& client, Command *rqst) {
 	//Creer une fonction foreach pour les clients ?
-	while (it != ite) {
-		client = it->second;
-		while (client->hasRequest()) {
-			rqst = client->nextRequest();
-			rqst->execute(it->first);
-			if (true)
-				delete (rqst);
-		}
-		it++;
-	}
+	std::cout << "hello word" << std::endl;
+	std::cout << rqst->getType() << std::endl;
+	if (rqst->getType() == CHANNEL)
+		rqst->execute(&client, this->_channels);
+	else
+		rqst->execute(client.getFd());
+
+	delete (rqst);
 }
