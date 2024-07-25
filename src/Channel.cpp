@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 17:08:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:47:51 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ int	Channel::join(Client *client_rqst)
 		!= this->_client.end())
 		return (ECHAN_ALREADY_REGISTERED);
 	if (this->_super_user_set == false)
+	{
 		this->_super_user = client_rqst;
+		this->_super_user_set = true;
+	}
 	this->_client.push_back(client_rqst);
 	return (GOOD_REGISTER);
 }

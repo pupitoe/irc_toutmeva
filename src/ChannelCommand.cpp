@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 22:03:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:56:53 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ ChannelCommand::ChannelCommand(std::string msg) : Command(msg) {
 	//TODO Verifier ici les cmmd;
 	this->_type = CHANNEL;
 	std::cout << "channel creation" << std::endl;
+}
+
+int	ChannelCommand::execute(int)
+{
+	return (0);
 }
 
 ChannelCommand::~ChannelCommand(void) {
@@ -50,11 +55,34 @@ int	ChannelCommand::channelFormating(std::string const& name)
 	return (status);
 }
 
-int ChannelCommand::execute(int socket) {
-	(void) socket;
-	return (0);
+bool	ChannelCommand::channelExist(std::string const& channelName,
+	std::map<std::string, Channel *>& channels) const
+{
+	return (channels.find(channelName) != channels.end());
 }
 
+int	ChannelCommand::join_channel(Client* user_rqts,
+	std::string const& channelName, std::map<std::string, Channel *>& channels)
+{
+	int		status;
+	Channel	*buffer;
+
+	status = SUCCESS;
+	if (this->channelExist(channelName, channels) == false)
+	{
+		buffer = new (std::nothrow) Channel(channelName);
+		if (buffer)
+			channels.insert(std::pair<std::string,
+				Channel *>(channelName, buffer));
+		else
+			status = FAIL;
+	}
+	else
+		buffer = channels[channelName];
+	if (status == SUCCESS)
+		status = buffer->join(user_rqts);
+	return (status);
+}
 
 void	ChannelCommand::errorMessage(int error, Client *client)
 {
@@ -77,22 +105,24 @@ int	ChannelCommand::join(Client *client,
 	size_t		i;
 	std::string	channels_name;
 	std::string	channels_key;
+	std::string	buffer_channel_name;
 
 	ss >> channels_name;
 	ss >> channels_key;
 	i = 0;
-	while (i < 100 && getPart(channels_name, i).empty() == 0)
+	buffer_channel_name = getPart(channels_name, i);
+	while (i < 100 && buffer_channel_name.empty() == 0)
 	{
 		std::cout << getPart(channels_name, i) << " with key: '" << getPart(channels_key, i) << "'"<< std::endl;
-		status = this->channelFormating(getPart(channels_name, i));
+		status = this->channelFormating(buffer_channel_name);
 		if (status == SUCCESS)
-			client->addRPLBuffer("holla le tu as rejoin un super serveur\n");
+			status = this->join_channel(client, buffer_channel_name, channels);
 		this->errorMessage(status, client);
 		i++;
+		buffer_channel_name = getPart(channels_name, i);
 	}
 	if (channels_name.empty())
 		this->errorMessage(ERR_NEEDMOREPARAMS, client);
-	(void)channels;
 	return (0);
 }
 

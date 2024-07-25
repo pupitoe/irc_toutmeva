@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 21:23:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:27:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ class	Channel
 		//std::list<Client *>	_operator;
 	
 		std::string			_topic;
-		
+
 	public:
 		Channel(std::string const& str);
 		~Channel(void);
