@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 17:32:19 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 22:26:11 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,14 @@ int	Channel::part(Client *client_rqst)
 	std::list<Client *>::iterator	buffer_op;
 
 	buffer = std::find(this->_client.begin(), this->_client.end(), client_rqst);
-	buffer_op = std::find(this->_operators.begin(), this->_operators.end(), client_rqst);
+	buffer_op = std::find(this->_operators.begin(),
+		this->_operators.end(), client_rqst);
 	if (buffer == this->_client.end())
+	{
+		client_rqst->addRPLBuffer(":442 " + client_rqst->getNickName() +
+			+ " " + this->_name + " :You're not on that channel\n");
 		return (ECHAN_NOT_REGISTERED);
+	}
 	this->_client.erase(buffer);
 	if (buffer_op != this->_operators.end())
 		this->_operators.erase(buffer_op);
@@ -52,7 +57,6 @@ void	Channel::RPL_NAMREPLY(Client *client)
 {
 	std::string						buffer;
 	std::list<Client *>::iterator	it;
-	// <-  :testnet.ergo.chat 353 tom = #poloooooo :@tom
 	buffer = ":353 " + client->getNickName() + " = " + this->_name + " :";
 	it = this->_client.begin();
 	while (it != this->_client.end())
@@ -72,7 +76,6 @@ void	Channel::RPL_NAMREPLY(Client *client)
 void	Channel::RPL_ENDOFNAMES(Client *client)
 {
 	std::string						buffer;
-	//<-  :testnet.ergo.chat 366 tom #poloooooo :End of NAMES list
 	buffer = ":366 " + client->getNickName() + " " + this->_name
 		+ " :End of NAMES list\n";
 	client->addRPLBuffer(buffer);
