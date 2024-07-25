@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 12:27:14 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:49:39 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,15 @@ class	Channel
 {
 	private:
 		std::string const	_name;
-		Client*				_super_user;
+		std::list<Client *>	_operators;
 		std::list<Client *>	_client;
 
 		int					_super_user_set;
-		//std::list<Client *>	_operator;
 	
 		std::string			_topic;
+
+		int	inLst(Client *client);
+		int	inOpLst(Client *client);
 
 	public:
 		Channel(std::string const& str);
