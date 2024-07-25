@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/25 12:14:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:26:31 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 class ChannelCommand : public Command {
 	private:
 		int	join(Client *client, std::map<std::string, Channel *>& channels,
+			std::stringstream& ss);
+		int	part(Client *client, std::map<std::string, Channel *>& channels,
 			std::stringstream& ss);
 		int	channelFormating(std::string const& name);
 		
