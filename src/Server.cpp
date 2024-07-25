@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 22:41:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:17:22 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ Server::Server(void) : _socket(0) {
 	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
+	FD_ZERO(&this->_rfds_error);
+	FD_ZERO(&this->_rfds_read);
+	FD_ZERO(&this->_rfds_write);
 	this->_status_server = SUCCESS;
 }
 

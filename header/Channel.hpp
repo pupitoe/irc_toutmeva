@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 15:49:39 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:52:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ class	Channel
 
 		int	inLst(Client *client);
 		int	inOpLst(Client *client);
+
+		void	RPL_NAMREPLY(Client *client);
+		void	RPL_ENDOFNAMES(Client *client);
 
 	public:
 		Channel(std::string const& str);

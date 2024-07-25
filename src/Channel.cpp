@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 15:57:25 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:32:19 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,36 @@ int	Channel::inOpLst(Client *client)
 		!= this->_operators.end());
 }
 
+void	Channel::RPL_NAMREPLY(Client *client)
+{
+	std::string						buffer;
+	std::list<Client *>::iterator	it;
+	// <-  :testnet.ergo.chat 353 tom = #poloooooo :@tom
+	buffer = ":353 " + client->getNickName() + " = " + this->_name + " :";
+	it = this->_client.begin();
+	while (it != this->_client.end())
+	{
+		if (it != this->_client.end())
+			buffer += " ";
+		if (this->inOpLst(*it))
+			buffer += "@";
+		buffer += client->getNickName();
+			
+		it++;
+	}
+	buffer += "\n";
+	client->addRPLBuffer(buffer);
+}
+
+void	Channel::RPL_ENDOFNAMES(Client *client)
+{
+	std::string						buffer;
+	//<-  :testnet.ergo.chat 366 tom #poloooooo :End of NAMES list
+	buffer = ":366 " + client->getNickName() + " " + this->_name
+		+ " :End of NAMES list\n";
+	client->addRPLBuffer(buffer);
+}
+
 int	Channel::join(Client *client_rqst)
 {
 	if (this->inLst(client_rqst))
@@ -58,5 +88,7 @@ int	Channel::join(Client *client_rqst)
 		this->_super_user_set = true;
 	}
 	this->_client.push_back(client_rqst);
+	this->RPL_NAMREPLY(client_rqst);
+	this->RPL_ENDOFNAMES(client_rqst);
 	return (GOOD_REGISTER);
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 22:22:18 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:57:19 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 Client::Client(int const client_fd): _client_fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
+	this->_nickName = "mielpops/nesquik";
 	std::cout << "client created: " << client_fd << std::endl;
 }
 
@@ -114,4 +115,9 @@ std::string	Client::getRPL(void)
 std::string const&	Client::getRPLBuffer(void) const
 {
 	return (this->_bufferRPL);
+}
+
+std::string const&	Client::getNickName(void) const
+{
+	return (this->_nickName);
 }

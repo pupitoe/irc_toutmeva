@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 22:10:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:43:07 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ class	Client
 		void				addRPLBuffer(std::string const& rpl);
 		std::string const&	getRPLBuffer(void) const;
 		std::string			getRPL(void);
+
+		std::string const&	getNickName(void) const;
 };
 
 #endif
