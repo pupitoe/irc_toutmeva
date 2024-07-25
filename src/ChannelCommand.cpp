@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/25 19:25:34 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:28:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,50 @@ void	ChannelCommand::errorMessage(int error, Client *client)
 	}
 }
 
+int	ChannelCommand::kick_channel(Client* user_rqts,
+	std::string const& channelName, std::string const& userKick,
+	std::string const& comment, std::map<std::string, Channel *>& channels)
+{
+	int		status;
+
+	status = ERR_NOSUCHCHANNEL;
+	if (this->channelExist(channelName, channels) == true)
+		status = channels[channelName]->kick(user_rqts, userKick, comment);
+	return (status);
+}
+
+int	ChannelCommand::kick(Client *client,
+	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+{
+	int			status;
+	size_t		i;
+	std::string	channel;
+	std::string	user_name;
+	std::string	comment;
+	std::string	buffer_user_name;
+
+	ss >> channel;
+	ss >> user_name;
+	ss >> comment;
+	i = 0;
+	buffer_user_name = getPart(user_name, i);
+	while (i < 100 && buffer_user_name.empty() == 0)
+	{
+		std::cout << getPart(user_name, i) << " with key: '"
+			<< getPart(comment, i) << "'"<< std::endl;
+		status = this->channelFormating(buffer_user_name);
+		if (status == SUCCESS)
+			status = this->kick_channel(client, channel, buffer_user_name, comment,
+				channels);
+		this->errorMessage(status, client);
+		i++;
+		buffer_user_name = getPart(user_name, i);
+	}
+	if (user_name.empty())
+		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+	return (0);
+}
+
 int	ChannelCommand::execute(Client *client,
 	std::map<std::string, Channel *>& channels)
 {
@@ -52,5 +96,7 @@ int	ChannelCommand::execute(Client *client,
 		return (this->join(client, channels, ss));
 	if (buffer == "PART")
 		return (this->part(client, channels, ss));
+	if (buffer == "KICK")
+		return (this->kick(client, channels, ss));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 16:52:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:56:15 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ enum	retChannel
 	GOOD_PART
 };
 
+enum	userChannelGrade
+{
+	CH_NO_GRADE = 0,
+	CH_USER,
+	CH_OPERATOR
+};
+
 class	Channel
 {
 	private:
@@ -58,12 +65,16 @@ class	Channel
 		void	RPL_NAMREPLY(Client *client);
 		void	RPL_ENDOFNAMES(Client *client);
 
+		int	userGrade(std::string const& nickName);
+
 	public:
 		Channel(std::string const& str);
 		~Channel(void);
 
 		int	join(Client* client_rqst);
 		int	part(Client* client_rqst);
+		int	kick(Client* client_rqst, std::string const& userKick,
+			std::string const& comment);
 };
 
 #endif

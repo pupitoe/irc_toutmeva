@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 22:26:11 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 00:03:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,48 @@ int	Channel::join(Client *client_rqst)
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
 	return (GOOD_REGISTER);
+}
+
+int	Channel::userGrade(std::string const& nickName)
+{
+	int								grade;
+	std::list<Client *>::iterator	it;
+	std::list<Client *>::iterator	itend;
+
+	grade = CH_NO_GRADE;
+	it = this->_client.begin();
+	itend = this->_client.end();
+	while (it != itend && (*it)->getNickName() != nickName)
+		it++;
+	if (it != itend)
+		grade = CH_USER + this->inOpLst(*it);
+	return (grade);
+}
+
+int	Channel::kick(Client* client_rqst, std::string const& userKick,
+	std::string const& comment)
+{
+	int status;
+
+	status = 1;
+	if (this->inLst(client_rqst))
+	{
+		if (this->userGrade(userKick))
+		{
+			if (this->inOpLst(client_rqst) == CH_OPERATOR)
+			{
+				status = 0;
+				// make kick messages !!!!!!!
+			}
+			else
+				client_rqst->addRPLBuffer("482");
+		}
+		else
+			client_rqst->addRPLBuffer("441");
+
+	}
+	else
+		client_rqst->addRPLBuffer("442");
+	(void)comment;
+	return (status);
 }

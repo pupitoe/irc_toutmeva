@@ -6,13 +6,13 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 19:24:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 22:26:33 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/25 23:17:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ChannelCommand.hpp>
 
-static std::string getPart(std::string str, size_t pos)
+std::string	ChannelCommand::getPart(std::string str, size_t pos)
 {
 	std::string ret;
 	size_t		count;
@@ -84,7 +84,8 @@ int	ChannelCommand::join(Client *client,
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == 0)
 	{
-		std::cout << getPart(channels_name, i) << " with key: '" << getPart(channels_key, i) << "'"<< std::endl;
+		std::cout << getPart(channels_name, i) << " with key: '"
+			<< getPart(channels_key, i) << "'"<< std::endl;
 		status = this->channelFormating(buffer_channel_name);
 		if (status == SUCCESS)
 			status = this->join_channel(client, buffer_channel_name, channels);
@@ -126,11 +127,10 @@ int	ChannelCommand::part_channel(Client* user_rqts,
 {
 	int		status;
 
-	status = FAIL;
+	status = ERR_NOSUCHCHANNEL;
 	if (this->channelExist(channelName, channels) == true)
 		status = channels[channelName]->part(user_rqts);
-	else
-		user_rqts->addRPLBuffer(":403 " + user_rqts->getNickName()
-			+ " " + channelName + " :No such channel\n");
+	//user_rqts->addRPLBuffer(":403 " + user_rqts->getNickName()
+	//	+ " " + channelName + " :No such channel\n");
 	return (status);
 }
