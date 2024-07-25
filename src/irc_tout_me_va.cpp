@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 21:46:53 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/25 09:36:30 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 	int	port;
 	// Remplacer les catch par des nombre a l'instantiation des classes errors
 	try{
-		ConnexionCommand test("PASS 	q\r q q\n	   les amis   		     :test qpwkpqw");
+		ConnexionCommand test("PASS     q   q qw");
 	}
 	catch(IRCError &e){
 		std::cout << e.what() << std::endl;

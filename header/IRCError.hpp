@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 21:53:59 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:00:37 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <exception>
 
+# define ERR_UNKNOWNERROR		400
 # define ERR_INPUTTOOLONG		417
 # define ERR_NEEDMOREPARAMS		461
 
@@ -22,12 +23,13 @@
 class IRCError : public std::exception {
 
 	private :
-		int	_err;
+		int			_err;
+		std::string	_str;
 
 		IRCError(void);
 		
 	public :
-		IRCError(int err);
+		IRCError(int err, std::string str);
 		~IRCError(void) throw();
 		IRCError(IRCError const &);
 

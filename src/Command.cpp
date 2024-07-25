@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 21:49:48 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/25 10:56:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,50 @@
 #include <iostream>
 
 #include <sstream>
+#include <algorithm>
 
+static bool	isCommand(std::string str) {
+	unsigned int	i = 0;
+	std::transform(str.begin(), str.end(), str.begin(), std::toupper);
+	while (str[i]) {
+		if (str[i] < 65 || str[i] > 90)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+/**
+ * Here's the parsing for our IRC:
+ * 	CMD *PARAM
+ * 
+ * The spaces can be 1 or more spaces (character " ")
+ * 
+ * CMD := <letters> | <3 digit number>
+ * 
+ * PARAM := <optional ":"><letters>
+ * 
+ * parsing step :
+ * 1. Ignore first word
+ * 2. For every word after that
+ *	2a. If it begins with ":" , then the rest of msg is final param
+ * 	2b. Else, parse normally.
+ * */
 Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) :
 	_msg(msg) {
-	//parsing
-	if (msg.length() < MESSAGES_LIMIT)
+	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
 	std::cout << "Debut" <<std::endl;
-	
-	std::stringstream test(msg);
+	std::stringstream str(msg);
 	std::string word;
-	while (test >> word){
+
+	str >> word;
+
+	if (!isCommand(word))
+		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
+	while (str >> word){
 		std::cout << word << std::endl;
 	}
-	
 	this->_type = EMPTY;
 }
 
