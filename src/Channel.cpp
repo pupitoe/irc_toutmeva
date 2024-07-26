@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/27 01:32:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:38:17 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,8 +155,8 @@ void	Channel::kickActiv(Client* client_rqst, std::string const& userKick,
 	user = this->getClient(userKick);	
 	if (user)
 	{
-		buffer = ":" + client_rqst->getNickName() + " KICK " + this->_name + " "
-			+ user->getNickName() + " ";
+		buffer = ":" + client_rqst->getNickName() + " KICK "
+			+ this->_name + " " + user->getNickName() + " ";
 		if (comment.empty())
 			buffer += "a moderator kick u sorry\n";
 		else
