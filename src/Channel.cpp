@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:19:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:28:59 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 	status = 1;
 	if (this->inLst(client_rqst))
 	{
-		if (this->userGrade(userKick))
+		if (this->getClient(userKick))
 		{
 			if (this->inOpLst(client_rqst) == CH_OPERATOR)
 			{
@@ -184,13 +184,13 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 				this->kickActiv(client_rqst, userKick, comment);
 			}
 			else
-				client_rqst->addRPLBuffer("482");
+				client_rqst->addRPLBuffer("482\n");
 		}
 		else
-			client_rqst->addRPLBuffer("441");
+			client_rqst->addRPLBuffer("441\n");
 	}
 	else
-		client_rqst->addRPLBuffer("442");
+		client_rqst->addRPLBuffer("442\n");
 	return (status);
 }
 

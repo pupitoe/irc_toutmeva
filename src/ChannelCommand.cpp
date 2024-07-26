@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/26 20:06:04 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:25:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ int	ChannelCommand::kick(Client *client,
 	{
 		std::cout << getPart(user_name, i) << " with key: '"
 			<< getPart(comment, i) << "'"<< std::endl;
-		status = this->channelFormating(buffer_user_name);
+		status = this->channelFormating(channel);
 		if (status == SUCCESS)
-			status = this->kick_channel(client, channel, buffer_user_name, comment,
-				channels);
+			status = this->kick_channel(client, channel, buffer_user_name,
+				comment, channels);
 		this->errorMessage(status, client);
 		i++;
 		buffer_user_name = getPart(user_name, i);
