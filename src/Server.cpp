@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:12:01 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:17:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,8 +259,8 @@ static enum type guessType(std::string msg) {
 		|| !msg.compare(0, 5, "USER ", 5) || !msg.compare(0, 4, "CAP ", 4))
 		return (CONNEXION);
 	else if (!msg.compare(0, 5, "JOIN ", 5) || !msg.compare(0, 5, "PART ", 5)
-		|| !msg.compare(0, 5, "TOPIC ", 6) || !msg.compare(0, 5, "NAMES  ", 6)
-		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 5, "INVITE ", 7)
+		|| !msg.compare(0, 6, "TOPIC ", 6) || !msg.compare(0, 6, "NAMES ", 6)
+		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 7, "INVITE ", 7)
 		|| !msg.compare(0, 5, "KICK ", 5))
 		return (CHANNEL);
 	else if (msg.empty())

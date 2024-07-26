@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/27 01:07:50 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:26:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int	Channel::join(Client *client_rqst)
 	this->_client.push_back(client_rqst);
 	this->sendAll(":" + client_rqst->getNickName() + " JOIN " + this->_name
 		+ "\n");
+	if (this->_topic.empty() == 0)
+		this->topicRPL(client_rqst);
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
 	return (GOOD_REGISTER);
@@ -202,10 +204,29 @@ void	Channel::topicRPL(Client *client_rqst)
 		+ " " + this->_name + " " + this->_topic_usr + "\n");
 }
 
-void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic)
+void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 {
 	std::stringstream	ss;
 	std::string			buffer;
+
+	if (newTopic == ":")
+	{
+		this->_topic_usr.erase();
+		this->_topic.erase();
+	}
+	else
+	{
+		ss << std::time(NULL); 
+		ss >> buffer;
+		this->_topic = newTopic.c_str() + ((newTopic[0] == ':')? 1: 0);
+		this->_topic_usr = client_rqst->getNickName() + " " + buffer + "\n";
+		this->sendAll(":" + client_rqst->getNickName()
+			+ " TOPIC " + this->_name + " " + this->_topic + "\n");
+	}
+}
+
+void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic)
+{
 
 	if (newTopic.empty())
 	{
@@ -216,19 +237,7 @@ void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic)
 			this->topicRPL(client_rqst);
 	}
 	else
-	{
-		if (newTopic == ":")
-			this->_topic.erase();
-		else
-		{
-			ss << std::time(NULL); 
-			ss >> buffer;
-			this->_topic = newTopic.c_str() + ((newTopic[0] == ':')? 1: 0);
-			this->_topic_usr = client_rqst->getNickName() + " " + buffer + "\n";
-			this->sendAll(":" + client_rqst->getNickName()
-				+ " TOPIC " + this->_name + " " + this->_topic + "\n");
-		}
-	}
+		this->topicChange(client_rqst, newTopic);
 }
 
 int	Channel::topic(Client* client_rqst, std::string const& newTopic)
