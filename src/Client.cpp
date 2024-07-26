@@ -6,17 +6,33 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 16:57:19 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:20:16by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 # include <iostream>
 
+unsigned int i = 0; // adelet car jai toujour pas de quoi me co
+
 Client::Client(int const client_fd): _client_fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
-	this->_nickName = "mielpops/nesquik";
+	switch (i++ % 3)
+	{
+	case 0:
+		this->_nickName = "mielpops/nesquik";
+		break;
+	case 1:
+		this->_nickName = "sr";	
+		break;
+	case 2:
+		this->_nickName = "pelo";
+		break;
+	default:
+		this->_nickName = "?????";
+		break;
+	}
 	std::cout << "client created: " << client_fd << std::endl;
 }
 

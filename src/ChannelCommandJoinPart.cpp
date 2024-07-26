@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 19:24:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 19:41:52 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:07:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,6 @@ int	ChannelCommand::channelFormating(std::string const& name)
 	return (status);
 }
 
-bool	ChannelCommand::channelExist(std::string const& channelName,
-	std::map<std::string, Channel *>& channels) const
-{
-	return (channels.find(channelName) != channels.end());
-}
-
 int	ChannelCommand::join_channel(Client* user_rqts,
 	std::string const& channelName, std::map<std::string, Channel *>& channels)
 {
@@ -53,7 +47,7 @@ int	ChannelCommand::join_channel(Client* user_rqts,
 	Channel	*buffer;
 
 	status = SUCCESS;
-	if (this->channelExist(channelName, channels) == false)
+	if (channelExist(channelName, channels) == false)
 	{
 		buffer = new (std::nothrow) Channel(channelName);
 		if (buffer)
@@ -132,10 +126,10 @@ int	ChannelCommand::part_channel(Client* user_rqts,
 	int		status;
 
 	status = ERR_NOSUCHCHANNEL;
-	if (this->channelExist(channelName, channels) == true)
+	if (channelExist(channelName, channels) == true)
 	{
 		status = channels[channelName]->part(user_rqts, reason);
-		this->closeChannel(channelName, channels);
+		closeChannel(channelName, channels);
 	}
 	//user_rqts->addRPLBuffer(":403 " + user_rqts->getNickName()
 	//	+ " " + channelName + " :No such channel\n");

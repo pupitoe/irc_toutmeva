@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/26 19:37:45 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:04:51 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ class ChannelCommand : public Command {
 		int	channelFormating(std::string const& name);
 		
 		void	errorMessage(int error, Client *);
-		bool	channelExist(std::string const& channelName,
-			std::map<std::string, Channel *>& channels) const;
 
 		int	join_channel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels);
@@ -43,9 +41,6 @@ class ChannelCommand : public Command {
 			std::string const& userKick, std::string const& comment,
 			std::map<std::string, Channel *>& channels);
 		std::string getPart(std::string str, size_t pos);
-
-		void	closeChannel(std::string const& channelName,
-			std::map<std::string, Channel *>& channels);
 
     public :
         ChannelCommand(std::string msg);

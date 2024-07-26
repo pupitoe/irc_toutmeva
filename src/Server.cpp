@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 17:17:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:12:01 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,20 @@ void	Server::searchClient(void)
 
 void	Server::deletClient(int const fd)
 {
+	std::map<std::string, Channel *>::iterator	it_channel;
+	std::map<std::string, Channel *>::iterator	it_old_channel;
+
 	if ( this->_status_server == SUCCESS
 		&& this->_clientList.find(fd) != this->_clientList.end())
 	{
+		it_channel = this->_channels.begin();
+		while (it_channel != this->_channels.end())
+		{
+			it_old_channel = it_channel;
+			it_channel++;
+			it_old_channel->second->part(this->_clientList[fd], "");
+			closeChannel(it_old_channel->first, this->_channels);
+		}
 		// remove the client from the table
 		FD_CLR(fd, &this->_rfds);
 		delete this->_clientList[fd];

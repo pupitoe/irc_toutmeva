@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 19:34:50 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:19:32 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	Channel::RPL_NAMREPLY(Client *client)
 {
 	std::string						buffer;
 	std::list<Client *>::iterator	it;
+
 	buffer = ":353 " + client->getNickName() + " = " + this->_name + " :";
 	it = this->_client.begin();
 	while (it != this->_client.end())
@@ -67,8 +68,7 @@ void	Channel::RPL_NAMREPLY(Client *client)
 			buffer += " ";
 		if (this->inOpLst(*it))
 			buffer += "@";
-		buffer += client->getNickName();
-			
+		buffer += (*it)->getNickName();
 		it++;
 	}
 	buffer += "\n";
@@ -197,4 +197,21 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 size_t	Channel::countClient(void) const
 {
 	return (this->_client.size());
+}
+
+bool	channelExist(std::string const& channelName,
+	std::map<std::string, Channel *>& channels)
+{
+	return (channels.find(channelName) != channels.end());
+}
+
+void	closeChannel(std::string const& channelName,
+	std::map<std::string, Channel *>& channels)
+{
+	if (channelExist(channelName, channels)
+		&& channels[channelName]->countClient() == 0)
+	{
+		delete channels[channelName];
+		channels.erase(channelName);
+	}
 }

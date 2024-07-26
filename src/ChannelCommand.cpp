@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/26 19:41:33 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:06:04 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ int	ChannelCommand::kick_channel(Client* user_rqts,
 	int		status;
 
 	status = ERR_NOSUCHCHANNEL;
-	if (this->channelExist(channelName, channels) == true)
+	if (channelExist(channelName, channels) == true)
 	{
 		status = channels[channelName]->kick(user_rqts, userKick, comment);
-		this->closeChannel(channelName, channels);
+		closeChannel(channelName, channels);
 	}
 	return (status);
 }
@@ -86,17 +86,6 @@ int	ChannelCommand::kick(Client *client,
 	if (user_name.empty())
 		this->errorMessage(ERR_NEEDMOREPARAMS, client);
 	return (0);
-}
-
-void	ChannelCommand::closeChannel(std::string const& channelName,
-	std::map<std::string, Channel *>& channels)
-{
-	if (this->channelExist(channelName, channels)
-		&& channels[channelName]->countClient() == 0)
-	{
-		delete channels[channelName];
-		channels.erase(channelName);
-	}
 }
 
 int	ChannelCommand::execute(Client *client,
