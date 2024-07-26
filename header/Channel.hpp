@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 23:56:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 18:53:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,12 @@ class	Channel
 		void	RPL_ENDOFNAMES(Client *client);
 
 		int	userGrade(std::string const& nickName);
+
+		void	kickActiv(Client* client_rqst, std::string const& userKick,
+			std::string const& comment);
+
+		Client	*getClient(std::string const& nickName);
+		void	sendAll(std::string const& msg);
 
 	public:
 		Channel(std::string const& str);

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 00:03:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:18:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,24 @@ Channel::~Channel(void)
 {
 }
 
+// add reson
 int	Channel::part(Client *client_rqst)
 {
 	std::list<Client *>::iterator	buffer;
-	std::list<Client *>::iterator	buffer_op;
 
 	buffer = std::find(this->_client.begin(), this->_client.end(), client_rqst);
-	buffer_op = std::find(this->_operators.begin(),
-		this->_operators.end(), client_rqst);
 	if (buffer == this->_client.end())
 	{
 		client_rqst->addRPLBuffer(":442 " + client_rqst->getNickName() +
 			+ " " + this->_name + " :You're not on that channel\n");
 		return (ECHAN_NOT_REGISTERED);
 	}
+	this->sendAll(client_rqst->getNickName() + " PART " + this->_name + "\n");
 	this->_client.erase(buffer);
-	if (buffer_op != this->_operators.end())
-		this->_operators.erase(buffer_op);
+	buffer = std::find(this->_operators.begin(),
+		this->_operators.end(), client_rqst);
+	if (buffer != this->_operators.end())
+		this->_operators.erase(buffer);
 	return (GOOD_PART);
 }
 
@@ -98,18 +99,69 @@ int	Channel::join(Client *client_rqst)
 
 int	Channel::userGrade(std::string const& nickName)
 {
-	int								grade;
-	std::list<Client *>::iterator	it;
-	std::list<Client *>::iterator	itend;
+	int		grade;
+	Client	*buffer;
 
 	grade = CH_NO_GRADE;
+	buffer = this->getClient(nickName);
+	if (buffer)
+		grade = CH_USER + this->inOpLst(buffer);
+	return (grade);
+}
+
+Client	*Channel::getClient(std::string const& nickName)
+{
+	std::list<Client *>::iterator	it;
+	std::list<Client *>::iterator	itend;
+	Client							*buffer;
+
 	it = this->_client.begin();
 	itend = this->_client.end();
 	while (it != itend && (*it)->getNickName() != nickName)
 		it++;
-	if (it != itend)
-		grade = CH_USER + this->inOpLst(*it);
-	return (grade);
+	if (it == itend)
+		buffer = NULL;
+	else
+		buffer = *it;
+	return (buffer);
+}
+
+void	Channel::sendAll(std::string const& msg)
+{
+	std::list<Client *>::iterator	it;
+	std::list<Client *>::iterator	itend;
+
+	it = this->_client.begin();
+	itend = this->_client.end();
+	while (it != itend)
+	{
+		(*it)->addRPLBuffer(msg);
+		it++;
+	}
+}
+
+void	Channel::kickActiv(Client* client_rqst, std::string const& userKick,
+	std::string const& comment)
+{
+	std::string	buffer;
+	Client		*user;
+
+	user = this->getClient(userKick);	
+	if (user)
+	{
+		buffer = client_rqst->getNickName() + " KICK " + this->_name + " "
+			+ user->getNickName() + " ";
+		if (comment.empty())
+			buffer += "a moderator kick u sorry\n";
+		else
+			buffer += comment + "\n";
+		this->sendAll(buffer);
+		this->_client.erase(std::find(this->_client.begin(),
+			this->_client.end(), user));
+		if (this->inOpLst(user))
+			this->_operators.erase(std::find(this->_operators.begin(),
+				this->_operators.end(), user));
+	}
 }
 
 int	Channel::kick(Client* client_rqst, std::string const& userKick,
@@ -125,17 +177,15 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 			if (this->inOpLst(client_rqst) == CH_OPERATOR)
 			{
 				status = 0;
-				// make kick messages !!!!!!!
+				this->kickActiv(client_rqst, userKick, comment);
 			}
 			else
 				client_rqst->addRPLBuffer("482");
 		}
 		else
 			client_rqst->addRPLBuffer("441");
-
 	}
 	else
 		client_rqst->addRPLBuffer("442");
-	(void)comment;
 	return (status);
 }
