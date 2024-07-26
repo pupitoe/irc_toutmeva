@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 19:24:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 23:17:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:41:52 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,17 @@ int	ChannelCommand::part(Client *client,
 	size_t		i;
 	std::string	channels_name;
 	std::string	buffer_channel_name;
+	std::string	reason;
 
 	ss >> channels_name;
+	ss >> reason;
 	i = 0;
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == 0)
 	{
 		std::cout << getPart(channels_name, i) << std::endl;
-		status = this->part_channel(client, buffer_channel_name, channels);
+		status = this->part_channel(client, buffer_channel_name, channels,
+			reason);
 		this->errorMessage(status, client);
 		i++;
 		buffer_channel_name = getPart(channels_name, i);
@@ -123,13 +126,17 @@ int	ChannelCommand::part(Client *client,
 }
 
 int	ChannelCommand::part_channel(Client* user_rqts,
-	std::string const& channelName, std::map<std::string, Channel *>& channels)
+	std::string const& channelName, std::map<std::string, Channel *>& channels,
+	std::string const& reason)
 {
 	int		status;
 
 	status = ERR_NOSUCHCHANNEL;
 	if (this->channelExist(channelName, channels) == true)
-		status = channels[channelName]->part(user_rqts);
+	{
+		status = channels[channelName]->part(user_rqts, reason);
+		this->closeChannel(channelName, channels);
+	}
 	//user_rqts->addRPLBuffer(":403 " + user_rqts->getNickName()
 	//	+ " " + channelName + " :No such channel\n");
 	return (status);

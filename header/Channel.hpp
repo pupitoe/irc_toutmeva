@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 18:53:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:33:44 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,10 @@ class	Channel
 		~Channel(void);
 
 		int	join(Client* client_rqst);
-		int	part(Client* client_rqst);
+		int	part(Client* client_rqst, std::string const& reason);
 		int	kick(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
+		size_t	countClient(void) const;
 };
 
 #endif

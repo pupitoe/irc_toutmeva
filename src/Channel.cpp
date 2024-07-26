@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 19:18:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 19:34:50 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Channel::~Channel(void)
 }
 
 // add reson
-int	Channel::part(Client *client_rqst)
+int	Channel::part(Client *client_rqst, std::string const& reason)
 {
 	std::list<Client *>::iterator	buffer;
 
@@ -33,7 +33,8 @@ int	Channel::part(Client *client_rqst)
 			+ " " + this->_name + " :You're not on that channel\n");
 		return (ECHAN_NOT_REGISTERED);
 	}
-	this->sendAll(client_rqst->getNickName() + " PART " + this->_name + "\n");
+	this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name +
+		((reason.empty())? "": " " + reason) + "\n");
 	this->_client.erase(buffer);
 	buffer = std::find(this->_operators.begin(),
 		this->_operators.end(), client_rqst);
@@ -76,7 +77,8 @@ void	Channel::RPL_NAMREPLY(Client *client)
 
 void	Channel::RPL_ENDOFNAMES(Client *client)
 {
-	std::string						buffer;
+	std::string	buffer;
+
 	buffer = ":366 " + client->getNickName() + " " + this->_name
 		+ " :End of NAMES list\n";
 	client->addRPLBuffer(buffer);
@@ -92,6 +94,8 @@ int	Channel::join(Client *client_rqst)
 		this->_super_user_set = true;
 	}
 	this->_client.push_back(client_rqst);
+	this->sendAll(":" + client_rqst->getNickName() + " JOIN " + this->_name
+		+ "\n");
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
 	return (GOOD_REGISTER);
@@ -149,7 +153,7 @@ void	Channel::kickActiv(Client* client_rqst, std::string const& userKick,
 	user = this->getClient(userKick);	
 	if (user)
 	{
-		buffer = client_rqst->getNickName() + " KICK " + this->_name + " "
+		buffer = ":" + client_rqst->getNickName() + " KICK " + this->_name + " "
 			+ user->getNickName() + " ";
 		if (comment.empty())
 			buffer += "a moderator kick u sorry\n";
@@ -188,4 +192,9 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 	else
 		client_rqst->addRPLBuffer("442");
 	return (status);
+}
+
+size_t	Channel::countClient(void) const
+{
+	return (this->_client.size());
 }
