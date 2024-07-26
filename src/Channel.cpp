@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/27 01:26:18 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:32:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,7 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 		ss << std::time(NULL); 
 		ss >> buffer;
 		this->_topic = newTopic.c_str() + ((newTopic[0] == ':')? 1: 0);
-		this->_topic_usr = client_rqst->getNickName() + " " + buffer + "\n";
+		this->_topic_usr = client_rqst->getNickName() + " " + buffer;
 		this->sendAll(":" + client_rqst->getNickName()
 			+ " TOPIC " + this->_name + " " + this->_topic + "\n");
 	}
