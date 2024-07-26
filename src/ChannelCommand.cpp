@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/26 20:25:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 00:10:05 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,38 @@ int	ChannelCommand::kick(Client *client,
 		this->errorMessage(ERR_NEEDMOREPARAMS, client);
 	return (0);
 }
+
+int	ChannelCommand::topic_channel(Client* user_rqts,
+	std::string const& channelName, std::string const& newTopic,
+	std::map<std::string, Channel *>& channels)
+{
+	int		status;
+
+	status = ERR_NOSUCHCHANNEL;
+	if (channelExist(channelName, channels) == true)
+		status = channels[channelName]->topic(user_rqts, newTopic);
+	return (status);
+}
+
+int	ChannelCommand::topic(Client *client,
+	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+{
+	int			status;
+	std::string	channelName;
+	std::string	newTopic;
+
+	ss >> channelName;
+	ss >> newTopic;
+	status = this->channelFormating(channelName);
+	if (status == SUCCESS)
+		status = this->topic_channel(client, channelName, newTopic, channels);
+	this->errorMessage(status, client);
+	if (channelName.empty())
+		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+	return (0);
+}
+
+
 
 int	ChannelCommand::execute(Client *client,
 	std::map<std::string, Channel *>& channels)

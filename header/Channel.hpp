@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:07:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:08:34 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <string>
 # include <algorithm>
 # include <map>
+# include <ctime>
+# include <sstream>
 
 enum	retChannel
 {
@@ -58,6 +60,7 @@ class	Channel
 
 		int					_super_user_set;
 	
+		std::string			_topic_usr;
 		std::string			_topic;
 
 		int	inLst(Client *client);
@@ -74,6 +77,9 @@ class	Channel
 		Client	*getClient(std::string const& nickName);
 		void	sendAll(std::string const& msg);
 
+		void	topicActiv(Client* client_rqst, std::string const& newTopic);
+		void	topicRPL(Client *client_rqst);
+
 	public:
 		Channel(std::string const& str);
 		~Channel(void);
@@ -82,6 +88,9 @@ class	Channel
 		int	part(Client* client_rqst, std::string const& reason);
 		int	kick(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
+
+		int	topic(Client* client_rqst, std::string const& newTopic);
+
 		size_t	countClient(void) const;
 };
 
@@ -89,4 +98,5 @@ void	closeChannel(std::string const& channelName,
 	std::map<std::string, Channel *>& channels);
 bool	channelExist(std::string const& channelName,
 	std::map<std::string, Channel *>& channels);
+
 #endif

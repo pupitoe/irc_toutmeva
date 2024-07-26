@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:28:59 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:07:50 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 	{
 		if (this->getClient(userKick))
 		{
-			if (this->inOpLst(client_rqst) == CH_OPERATOR)
+			if (this->inOpLst(client_rqst))
 			{
 				status = 0;
 				this->kickActiv(client_rqst, userKick, comment);
@@ -188,6 +188,63 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 		}
 		else
 			client_rqst->addRPLBuffer("441\n");
+	}
+	else
+		client_rqst->addRPLBuffer("442\n");
+	return (status);
+}
+
+void	Channel::topicRPL(Client *client_rqst)
+{
+	client_rqst->addRPLBuffer(":332 " + client_rqst->getNickName()
+		+ " " + this->_name + " " + this->_topic + "\n");
+	client_rqst->addRPLBuffer(":333 " + client_rqst->getNickName()
+		+ " " + this->_name + " " + this->_topic_usr + "\n");
+}
+
+void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic)
+{
+	std::stringstream	ss;
+	std::string			buffer;
+
+	if (newTopic.empty())
+	{
+		if (this->_topic.empty())
+			client_rqst->addRPLBuffer(":331 " + client_rqst->getNickName()
+				+ " " + this->_name + " :No topic is set\n");
+		else
+			this->topicRPL(client_rqst);
+	}
+	else
+	{
+		if (newTopic == ":")
+			this->_topic.erase();
+		else
+		{
+			ss << std::time(NULL); 
+			ss >> buffer;
+			this->_topic = newTopic.c_str() + ((newTopic[0] == ':')? 1: 0);
+			this->_topic_usr = client_rqst->getNickName() + " " + buffer + "\n";
+			this->sendAll(":" + client_rqst->getNickName()
+				+ " TOPIC " + this->_name + " " + this->_topic + "\n");
+		}
+	}
+}
+
+int	Channel::topic(Client* client_rqst, std::string const& newTopic)
+{
+	int status;
+
+	status = 1;
+	if (this->inLst(client_rqst))
+	{
+		if (newTopic.empty() || this->inOpLst(client_rqst))
+		{
+			status = 0;
+			this->topicActiv(client_rqst, newTopic);
+		}
+		else
+			client_rqst->addRPLBuffer("482\n");
 	}
 	else
 		client_rqst->addRPLBuffer("442\n");
