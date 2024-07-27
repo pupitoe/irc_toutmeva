@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/27 01:13:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 17:28:27 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,18 @@ int	ChannelCommand::topic(Client *client,
 
 	ss >> channelName;
 	ss >> newTopic;
-	status = this->channelFormating(channelName);
-	if (status == SUCCESS)
-		status = this->topic_channel(client, channelName, newTopic, channels);
-	this->errorMessage(status, client);
-	if (channelName.empty())
+	if (channelName.empty() == 0)
+	{
+		status = this->channelFormating(channelName);
+		if (status == SUCCESS && channelName.empty() == 0)
+			status = this->topic_channel(client,
+				channelName, newTopic, channels);
+		this->errorMessage(status, client);
+	}
+	else
 		this->errorMessage(ERR_NEEDMOREPARAMS, client);
 	return (0);
 }
-
-
 
 int	ChannelCommand::execute(Client *client,
 	std::map<std::string, Channel *>& channels)
