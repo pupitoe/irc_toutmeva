@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 18:31:12 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:46:36 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,3 @@ int IRCError::getErr(void) const {
 const char  *IRCError::what(void) const throw() {
     return ("wip");
 }
-
-
-
-
-
-
-
-
-//These functions are only used for debugging (and may be used for logs)
-
-// const char    *IRCError::NeedMoreParams::what(void) const throw() {
-//     return ("<client> <command> : NotEnough parameters");
-// }
-
-// const char    *IRCError::InputTooLong::what(void) const throw() {
-//     return ("The limit for messages is MESSAGE_LIMIT");
-// }

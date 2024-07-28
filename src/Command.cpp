@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 17:37:06 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:47:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 	
 	//Parameters
 	while (str >> word) {
-		if (word[0] == ':'){
+		if (word[0] == ':') {
 			word.append(str.str().substr(str.tellg(), str.str().size()));
 			word.erase(0, 1);
 			_args.push_back(word);
