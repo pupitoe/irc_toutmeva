@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 09:36:30 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 12:18:15 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ bool	is_number(char *str){
 int	main(int argc, char **argv)
 {
 	int	port;
-	// Remplacer les catch par des nombre a l'instantiation des classes errors
 	try{
-		ConnexionCommand test("PASS     q   q qw");
+		ConnexionCommand test("PASS   qwqwqwq  q   q qw");
 	}
 	catch(IRCError &e){
 		std::cout << e.what() << std::endl;

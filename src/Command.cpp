@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/25 10:56:32 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 12:17:35 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 static bool	isCommand(std::string str) {
 	unsigned int	i = 0;
-	std::transform(str.begin(), str.end(), str.begin(), std::toupper);
 	while (str[i]) {
 		if (str[i] < 65 || str[i] > 90)
 			return (false);
@@ -47,8 +46,12 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) :
 	_msg(msg) {
 	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
-	std::cout << "Debut" <<std::endl;
-	std::stringstream str(msg);
+	
+	for (unsigned int i = 0 ; msg[i] != 0 ; i++) {
+		_msg[i] = std::toupper(_msg[i]);
+	}
+
+	std::stringstream str(_msg);
 	std::string word;
 
 	str >> word;

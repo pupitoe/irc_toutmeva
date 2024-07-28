@@ -6,13 +6,17 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 21:55:00 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 12:00:39 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <IRCError.hpp>
 
-IRCError::IRCError(int err) : _err(err){
+IRCError::IRCError(int err) : _err(err) {
+    
+}
+
+IRCError::IRCError(int err, std::string str) : _err(err), _str(str) {
     
 }
 
@@ -28,7 +32,7 @@ int IRCError::getErr(void) const {
     return (_err);
 }
 
-const char  *IRCError::what(void) const throw(){
+const char  *IRCError::what(void) const throw() {
     return ("ahahahahahahah");
 }
 
