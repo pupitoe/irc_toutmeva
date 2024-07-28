@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 20:28:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/29 01:33:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 Channel::Channel(std::string const& name): _name(name)
 {
 	this->_super_user_set = false;
+	this->_topic_priv_need = true;
 }
 
 Channel::~Channel(void)
@@ -252,7 +253,8 @@ int	Channel::topic(Client* client_rqst, std::string const& newTopic,
 	status = 1;
 	if (this->inLst(client_rqst))
 	{
-		if (newTopic.empty() || this->inOpLst(client_rqst))
+		if ((newTopic.empty() && topicHaveArg == 0)
+			|| this->_topic_priv_need == 0 || this->inOpLst(client_rqst))
 		{
 			status = 0;
 			this->topicActiv(client_rqst, newTopic, topicHaveArg);
@@ -291,15 +293,4 @@ void	Channel::RPL_CREATIONTIME(Client* client_rqst)
 {
 	client_rqst->addRPLBuffer(":329 " + client_rqst->getNickName() + " "
 		+ this->_name + " " + this->_creation_time + "\n");
-}
-
-int	Channel::mode(Client* client_rqst)
-{
-	std::string	buffer;
-
-	buffer = ":324 " + client_rqst->getNickName() + " " + this->_name;
-	buffer += "\n";
-	client_rqst->addRPLBuffer(buffer);
-	RPL_CREATIONTIME(client_rqst);
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 22:13:45 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/29 01:25:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 # define MODE_CHANNEL 0
 # define MODE_FLAGS 1
-# define RESERV_BITS 15U
+# define RESERV_BITS 255U
 # define FLAG_USED 1
 # define FLAG_NO_USED 2
+# define MODE_SIGNE_BIT (1 << 9)
 
 int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 	std::string& arg)
@@ -36,6 +37,7 @@ int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 		case 'o':
 			break;
 		case 't':
+			status = channel->mode_t(client, mode & MODE_SIGNE_BIT);
 			ret = FLAG_NO_USED;
 			break;
 		case 'k':
@@ -44,6 +46,7 @@ int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 			client->addRPLBuffer("tu es une merde\n");
 			break;
 	}
+	std::cout << "le mode tkt " << (mode & RESERV_BITS) << std::endl;
 	(void)client;
 	(void)channel;
 	(void)mode;
@@ -68,10 +71,13 @@ int	ChannelCommand::modeFlags(Client *client, Channel *channel,
 	while (!flagLst.empty() && flagLst[i] && retFalg != ERR_CHANOPRIVSNEEDED)
 	{
 		mode &= ~RESERV_BITS;
-		mode |= flagLst[i];
+		std::cout << "bits:" << ~RESERV_BITS << std::endl;
+		mode |= (unsigned int)flagLst[i];
+		std::cout << "it 0 le mode tkt " << (mode & RESERV_BITS) << std::endl;
 		if (flagLst[i] == '+' || flagLst[i] == '-')
-			mode = (1 << 9) + ((flagLst[i] == '-')? 1: 0);
-		if (mode & RESERV_BITS)
+			mode = MODE_SIGNE_BIT << ((flagLst[i] == '-')? 1: 0);
+		std::cout << "it 1 le mode tkt " << (mode & RESERV_BITS) << std::endl;
+		if ((mode & RESERV_BITS) && (mode & ~RESERV_BITS))
 		{
 			retFalg = this->modeFlagsUse(client, channel, mode, argFlag); 
 			if (retFalg == FLAG_USED)

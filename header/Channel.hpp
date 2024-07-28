@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 21:39:07 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/29 01:01:01 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <map>
 # include <ctime>
 # include <sstream>
+
+# define MODE_ADD 1
+# define MODE_REMOVE 0
 
 enum	retChannel
 {
@@ -59,10 +62,12 @@ class	Channel
 		std::list<Client *>	_client;
 
 		int					_super_user_set;
-	
+
 		std::string			_topic_usr;
 		std::string			_topic;
 		std::string			_creation_time;
+
+		bool				_topic_priv_need;
 
 		int	inLst(Client *client);
 		int	inOpLst(Client *client);
@@ -92,10 +97,10 @@ class	Channel
 		int	part(Client* client_rqst, std::string const& reason);
 		int	kick(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
-		int	mode(Client* client_rqst);
-
 		int	topic(Client* client_rqst, std::string const& newTopic,
 			int topicHaveArg);
+		int	mode(Client* client_rqst);
+		int	mode_t(Client* client_rqst, int signe);
 
 		size_t	countClient(void) const;
 };
