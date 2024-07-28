@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 20:12:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:15:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 int	ChannelCommand::modeFlags(Client *client,
 	std::map<std::string, Channel *>& channels,
-	std::string *arg, std::stringstream& ss)
+	std::string *arg)
 {
 	size_t			i;
 	unsigned int	mode;
@@ -39,18 +39,17 @@ int	ChannelCommand::modeFlags(Client *client,
 	(void)client;
 	(void)channels;
 	(void)arg;
-	(void)ss;
 	return (SUCCESS);
 }
 
 int	ChannelCommand::mode(Client *client,
-	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+	std::map<std::string, Channel *>& channels)
 {
 	std::string		arg[2];
 	int				status;
 	
-	ss >> arg[MODE_CHANNEL];
-	ss >> arg[MODE_FLAGS];
+	arg[MODE_CHANNEL] = this->getArg();
+	arg[MODE_FLAGS] = this->getArg();
 	status = ERR_NEEDMOREPARAMS;
 	if (arg[MODE_CHANNEL].empty() == 0)
 	{
@@ -63,7 +62,7 @@ int	ChannelCommand::mode(Client *client,
 			else
 			{
 				status = SUCCESS;
-				this->modeFlags(client, channels, arg, ss);
+				this->modeFlags(client, channels, arg);
 			}
 		}
 	}
