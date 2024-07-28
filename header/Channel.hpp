@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 20:10:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:39:07 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ enum	retChannel
 	ERR_CHANNELISFULL,
 	ERR_INVITEONLYCHAN,
 	ERR_BADCHANMASK,
+	ERR_CHANOPRIVSNEEDED,
 	RPL_TOPIC,
 	RPL_TOPICWHOTIME,
 	RPL_NAMREPLY,

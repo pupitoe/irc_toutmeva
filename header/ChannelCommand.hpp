@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 20:14:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 21:22:12 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ class ChannelCommand : public Command {
 		int	kick(Client *client, std::map<std::string, Channel *>& channels);
 		int	topic(Client *client, std::map<std::string, Channel *>& channels);
 		int	mode(Client *client, std::map<std::string, Channel *>& channels);
-		int	modeFlags(Client *client,
-			std::map<std::string, Channel *>& channels,
-			std::string *arg);
+		int	modeFlags(Client *client, Channel *channel, std::string& flagLst);
+		int	modeFlagsUse(Client *client, Channel *channel, int mode,
+			std::string& arg);
 
 		int	channelFormating(std::string const& name);
 		

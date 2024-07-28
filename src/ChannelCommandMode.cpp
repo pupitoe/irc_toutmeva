@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 20:15:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 22:13:45 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,71 @@
 
 # define MODE_CHANNEL 0
 # define MODE_FLAGS 1
+# define RESERV_BITS 15U
+# define FLAG_USED 1
+# define FLAG_NO_USED 2
 
-int	ChannelCommand::modeFlags(Client *client,
-	std::map<std::string, Channel *>& channels,
-	std::string *arg)
+int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
+	std::string& arg)
+{	
+	int	ret;
+	int	status;
+
+	ret = FLAG_USED;
+	status = 0;
+	switch (mode & RESERV_BITS)
+	{
+		case 'l':
+			break;
+		case 'i':
+			ret = FLAG_NO_USED;
+			break;
+		case 'o':
+			break;
+		case 't':
+			ret = FLAG_NO_USED;
+			break;
+		case 'k':
+			break;
+		default:
+			client->addRPLBuffer("tu es une merde\n");
+			break;
+	}
+	(void)client;
+	(void)channel;
+	(void)mode;
+	(void)arg;
+	if (status)
+		return (status);
+	return (ret);
+}
+
+int	ChannelCommand::modeFlags(Client *client, Channel *channel,
+	std::string& flagLst)
 {
-	size_t			i;
+	std::string		argFlag;
 	unsigned int	mode;
+	size_t			i;
+	int 			retFalg;
 
 	i = 0;
 	mode = 0;
-	while (arg[MODE_FLAGS].empty() == 0 && arg[MODE_FLAGS][i])
+	argFlag = this->getArg();
+	retFalg = 0;
+	while (!flagLst.empty() && flagLst[i] && retFalg != ERR_CHANOPRIVSNEEDED)
 	{
-		mode &= ~15U;
-		if (arg[MODE_FLAGS][i] == '+')
-			mode = 1 << 9;
-		else if (arg[MODE_FLAGS][i] == '-')
-			mode = 1 << 10;
-		else
-			mode |= arg[MODE_FLAGS][i];
-		std::cout << "cur int : " << mode << std::endl;
+		mode &= ~RESERV_BITS;
+		mode |= flagLst[i];
+		if (flagLst[i] == '+' || flagLst[i] == '-')
+			mode = (1 << 9) + ((flagLst[i] == '-')? 1: 0);
+		if (mode & RESERV_BITS)
+		{
+			retFalg = this->modeFlagsUse(client, channel, mode, argFlag); 
+			if (retFalg == FLAG_USED)
+				argFlag = this->getArg();
+		}
 		i++;
 	}
-	(void)client;
-	(void)channels;
-	(void)arg;
 	return (SUCCESS);
 }
 
@@ -60,10 +100,8 @@ int	ChannelCommand::mode(Client *client,
 			if (arg[MODE_FLAGS].empty())
 				status = channels[arg[MODE_CHANNEL]]->mode(client);
 			else
-			{
-				status = SUCCESS;
-				this->modeFlags(client, channels, arg);
-			}
+				status = this->modeFlags(client, channels[arg[MODE_CHANNEL]],
+					arg[MODE_FLAGS]);
 		}
 	}
 	this->errorMessage(status, client);
