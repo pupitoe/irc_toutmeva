@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 15:26:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 16:06:15 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,14 @@ class	Channel
 	
 		std::string			_topic_usr;
 		std::string			_topic;
+		std::string			_creation_time;
 
 		int	inLst(Client *client);
 		int	inOpLst(Client *client);
 
 		void	RPL_NAMREPLY(Client *client);
 		void	RPL_ENDOFNAMES(Client *client);
+		void	RPL_CREATIONTIME(Client* client_rqst);
 
 		int	userGrade(std::string const& nickName);
 
