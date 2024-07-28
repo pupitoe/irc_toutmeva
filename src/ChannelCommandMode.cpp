@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 15:37:02 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:13:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	ChannelCommand::mode(Client *client,
 	{
 		status = ERR_NOSUCHCHANNEL;
 		if (this->channelFormating(arg[MODE_CHANNEL]) == SUCCESS
-			&& channelExist(arg[MODE_CHANNEL], channels) == SUCCESS)
+			&& channelExist(arg[MODE_CHANNEL], channels))
 		{
-			if (arg[MODE_FLAGS].empty() == 0)
+			if (arg[MODE_FLAGS].empty())
 				status = channels[arg[MODE_CHANNEL]]->mode(client);
 			else
 			{

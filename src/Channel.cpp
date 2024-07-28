@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 20:03:25 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:04:38 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,14 @@ void	Channel::RPL_ENDOFNAMES(Client *client)
 
 int	Channel::join(Client *client_rqst)
 {
+	std::stringstream	ss;
+
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
 	if (this->_super_user_set == false)
 	{
+		ss << std::time(NULL);
+		ss >> this->_creation_time;
 		this->_operators.push_back(client_rqst);
 		this->_super_user_set = true;
 	}
@@ -282,8 +286,20 @@ void	closeChannel(std::string const& channelName,
 		channels.erase(channelName);
 	}
 }
+void	Channel::RPL_CREATIONTIME(Client* client_rqst)
+{
+	client_rqst->addRPLBuffer(":329 " + client_rqst->getNickName() + " "
+		+ this->_name + " " + this->_creation_time + "\n");
+}
+
 
 int	Channel::mode(Client* client_rqst)
 {
-	(void)client_rqst;
+	std::string	buffer;
+
+	buffer = ":324 " + client_rqst->getNickName() + " " + this->_name;
+	buffer += "\n";
+	client_rqst->addRPLBuffer(buffer);
+	RPL_CREATIONTIME(client_rqst);
+	return (0);
 }
