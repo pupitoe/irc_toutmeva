@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 11:59:10 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:22:28 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,38 +26,21 @@ class IRCError : public std::exception {
 	private :
 		int			_err;
 		std::string	_str;
+		std::string	_repl;
 
 		IRCError(void);
 		
 	public :
 		IRCError(int err);
-		IRCError(int err, std::string str);
+		IRCError(int err, std::string str); // code err , infos
 		~IRCError(void) throw();
 		IRCError(IRCError const &);
 
 		int		getErr(void) const;
+		std::string	getError();
 
 		const char  *what(void) const throw();
 
-		/*class NeedMoreParams {
-			public :
-				const char	*what(void) const throw();
-		};
-
-		class Passwdmismatch {
-			public :
-				const char	*what(void) const throw();
-		};
-
-		class AlreadyRegistered {
-			public :
-				const char	*what(void) const throw();
-		};
-
-		class InputTooLong {
-			public :
-				const char	*what(void) const throw();
-		};*/
 };
 
 #endif
