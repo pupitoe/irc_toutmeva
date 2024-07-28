@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 17:13:06 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:30:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,23 @@ int	ChannelCommand::modeFlags(Client *client,
 	std::map<std::string, Channel *>& channels,
 	std::string *arg, std::stringstream& ss)
 {
-//	size_t			i;
-//	unsigned int	mode;
+	size_t			i;
+	unsigned int	mode;
 
-//	i = 0;
-//	mode = 0;
-//	while (flags.empty() == 0 && flags[i])
-//	{
-//		if (flags[i] == '+')
-//			mode = (mode & 15U) | (1 << 9);
-//		else if (flags[i] == '-')
-//			mode = (mode & 15U) | (1 << 10);
-//		else
-					
-//		i++;
-//	}
+	i = 0;
+	mode = 0;
+	while (arg[MODE_FLAGS].empty() == 0 && arg[MODE_FLAGS][i])
+	{
+		mode &= ~15U;
+		if (arg[MODE_FLAGS][i] == '+')
+			mode = 1 << 9;
+		else if (arg[MODE_FLAGS][i] == '-')
+			mode = 1 << 10;
+		else
+			mode |= arg[MODE_FLAGS][i];
+		std::cout << "cur int : " << mode << std::endl;
+		i++;
+	}
 	(void)client;
 	(void)channels;
 	(void)arg;
