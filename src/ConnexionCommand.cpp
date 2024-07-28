@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 18:08:04 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:53:35 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,19 @@
 #include <iostream>
 
 static void	test_password(const char *str) {
-	std::cout << "test" << std::endl;
 	if (str == NULL || *str == 0){
-		throw (IRCError::NeedMoreParams());
+		throw (IRCError(ERR_NEEDMOREPARAMS));
 	}
 }
 
 ConnexionCommand::ConnexionCommand(std::string msg)
-	throw (IRCError::NeedMoreParams) : Command(msg) {
+	throw (IRCError) : Command(msg) {
 	this->_type = CONNEXION;
 	if (!msg.compare(0, 5, "PASS ", 5)){
 		test_password(msg.c_str() + 5);
 	}
+	
+	
 }
 
 ConnexionCommand::~ConnexionCommand(void) {

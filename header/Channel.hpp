@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/27 01:26:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:48:24 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ enum	retChannel
 	ECHAN_BAD_ALLOC = 2,
 	ECHAN_ALREADY_REGISTERED,
 	ECHAN_NOT_REGISTERED,
-	ERR_NEEDMOREPARAMS,
 	ERR_NOSUCHCHANNEL,
 	ERR_TOOMANYCHANNELS,
 	ERR_BADCHANNELKEY,

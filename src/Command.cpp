@@ -3,22 +3,75 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 22:39:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 18:47:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Command.hpp>
 #include <iostream>
 
-Command::Command(std::string msg) throw (Command::UnrecognizedType) :
-	_msg(msg) {
-		this->_type = EMPTY;
+#include <sstream>
+#include <algorithm>
+
+static bool	isCommand(std::string str) {
+	unsigned int	i = 0;
+	while (str[i]) {
+		if (str[i] < 65 || str[i] > 90)
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
-Command::Command(Command const &ref) : _msg(ref.getMsg()),
+/**
+ * Here's the parsing for our IRC:
+ * 	CMD *PARAM
+ * 
+ * The spaces can be 1 or more spaces (character " ")
+ * 
+ * CMD := <letters>
+ * 
+ * PARAM := <optional ":"><letters>
+ * 
+ * parsing step :
+ * 1. Ignore first word if its a command
+ * 2. For every word after that
+ *	2a. If it begins with ":" , then the rest of msg is final param
+ * 	2b. Else, parse normally.
+ * */
+Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
+	std::string			word;
+	std::stringstream	str(msg);
+
+	if (msg.length() > MESSAGES_LIMIT)
+		throw (IRCError(ERR_INPUTTOOLONG));
+		
+	//Command
+	str >> word;
+	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
+		word[i] = std::toupper(word[i]);
+	}
+	if (!isCommand(word))
+		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
+	_args.push_back(word);
+	
+	//Parameters
+	while (str >> word) {
+		if (word[0] == ':') {
+			word.append(str.str().substr(str.tellg(), str.str().size()));
+			word.erase(0, 1);
+			_args.push_back(word);
+			break ;
+		}
+		_args.push_back(word);
+	}
+	this->_type = EMPTY;
+}
+
+Command::Command(Command const &ref) : _args(ref.getArgs()),
 	_type(ref.getType()) {
 
 }
@@ -27,11 +80,11 @@ Command::~Command(void) {
 
 }
 
-std::string	Command::getMsg(void) const {
-	return (_msg);	
+std::list<std::string>	Command::getArgs(void) const {
+	return (_args); // A modifier, copie partielle
 }
 
-enum type	Command::getType(void) const {
+cmd_type	Command::getType(void) const {
 	return (_type);
 }
 
@@ -40,6 +93,5 @@ const char	*Command::UnrecognizedType::what(void) const throw() {
 };
 
 std::ostream	&operator<<(std::ostream &out, Command const &c) {
-	out << c.getMsg().substr(0, 5);
-	return (out);
+	return (out << c.getArgs().front());
 }
