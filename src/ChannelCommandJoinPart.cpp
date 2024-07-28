@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 19:24:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:07:35 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 19:18:05tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	ChannelCommand::join_channel(Client* user_rqts,
 }
 
 int	ChannelCommand::join(Client *client,
-	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+	std::map<std::string, Channel *>& channels)
 {
 	int			status;
 	size_t		i;
@@ -72,8 +72,8 @@ int	ChannelCommand::join(Client *client,
 	std::string	channels_key;
 	std::string	buffer_channel_name;
 
-	ss >> channels_name;
-	ss >> channels_key;
+	channels_name = this->getArg();
+	channels_key = this->getArg();
 	i = 0;
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == 0)
@@ -93,7 +93,7 @@ int	ChannelCommand::join(Client *client,
 }
 
 int	ChannelCommand::part(Client *client,
-	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+	std::map<std::string, Channel *>& channels)
 {
 	int			status;
 	size_t		i;
@@ -101,8 +101,8 @@ int	ChannelCommand::part(Client *client,
 	std::string	buffer_channel_name;
 	std::string	reason;
 
-	ss >> channels_name;
-	ss >> reason;
+	channels_name = this->getArg();
+	reason = this->getArg();
 	i = 0;
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == 0)

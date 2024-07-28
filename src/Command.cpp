@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 18:47:08 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 19:56:31 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 	//Parameters
 	while (str >> word) {
 		if (word[0] == ':') {
-			word.append(str.str().substr(str.tellg(), str.str().size()));
+			if (str.tellg() > 0 && (size_t)str.tellg() < str.str().length())
+				word.append(str.str().substr(str.tellg(), str.str().size()));
 			word.erase(0, 1);
 			_args.push_back(word);
 			break ;

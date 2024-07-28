@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 18:48:24 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 19:44:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ class	Channel
 		Client	*getClient(std::string const& nickName);
 		void	sendAll(std::string const& msg);
 
-		void	topicActiv(Client* client_rqst, std::string const& newTopic);
+		void	topicActiv(Client* client_rqst, std::string const& newTopic,
+			int topicHaveArg);
 		void	topicChange(Client* client_rqst, std::string const& newTopic);
 		void	topicRPL(Client *client_rqst);
 
@@ -89,7 +90,8 @@ class	Channel
 		int	kick(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
 
-		int	topic(Client* client_rqst, std::string const& newTopic);
+		int	topic(Client* client_rqst, std::string const& newTopic,
+			int topicHaveArg);
 
 		size_t	countClient(void) const;
 };
