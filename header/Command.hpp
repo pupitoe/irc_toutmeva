@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/25 09:44:04 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:22:15 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ enum type {
 	EMPTY,
 	CONNEXION,
 	CHANNEL
-};
+}	typedef cmd_type;
 # define MESSAGES_LIMIT 512
 /*
 * Polymorphic class
@@ -35,8 +35,8 @@ enum type {
 class Command {
 
 	protected :
-		std::string	_msg;
-		enum type	_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
+		std::list<std::string>	_args;
+		cmd_type				_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
 
 	public :
 		Command(std::string msg) 
@@ -44,7 +44,7 @@ class Command {
 		Command(Command const &);
 		virtual ~Command(void);
 
-		std::string	getMsg(void) const;
+		std::list<std::string>	getArgs(void) const;
 		virtual enum type getType(void) const;
 
 		virtual int	execute(int socket) = 0;

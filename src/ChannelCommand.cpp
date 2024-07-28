@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 20:16:28 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:38:58 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ChannelCommand::join(Client *client,
 int	ChannelCommand::execute(Client *client,
 	std::map<std::string, Channel *>& channels)
 {
-	std::stringstream	ss(this->_msg);
+	std::stringstream	ss(this->_args.front());
 	std::string			buffer;
 
 	ss >> buffer;

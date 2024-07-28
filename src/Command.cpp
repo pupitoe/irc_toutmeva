@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 12:17:35 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:41:45 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,39 +32,39 @@ static bool	isCommand(std::string str) {
  * 
  * The spaces can be 1 or more spaces (character " ")
  * 
- * CMD := <letters> | <3 digit number>
+ * CMD := <letters>
  * 
  * PARAM := <optional ":"><letters>
  * 
  * parsing step :
- * 1. Ignore first word
+ * 1. Ignore first word if its a command
  * 2. For every word after that
  *	2a. If it begins with ":" , then the rest of msg is final param
  * 	2b. Else, parse normally.
  * */
-Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) :
-	_msg(msg) {
+Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
+	std::string			word;
+	std::stringstream	str(msg);
+
 	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
-	
-	for (unsigned int i = 0 ; msg[i] != 0 ; i++) {
-		_msg[i] = std::toupper(_msg[i]);
-	}
-
-	std::stringstream str(_msg);
-	std::string word;
 
 	str >> word;
 
 	if (!isCommand(word))
 		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
-	while (str >> word){
-		std::cout << word << std::endl;
+	_args.push_back(word);
+	while (str >> word) {
+		for (unsigned int i = 0 ; word[i] != 0 ; i++) {
+			word[i] = std::toupper(word[i]);
+		}
+		// std::cout << word << std::endl;
+		_args.push_back(word);
 	}
 	this->_type = EMPTY;
 }
 
-Command::Command(Command const &ref) : _msg(ref.getMsg()),
+Command::Command(Command const &ref) : _args(ref.getArgs()),
 	_type(ref.getType()) {
 
 }
@@ -73,11 +73,11 @@ Command::~Command(void) {
 
 }
 
-std::string	Command::getMsg(void) const {
-	return (_msg);	
+std::list<std::string>	Command::getArgs(void) const {
+	return (_args); // A modifier, copie partielle
 }
 
-enum type	Command::getType(void) const {
+cmd_type	Command::getType(void) const {
 	return (_type);
 }
 
@@ -86,6 +86,6 @@ const char	*Command::UnrecognizedType::what(void) const throw() {
 };
 
 std::ostream	&operator<<(std::ostream &out, Command const &c) {
-	std::string str = c.getMsg().substr(0, 5);
+	std::string str = c.getArgs().front();
 	return (out << str);
 }
