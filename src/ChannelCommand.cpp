@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 19:45:45 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:02:54 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,5 +153,7 @@ int	ChannelCommand::execute(Client *client,
 		return (this->kick(client, channels));
 	if (buffer == "TOPIC")
 		return (this->topic(client, channels));
+	if (buffer == "MODE")
+		return (this->mode(client, channels, ss));
 	return (0);
 }

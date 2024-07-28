@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 19:51:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:03:25 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,4 +281,9 @@ void	closeChannel(std::string const& channelName,
 		delete channels[channelName];
 		channels.erase(channelName);
 	}
+}
+
+int	Channel::mode(Client* client_rqst)
+{
+	(void)client_rqst;
 }
