@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 15:56:13 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:37:06 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,22 +48,24 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 
 	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
-
+		
+	//Command
 	str >> word;
-
+	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
+		word[i] = std::toupper(word[i]);
+	}
 	if (!isCommand(word))
 		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
 	_args.push_back(word);
+	
+	//Parameters
 	while (str >> word) {
 		if (word[0] == ':'){
-			std::cout << str.rdbuf() << std::endl;
-			word.append(str.rdbuf());
+			word.append(str.str().substr(str.tellg(), str.str().size()));
+			word.erase(0, 1);
+			_args.push_back(word);
+			break ;
 		}
-		
-		// for (unsigned int i = 0 ; word[i] != 0 ; i++) {
-		// 	word[i] = std::toupper(word[i]);
-		// }
-		// std::cout << word << std::endl;
 		_args.push_back(word);
 	}
 	this->_type = EMPTY;

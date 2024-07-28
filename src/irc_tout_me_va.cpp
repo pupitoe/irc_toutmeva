@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 15:46:11 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:31:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int argc, char **argv)
 {
 	int	port;
 	try{
-		ConnexionCommand test("PASS   qwqwqwq  q   :q qw");
+		ConnexionCommand test("PASS   qwqwqwq  q   :qwq qw kko      :q");
 	}
 	catch(IRCError &e){
 		std::cout << e.what() << std::endl;
