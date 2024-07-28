@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/23 23:51:41 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:26:42 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,87 @@
 # include <list>
 # include <string>
 # include <algorithm>
+# include <map>
+# include <ctime>
+# include <sstream>
 
 enum	retChannel
 {
 	ECHAN_BAD_ALLOC = 2,
 	ECHAN_ALREADY_REGISTERED,
 	ECHAN_NOT_REGISTERED,
+	ERR_NEEDMOREPARAMS,
+	ERR_NOSUCHCHANNEL,
+	ERR_TOOMANYCHANNELS,
+	ERR_BADCHANNELKEY,
+	ERR_BANNEDFROMCHAN,
+	ERR_CHANNELISFULL,
+	ERR_INVITEONLYCHAN,
+	ERR_BADCHANMASK,
+	RPL_TOPIC,
+	RPL_TOPICWHOTIME,
+	RPL_NAMREPLY,
+	RPL_ENDOFNAMES,
 
 
 	GOOD_REGISTER,
 	GOOD_PART
 };
 
+enum	userChannelGrade
+{
+	CH_NO_GRADE = 0,
+	CH_USER,
+	CH_OPERATOR
+};
+
 class	Channel
 {
 	private:
 		std::string const	_name;
-		Client*				_super_user;
+		std::list<Client *>	_operators;
 		std::list<Client *>	_client;
 
 		int					_super_user_set;
-		//std::list<Client *>	_operator;
 	
+		std::string			_topic_usr;
 		std::string			_topic;
-		
+
+		int	inLst(Client *client);
+		int	inOpLst(Client *client);
+
+		void	RPL_NAMREPLY(Client *client);
+		void	RPL_ENDOFNAMES(Client *client);
+
+		int	userGrade(std::string const& nickName);
+
+		void	kickActiv(Client* client_rqst, std::string const& userKick,
+			std::string const& comment);
+
+		Client	*getClient(std::string const& nickName);
+		void	sendAll(std::string const& msg);
+
+		void	topicActiv(Client* client_rqst, std::string const& newTopic);
+		void	topicChange(Client* client_rqst, std::string const& newTopic);
+		void	topicRPL(Client *client_rqst);
+
 	public:
 		Channel(std::string const& str);
 		~Channel(void);
 
 		int	join(Client* client_rqst);
-		int	part(Client* client_rqst);
+		int	part(Client* client_rqst, std::string const& reason);
+		int	kick(Client* client_rqst, std::string const& userKick,
+			std::string const& comment);
+
+		int	topic(Client* client_rqst, std::string const& newTopic);
+
+		size_t	countClient(void) const;
 };
+
+void	closeChannel(std::string const& channelName,
+	std::map<std::string, Channel *>& channels);
+bool	channelExist(std::string const& channelName,
+	std::map<std::string, Channel *>& channels);
 
 #endif

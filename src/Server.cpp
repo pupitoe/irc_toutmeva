@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 10:30:58 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/27 01:17:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ Server::Server(void) : _socket(0) {
 	_password = "1234";
 	// set the fd table at 0
 	FD_ZERO(&this->_rfds);
+	FD_ZERO(&this->_rfds_error);
+	FD_ZERO(&this->_rfds_read);
+	FD_ZERO(&this->_rfds_write);
 	this->_status_server = SUCCESS;
 }
 
@@ -90,9 +93,20 @@ void	Server::searchClient(void)
 
 void	Server::deletClient(int const fd)
 {
+	std::map<std::string, Channel *>::iterator	it_channel;
+	std::map<std::string, Channel *>::iterator	it_old_channel;
+
 	if ( this->_status_server == SUCCESS
 		&& this->_clientList.find(fd) != this->_clientList.end())
 	{
+		it_channel = this->_channels.begin();
+		while (it_channel != this->_channels.end())
+		{
+			it_old_channel = it_channel;
+			it_channel++;
+			it_old_channel->second->part(this->_clientList[fd], "");
+			closeChannel(it_old_channel->first, this->_channels);
+		}
 		// remove the client from the table
 		FD_CLR(fd, &this->_rfds);
 		delete this->_clientList[fd];
@@ -122,9 +136,20 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 			client.addCommandBuffer(buffer);
 		}
 		else if (ret_recv == 0)
+		{
+			//FD_CLR(client_fd, &this->_rfds_read);
 			client.terminateConnection();
+		}
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
+}
+
+void	Server::clientSendMessage(int const client_fd, Client& client)
+{
+	std::string	buffer;
+
+	buffer = client.getRPL();
+	send(client_fd, buffer.c_str(), buffer.length(), 0);
 }
 
 void	Server::clientRecv(void)
@@ -139,6 +164,24 @@ void	Server::clientRecv(void)
 			// to check if the requested fd is in the list
 			if (FD_ISSET(it->first, &this->_rfds_read))
 				this->clientRecvMessage(it->first, *it->second);
+			it++;
+		}
+	}
+}
+
+void	Server::clientSend(void)
+{
+	std::map<int, Client*>::iterator	it;
+	
+	if (this->_clientList.size() > 0)
+	{
+		it = this->_clientList.begin();
+		while (it != this->_clientList.end())
+		{
+			// to check if the requested fd is in the list
+			if (it->second->getRPLBuffer().empty() == false &&
+				FD_ISSET(it->first, &this->_rfds_write))
+				this->clientSendMessage(it->first, *it->second);
 			it++;
 		}
 	}
@@ -196,6 +239,7 @@ void	Server::parseInput(void) {
 			tkt = client->getCommand();		
 			std::cout << "!cmd: " << tkt << std::endl;
 			this->parse(tkt, *client);
+			std::cout << "bijour" << std::endl;
 		}
 		it++;
 	}
@@ -207,6 +251,7 @@ void	Server::execut(void) {
 	this->clientRecv();
 	this->parseInput();
 	this->eraseClient();
+	this->clientSend();
 }
 
 static enum type guessType(std::string msg) {
@@ -214,8 +259,8 @@ static enum type guessType(std::string msg) {
 		|| !msg.compare(0, 5, "USER ", 5) || !msg.compare(0, 4, "CAP ", 4))
 		return (CONNEXION);
 	else if (!msg.compare(0, 5, "JOIN ", 5) || !msg.compare(0, 5, "PART ", 5)
-		|| !msg.compare(0, 5, "TOPIC ", 6) || !msg.compare(0, 5, "NAMES  ", 6)
-		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 5, "INVITE ", 7)
+		|| !msg.compare(0, 6, "TOPIC ", 6) || !msg.compare(0, 6, "NAMES ", 6)
+		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 7, "INVITE ", 7)
 		|| !msg.compare(0, 5, "KICK ", 5))
 		return (CHANNEL);
 	else if (msg.empty())
@@ -236,8 +281,11 @@ void	Server::parse(std::string cmd, Client &c) {
 			rqst = new ConnexionCommand(cmd);
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
-		std::cout << *rqst << std::endl;
-		this->executeRequests(c, rqst);
+		if (rqst)
+		{
+			std::cout << *rqst << std::endl;
+			this->executeRequests(c, rqst);
+		}
 	}
 	catch (IRCError &e) {
 		std::cout << e.what() << std::endl;

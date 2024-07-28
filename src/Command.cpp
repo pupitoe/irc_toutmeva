@@ -93,6 +93,5 @@ const char	*Command::UnrecognizedType::what(void) const throw() {
 };
 
 std::ostream	&operator<<(std::ostream &out, Command const &c) {
-	std::string str = c.getArgs().front();
-	return (out << str);
+	return (out << c.getArgs().front());
 }

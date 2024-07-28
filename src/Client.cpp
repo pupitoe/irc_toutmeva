@@ -6,16 +6,33 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/24 16:59:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/26 20:20:16by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 # include <iostream>
 
+unsigned int i = 0; // adelet car jai toujour pas de quoi me co
+
 Client::Client(int const client_fd): _client_fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
+	switch (i++ % 3)
+	{
+	case 0:
+		this->_nickName = "mielpops/nesquik";
+		break;
+	case 1:
+		this->_nickName = "sr";	
+		break;
+	case 2:
+		this->_nickName = "pelo";
+		break;
+	default:
+		this->_nickName = "?????";
+		break;
+	}
 	std::cout << "client created: " << client_fd << std::endl;
 }
 
@@ -95,4 +112,28 @@ bool	Client::getCommandValible(void)
 void	Client::addCommandBuffer(char const *cmd)
 {
 	this->_bufferCommand += cmd;
+}
+
+void	Client::addRPLBuffer(std::string const& rpl)
+{
+	this->_bufferRPL += rpl;
+}
+
+std::string	Client::getRPL(void)
+{
+	std::string buffer;
+
+	buffer = this->_bufferRPL;
+	this->_bufferRPL.clear();
+	return (buffer);
+}
+
+std::string const&	Client::getRPLBuffer(void) const
+{
+	return (this->_bufferRPL);
+}
+
+std::string const&	Client::getNickName(void) const
+{
+	return (this->_nickName);
 }
