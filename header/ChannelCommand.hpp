@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/27 00:07:27 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 15:37:22 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ class ChannelCommand : public Command {
 			std::stringstream& ss);
 		int	topic(Client *client, std::map<std::string, Channel *>& channels,
 			std::stringstream& ss);
+		int	mode(Client *client, std::map<std::string, Channel *>& channels,
+			std::stringstream& ss);
+		int	modeFlags(Client *client,
+			std::map<std::string, Channel *>& channels,
+			std::string *arg, std::stringstream& ss);
 
 		int	channelFormating(std::string const& name);
 		
