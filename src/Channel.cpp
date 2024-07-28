@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 20:04:38 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:06:21 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,7 @@ void	closeChannel(std::string const& channelName,
 		channels.erase(channelName);
 	}
 }
+
 void	Channel::RPL_CREATIONTIME(Client* client_rqst)
 {
 	client_rqst->addRPLBuffer(":329 " + client_rqst->getNickName() + " "
