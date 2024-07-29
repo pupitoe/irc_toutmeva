@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/29 01:01:01 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/29 01:41:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ class	Channel
 			int topicHaveArg);
 		int	mode(Client* client_rqst);
 		int	mode_t(Client* client_rqst, int signe);
+		int	mode_o(Client* client_rqst, int signe, std::string& user);
 
 		size_t	countClient(void) const;
 };
