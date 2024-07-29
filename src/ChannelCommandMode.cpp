@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/29 01:41:02 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/29 02:09:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,9 @@ int	ChannelCommand::modeFlags(Client *client, Channel *channel,
 	while (!flagLst.empty() && flagLst[i] && retFalg != ERR_CHANOPRIVSNEEDED)
 	{
 		mode &= ~RESERV_BITS;
-		std::cout << "bits:" << ~RESERV_BITS << std::endl;
 		mode |= (unsigned int)flagLst[i];
-		std::cout << "it 0 le mode tkt " << (mode & RESERV_BITS) << std::endl;
 		if (flagLst[i] == '+' || flagLst[i] == '-')
 			mode = MODE_SIGNE_BIT << ((flagLst[i] == '-')? 1: 0);
-		std::cout << "it 1 le mode tkt " << (mode & RESERV_BITS) << std::endl;
 		if ((mode & RESERV_BITS) && (mode & ~RESERV_BITS))
 		{
 			retFalg = this->modeFlagsUse(client, channel, mode, argFlag); 
