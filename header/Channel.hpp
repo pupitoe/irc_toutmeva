@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 17:26:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:15:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ enum	retChannel
 	ECHAN_ALREADY_REGISTERED,
 	ECHAN_NOT_REGISTERED,
 	ERR_NOSUCHCHANNEL,
-	ERR_TOOMANYCHANNELS,
 	ERR_BADCHANNELKEY,
-	ERR_BANNEDFROMCHAN,
 	ERR_CHANNELISFULL,
 	ERR_INVITEONLYCHAN,
 	ERR_BADCHANMASK,
@@ -41,7 +39,6 @@ enum	retChannel
 	RPL_TOPICWHOTIME,
 	RPL_NAMREPLY,
 	RPL_ENDOFNAMES,
-
 
 	GOOD_REGISTER,
 	GOOD_PART
@@ -97,17 +94,22 @@ class	Channel
 
 		int		modeBasic(bool *modeVar, int signe, char typeMode,
 			Client *client_rqst);
+		void	sendInvitClient(Client* client_rqst,
+			std::string const& userName, std::map<int, Client *>& clientsLst);
 
 	public:
 		Channel(std::string const& str);
 		~Channel(void);
 
 		int	join(Client* client_rqst);
-		int	part(Client* client_rqst, std::string const& reason);
+		int	part(Client* client_rqst, std::string const& reason,
+			bool quitServe);
 		int	kick(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
 		int	topic(Client* client_rqst, std::string const& newTopic,
 			int topicHaveArg);
+		int	invite(Client* client_rqst, std::string const& userName,
+			std::map<int, Client *>& clientsLst);
 		int	mode(Client* client_rqst);
 		int	mode_t(Client* client_rqst, int signe);
 		int	mode_o(Client* client_rqst, int signe, std::string& user);

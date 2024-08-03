@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 17:52:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:26:01 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,17 @@ Channel::~Channel(void)
 {
 }
 
-int	Channel::part(Client *client_rqst, std::string const& reason)
+int	Channel::part(Client *client_rqst, std::string const& reason,
+	bool quitServe)
 {
 	std::list<Client *>::iterator	buffer;
 
 	buffer = std::find(this->_client.begin(), this->_client.end(), client_rqst);
 	if (buffer == this->_client.end())
 	{
-		client_rqst->addRPLBuffer(":442 " + client_rqst->getNickName() +
-			+ " " + this->_name + " :You're not on that channel\n");
+		if (quitServe == false)
+			client_rqst->addRPLBuffer(":442 " + client_rqst->getNickName() +
+				+ " " + this->_name + " :You're not on that channel\n");
 		return (ECHAN_NOT_REGISTERED);
 	}
 	this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name +
@@ -151,14 +153,30 @@ Client	*Channel::getClient(std::string const& nickName)
 	std::list<Client *>::iterator	itend;
 	Client							*buffer;
 
+	buffer = NULL;
 	it = this->_client.begin();
 	itend = this->_client.end();
 	while (it != itend && (*it)->getNickName() != nickName)
 		it++;
-	if (it == itend)
-		buffer = NULL;
-	else
+	if (it != itend)
 		buffer = *it;
+	return (buffer);
+}
+
+Client	*getClientMap(std::string const& nickName,
+	std::map<int, Client*>clientsLst)
+{
+	std::map<int, Client *>::iterator	it;
+	std::map<int, Client *>::iterator	itend;
+	Client								*buffer;
+
+	buffer = NULL;
+	it = clientsLst.begin();
+	itend = clientsLst.end();
+	while (it != itend && it->second->getNickName() != nickName)
+		it++;
+	if (it != itend)
+		buffer = it->second;
 	return (buffer);
 }
 
@@ -312,6 +330,53 @@ void	closeChannel(std::string const& channelName,
 		delete channels[channelName];
 		channels.erase(channelName);
 	}
+}
+
+void	Channel::sendInvitClient(Client* client_rqst,
+	std::string const& userName, std::map<int, Client *>& clientsLst)
+{
+	Client	*buffer;
+
+	buffer = getClientMap(userName, clientsLst);
+	if (buffer)
+	{
+		client_rqst->addRPLBuffer(":341 " + client_rqst->getNickName() +
+			" " + userName + " " + this->_name + "\n");
+		if (std::find(this->_invite_lst.begin(), this->_invite_lst.end(),
+				buffer) == this->_invite_lst.end())
+			this->_invite_lst.push_back(buffer);
+		buffer->addRPLBuffer(":" + client_rqst->getNickName() + " INVITE "
+			+ userName + " " + this->_name + "\n");
+	}
+	else
+		client_rqst->addRPLBuffer(":401 " + client_rqst->getNickName() +
+			" " + userName + " :No such nick\n");
+}
+
+int	Channel::invite(Client* client_rqst, std::string const& userName,
+	std::map<int, Client *>& clientsLst)
+{
+	int status;
+
+	status = 1;
+	if (this->inLst(client_rqst))
+	{
+		if (this->inOpLst(client_rqst))
+		{
+			if (!this->getClient(userName))
+			{
+				status = 0;
+				this->sendInvitClient(client_rqst, userName, clientsLst);
+			}
+			else
+				client_rqst->addRPLBuffer("443\n");
+		}
+		else
+			client_rqst->addRPLBuffer("482\n");
+	}
+	else
+		client_rqst->addRPLBuffer("442\n");
+	return (status);
 }
 
 void	Channel::RPL_CREATIONTIME(Client* client_rqst)

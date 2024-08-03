@@ -78,8 +78,8 @@ int	ChannelCommand::join(Client *client,
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == 0)
 	{
-		std::cout << getPart(channels_name, i) << " with key: '"
-			<< getPart(channels_key, i) << "'"<< std::endl;
+		//std::cout << getPart(channels_name, i) << " with key: '"
+		//	<< getPart(channels_key, i) << "'"<< std::endl;
 		status = this->channelFormating(buffer_channel_name);
 		if (status == SUCCESS)
 			status = this->join_channel(client, buffer_channel_name, channels);
@@ -128,7 +128,7 @@ int	ChannelCommand::part_channel(Client* user_rqts,
 	status = ERR_NOSUCHCHANNEL;
 	if (channelExist(channelName, channels) == true)
 	{
-		status = channels[channelName]->part(user_rqts, reason);
+		status = channels[channelName]->part(user_rqts, reason, false);
 		closeChannel(channelName, channels);
 	}
 	//user_rqts->addRPLBuffer(":403 " + user_rqts->getNickName()

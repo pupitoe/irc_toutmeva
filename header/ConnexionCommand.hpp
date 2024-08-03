@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/24 21:44:29 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/03 18:09:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ class ConnexionCommand : public Command {
         ~ConnexionCommand(void);
 
         int execute(int socket);
-		int	execute(Client *client, std::map<std::string, Channel *>& channels);
+		int	execute(Client *client, std::map<std::string, Channel *>& channels,
+			std::map<int, Client *>& clientLst);
 };
 
 #endif

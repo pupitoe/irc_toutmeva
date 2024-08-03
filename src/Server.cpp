@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 15:43:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:16:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ Server::~Server(void)
 	{
 		delete (this->_channels.begin()->second);
 		this->_channels.erase(this->_channels.begin());
-		this->deletClient(this->_clientList.begin()->first);
 	}
 }
 
@@ -104,7 +103,8 @@ void	Server::deletClient(int const fd)
 		{
 			it_old_channel = it_channel;
 			it_channel++;
-			it_old_channel->second->part(this->_clientList[fd], "");
+			it_old_channel->second->part(this->_clientList[fd], "", true);
+			it_old_channel->second->eraseInviteLst(this->_clientList[fd]);
 			closeChannel(it_old_channel->first, this->_channels);
 		}
 		// remove the client from the table
@@ -301,7 +301,7 @@ void	Server::parse(std::string cmd, Client &c) {
 void	Server::executeRequests(Client& client, Command *rqst) {
 	//Creer une fonction foreach pour les clients ?
 	if (rqst->getType() == CHANNEL)
-		rqst->execute(&client, this->_channels);
+		rqst->execute(&client, this->_channels, this->_clientList);
 	else
 		rqst->execute(client.getFd());
 	delete (rqst);

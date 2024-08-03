@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 20:16:44 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 19:21:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	ChannelCommand::topic(Client *client,
 	if (channelName.empty() == 0)
 	{
 		status = this->channelFormating(channelName);
-		if (status == SUCCESS && channelName.empty() == 0)
+		if (status == SUCCESS)
 			status = this->topic_channel(client,
 				channelName, newTopic, topicHaveArg, channels);
 		this->errorMessage(status, client);
@@ -139,8 +139,34 @@ int	ChannelCommand::topic(Client *client,
 	return (0);
 }
 
-int	ChannelCommand::execute(Client *client,
-	std::map<std::string, Channel *>& channels)
+int	ChannelCommand::invite(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
+{
+	int			status;
+	std::string	userName;
+	std::string	channelName;
+
+	userName = this->getArg();
+	channelName = this->getArg();
+	if (channelName.empty() == 0)
+	{
+		status = this->channelFormating(channelName);
+		if (status == SUCCESS)
+		{
+			status = ERR_NOSUCHCHANNEL;
+			if (channelExist(channelName, channels))
+				status = channels[channelName]->invite(client,
+					userName, clientLst);
+		}
+		this->errorMessage(status, client);
+	}
+	else
+		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+	return (0);
+}
+
+int	ChannelCommand::execute(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
 {
 	std::string			buffer;
 
@@ -155,5 +181,7 @@ int	ChannelCommand::execute(Client *client,
 		return (this->topic(client, channels));
 	if (buffer == "MODE")
 		return (this->mode(client, channels));
+	if (buffer == "INVITE")
+		return (this->invite(client, channels, clientLst));
 	return (0);
 }
