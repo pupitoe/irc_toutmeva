@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/02 13:22:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 17:45:21 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ Channel::~Channel(void)
 {
 }
 
-// add reson
 int	Channel::part(Client *client_rqst, std::string const& reason)
 {
 	std::list<Client *>::iterator	buffer;
@@ -45,16 +44,31 @@ int	Channel::part(Client *client_rqst, std::string const& reason)
 	return (GOOD_PART);
 }
 
-int	Channel::inLst(Client *client)
+int	Channel::inLst(Client *client) const
 {
 	return (std::find(this->_client.begin(), this->_client.end(), client)
 		!= this->_client.end());
 }
 
-int	Channel::inOpLst(Client *client)
+int	Channel::inOpLst(Client *client) const
 {
 	return (std::find(this->_operators.begin(), this->_operators.end(), client)
 		!= this->_operators.end());
+}
+
+int	Channel::inInvitLst(Client *client) const
+{
+	return (std::find(this->_invite_lst.begin(),
+		this->_invite_lst.end(), client) != this->_invite_lst.end());
+}
+
+void	Channel::eraseInviteLst(Client *client)
+{
+	std::list<Client *>::iterator	it;
+
+	it = std::find(this->_invite_lst.begin(), this->_invite_lst.end(), client);
+	if (it != this->_invite_lst.end())
+		this->_invite_lst.erase(it);
 }
 
 void	Channel::RPL_NAMREPLY(Client *client)
@@ -86,19 +100,28 @@ void	Channel::RPL_ENDOFNAMES(Client *client)
 	client->addRPLBuffer(buffer);
 }
 
-int	Channel::join(Client *client_rqst)
+void	Channel::join_super_user(Client* client_rqst)
 {
 	std::stringstream	ss;
 
+	ss << std::time(NULL);
+	ss >> this->_creation_time;
+	this->_operators.push_back(client_rqst);
+	this->_super_user_set = true;
+}
+
+int	Channel::join(Client *client_rqst)
+{
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
-	if (this->_super_user_set == false)
+	if (this->inInvitLst(client_rqst) == false && this->_invite_only)
 	{
-		ss << std::time(NULL);
-		ss >> this->_creation_time;
-		this->_operators.push_back(client_rqst);
-		this->_super_user_set = true;
+		client_rqst->addRPLBuffer(":473 " + client_rqst->getNickName()
+			+ " " + this->_name + ":Cannot join channel (+i)\n");
+		return (ERR_INVITEONLYCHAN);
 	}
+	if (this->_super_user_set == false)
+		this->join_super_user(client_rqst);
 	this->_client.push_back(client_rqst);
 	this->sendAll(":" + client_rqst->getNickName() + " JOIN " + this->_name
 		+ "\n");
@@ -106,6 +129,7 @@ int	Channel::join(Client *client_rqst)
 		this->topicRPL(client_rqst);
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
+	this->eraseInviteLst(client_rqst);
 	return (GOOD_REGISTER);
 }
 

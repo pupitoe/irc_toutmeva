@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 15:44:11 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 17:26:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ class	Channel
 		std::list<Client *>	_operators;
 		std::list<Client *>	_client;
 
+		std::list<Client *>	_invite_lst;
+
 		int					_super_user_set;
 
 		std::string			_topic_usr;
@@ -70,13 +72,16 @@ class	Channel
 		bool				_topic_priv_need;
 		bool				_invite_only;
 
-		int	inLst(Client *client);
-		int	inOpLst(Client *client);
+		int	inLst(Client *client) const;
+		int	inOpLst(Client *client) const;
+		int	inInvitLst(Client *client) const;
 
 		void	RPL_NAMREPLY(Client *client);
 		void	RPL_ENDOFNAMES(Client *client);
 		void	RPL_CREATIONTIME(Client* client_rqst);
 
+
+		void	join_super_user(Client* client_rqst);
 		int	userGrade(std::string const& nickName);
 
 		void	kickActiv(Client* client_rqst, std::string const& userKick,
@@ -109,6 +114,7 @@ class	Channel
 		int	mode_i(Client* client_rqst, int signe);
 
 		size_t	countClient(void) const;
+		void	eraseInviteLst(Client *client);
 };
 
 void	closeChannel(std::string const& channelName,
