@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 17:45:21 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 17:52:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	Channel::join(Client *client_rqst)
 	if (this->inInvitLst(client_rqst) == false && this->_invite_only)
 	{
 		client_rqst->addRPLBuffer(":473 " + client_rqst->getNickName()
-			+ " " + this->_name + ":Cannot join channel (+i)\n");
+			+ " " + this->_name + " :Cannot join channel (+i)\n");
 		return (ERR_INVITEONLYCHAN);
 	}
 	if (this->_super_user_set == false)
