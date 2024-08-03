@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/29 01:33:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/02 13:22:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Channel::Channel(std::string const& name): _name(name)
 {
 	this->_super_user_set = false;
 	this->_topic_priv_need = true;
+	this->_invite_only = false;
 }
 
 Channel::~Channel(void)

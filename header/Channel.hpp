@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/29 01:41:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 15:44:11 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ class	Channel
 		std::string			_creation_time;
 
 		bool				_topic_priv_need;
+		bool				_invite_only;
 
 		int	inLst(Client *client);
 		int	inOpLst(Client *client);
@@ -89,6 +90,9 @@ class	Channel
 		void	topicChange(Client* client_rqst, std::string const& newTopic);
 		void	topicRPL(Client *client_rqst);
 
+		int		modeBasic(bool *modeVar, int signe, char typeMode,
+			Client *client_rqst);
+
 	public:
 		Channel(std::string const& str);
 		~Channel(void);
@@ -102,6 +106,7 @@ class	Channel
 		int	mode(Client* client_rqst);
 		int	mode_t(Client* client_rqst, int signe);
 		int	mode_o(Client* client_rqst, int signe, std::string& user);
+		int	mode_i(Client* client_rqst, int signe);
 
 		size_t	countClient(void) const;
 };

@@ -6,13 +6,16 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/29 02:02:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/03 16:10:28 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 
-int	Channel::mode_t(Client* client_rqst, int signe)
+#include <iostream>
+
+int	Channel::modeBasic(bool *modeVar, int signe, char typeMode,
+	Client *client_rqst)
 {
 	int status;
 
@@ -20,16 +23,26 @@ int	Channel::mode_t(Client* client_rqst, int signe)
 	if (this->inOpLst(client_rqst))
 	{
 		status = 0;
-		if (this->_topic_priv_need == signe)
+		if (*modeVar == signe)
 			this->mode(client_rqst);
 		else
 			this->sendAll(":" + client_rqst->getNickName() + " MODE " +
-				this->_name + " " + ((signe)? "+": "-") + "t\n");
-		this->_topic_priv_need = signe;
+				this->_name + " " + ((signe)? "+": "-") + typeMode + "\n");
+		*modeVar = signe;
 	}
 	else
 		client_rqst->addRPLBuffer("482\n");
 	return (status);
+}
+
+int	Channel::mode_i(Client* client_rqst, int signe)
+{
+	return (this->modeBasic(&this->_invite_only, signe, 'i', client_rqst));
+}
+
+int	Channel::mode_t(Client* client_rqst, int signe)
+{
+	return (this->modeBasic(&this->_topic_priv_need, signe, 't', client_rqst));
 }
 
 // cas non gerer: s'il n'y a pas dargument pour l'username il vas renvoyer une erreur (dans se cas il ne dois rien print)
