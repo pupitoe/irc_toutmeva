@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 15:38:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:10:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,11 +176,29 @@ int	Channel::mode_k(Client* client_rqst, int signe, std::string const& key)
 
 int	Channel::mode(Client* client_rqst)
 {
-	std::string	buffer;
+	std::stringstream	ss;
+	std::string			args;
+	std::string			modes;
 
-	buffer = ":324 " + client_rqst->getNickName() + " " + this->_name;
-	buffer += "\n";
-	client_rqst->addRPLBuffer(buffer);
+	modes = "+";
+	args = "";
+	if (this->_key.empty() == false && this->inLst(client_rqst))
+	{
+		modes += 'k';
+		args +=  " " + this->_key;
+	}
+	if (this->_limit)
+	{
+		ss << this->_limit;
+		modes += 'l';
+		args += " " + ss.str();
+	}
+	if (this->_topic_priv_need)
+		modes += 't';
+	if (this->_invite_only)
+		modes += 'i';
+	client_rqst->addRPLBuffer(":324 " + client_rqst->getNickName() + " "
+		+ this->_name + " :" + ((modes.length() > 1)? modes: "") + args + "\n");
 	RPL_CREATIONTIME(client_rqst);
 	return (SUCCESS);
 }
