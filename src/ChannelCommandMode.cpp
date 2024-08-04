@@ -149,7 +149,7 @@ int	ChannelCommand::mode(Client *client,
 	
 	arg[MODE_CHANNEL] = this->getArg();
 	status = ERR_NEEDMOREPARAMS;
-	if (arg[MODE_CHANNEL].empty() == 0)
+	if (arg[MODE_CHANNEL].empty() == false)
 	{
 		status = ERR_NOSUCHCHANNEL;
 		if (this->channelFormating(arg[MODE_CHANNEL]) == SUCCESS
@@ -164,5 +164,5 @@ int	ChannelCommand::mode(Client *client,
 		}
 	}
 	this->errorMessage(status, client);
-	return (0);
+	return (SUCCESS);
 }

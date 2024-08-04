@@ -77,7 +77,7 @@ int	ChannelCommand::join(Client *client,
 	channels_key = this->getArg();
 	i = 0;
 	buffer_channel_name = getPart(channels_name, i);
-	while (i < 100 && buffer_channel_name.empty() == 0)
+	while (i < 100 && buffer_channel_name.empty() == false)
 	{
 		status = this->channelFormating(buffer_channel_name);
 		if (status == SUCCESS)
@@ -105,7 +105,7 @@ int	ChannelCommand::part(Client *client,
 	reason = this->getArg();
 	i = 0;
 	buffer_channel_name = getPart(channels_name, i);
-	while (i < 100 && buffer_channel_name.empty() == 0)
+	while (i < 100 && buffer_channel_name.empty() == false)
 	{
 		std::cout << getPart(channels_name, i) << std::endl;
 		status = this->part_channel(client, buffer_channel_name, channels,

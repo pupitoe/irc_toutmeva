@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/03 19:21:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 00:00:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	ChannelCommand::kick(Client *client,
 	}
 	if (user_name.empty())
 		this->errorMessage(ERR_NEEDMOREPARAMS, client);
-	return (0);
+	return (SUCCESS);
 }
 
 int	ChannelCommand::topic_channel(Client* user_rqts,
@@ -121,12 +121,12 @@ int	ChannelCommand::topic(Client *client,
 	std::string	channelName;
 	std::string	newTopic;
 
-	topicHaveArg = 0;
+	topicHaveArg = false;
 	if (this->_args.size() > 1)
-		topicHaveArg = 1;
+		topicHaveArg = true;
 	channelName = this->getArg();
 	newTopic = this->getArg();
-	if (channelName.empty() == 0)
+	if (channelName.empty() == false)
 	{
 		status = this->channelFormating(channelName);
 		if (status == SUCCESS)
@@ -162,7 +162,7 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 	}
 	else
 		this->errorMessage(ERR_NEEDMOREPARAMS, client);
-	return (0);
+	return (SUCCESS);
 }
 
 int	ChannelCommand::execute(Client *client, std::map<std::string,
