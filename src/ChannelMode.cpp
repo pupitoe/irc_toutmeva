@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 21:50:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 23:14:27 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int	Channel::modeBasic(bool *modeVar, int signe, char typeMode,
 	if (this->inOpLst(client_rqst))
 	{
 		status = 0;
-		if (*modeVar == signe)
-			this->mode(client_rqst);
-		else
+		if (*modeVar != signe)
 			this->sendAll(":" + client_rqst->getNickName() + " MODE " +
 				this->_name + " " + ((signe)? "+": "-") + typeMode + "\n");
 		*modeVar = signe;
