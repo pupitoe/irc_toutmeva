@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 18:08:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 23:58:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	Channel::join_check(Client *client_rqst, std::string const& key)
 		this->RPL_JOIN_MSG_ERR(client_rqst, "473", 'k');
 		return (ERR_BADCHANNELKEY);
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 int	Channel::join(Client *client_rqst, std::string const& key)
@@ -155,7 +155,7 @@ int	Channel::join(Client *client_rqst, std::string const& key)
 	this->_client.push_back(client_rqst);
 	this->sendAll(":" + client_rqst->getNickName() + " JOIN " + this->_name
 		+ "\n");
-	if (this->_topic.empty() == 0)
+	if (this->_topic.empty() == false)
 		this->topicRPL(client_rqst);
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
@@ -251,14 +251,14 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 {
 	int status;
 
-	status = 1;
+	status = FAIL;
 	if (this->inLst(client_rqst))
 	{
 		if (this->getClient(userKick))
 		{
 			if (this->inOpLst(client_rqst))
 			{
-				status = 0;
+				status = SUCCESS;
 				this->kickActiv(client_rqst, userKick, comment);
 			}
 			else
@@ -294,7 +294,7 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 	{
 		ss << std::time(NULL); 
 		ss >> buffer;
-		this->_topic = newTopic.c_str() + ((newTopic[0] == ':')? 1: 0);
+		this->_topic = newTopic.c_str();
 		this->_topic_usr = client_rqst->getNickName() + " " + buffer;
 	}
 	this->sendAll(":" + client_rqst->getNickName()
@@ -304,7 +304,7 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic,
 	int topicHaveArg)
 {
-	if (topicHaveArg == 0)
+	if (topicHaveArg == false)
 	{
 		if (this->_topic.empty())
 			client_rqst->addRPLBuffer(":331 " + client_rqst->getNickName()
@@ -321,13 +321,13 @@ int	Channel::topic(Client* client_rqst, std::string const& newTopic,
 {
 	int status;
 
-	status = 1;
+	status = FAIL;
 	if (this->inLst(client_rqst))
 	{
 		if ((newTopic.empty() && topicHaveArg == 0)
 			|| this->_topic_priv_need == 0 || this->inOpLst(client_rqst))
 		{
-			status = 0;
+			status = SUCCESS;
 			this->topicActiv(client_rqst, newTopic, topicHaveArg);
 		}
 		else
@@ -386,14 +386,14 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 {
 	int status;
 
-	status = 1;
+	status = FAIL;
 	if (this->inLst(client_rqst))
 	{
 		if (this->inOpLst(client_rqst))
 		{
 			if (!this->getClient(userName))
 			{
-				status = 0;
+				status = SUCCESS;
 				this->sendInvitClient(client_rqst, userName, clientsLst);
 			}
 			else

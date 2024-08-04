@@ -51,7 +51,8 @@ int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 			ret = (signe)? FLAG_USED: FLAG_NO_USED;
 			break;
 		default:
-			client->addRPLBuffer("tu es une merde\n");
+			status = channel->mode_other(client, mode & RESERV_BITS);
+			ret = FLAG_NO_USED;
 			break;
 	}
 	if (status == ERR_CHANOPRIVSNEEDED)

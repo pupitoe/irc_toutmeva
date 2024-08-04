@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 21:50:08 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 23:44:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ class	Channel
 		int	mode_l(Client* client_rqst, int signe, std::string const& limit);
 		int	mode_k(Client* client_rqst, int signe, std::string const& key);
 		int	mode_i(Client* client_rqst, int signe);
+		int	mode_other(Client* client_rqst, char flag);
 
 		bool mode_t_signe(void) const;
 		bool mode_i_signe(void) const;
