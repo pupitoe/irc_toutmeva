@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 02:14:43 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:37:26 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CHANNEL_HPP
 
 # include "Client.hpp"
+# include "irc_tout_me_va.hpp"
 # include <list>
 # include <string>
 # include <algorithm>
@@ -72,6 +73,7 @@ class	Channel
 		bool				_topic_priv_need;
 		bool				_invite_only;
 		userlimit			_limit;
+		std::string			_key;
 
 		int	inLst(Client *client) const;
 		int	inOpLst(Client *client) const;
@@ -104,6 +106,7 @@ class	Channel
 		void	RPL_MODE_L(Client *client_rqst);
 		void	RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 			char type);
+		int	mode_k_analyse(Client* client_rqst, std::string const& key);
 
 	public:
 		Channel(std::string const& str);
@@ -120,8 +123,9 @@ class	Channel
 			std::map<int, Client *>& clientsLst);
 		int	mode(Client* client_rqst);
 		int	mode_t(Client* client_rqst, int signe);
-		int	mode_o(Client* client_rqst, int signe, std::string& user);
-		int	mode_l(Client* client_rqst, int signe, std::string& limit);
+		int	mode_o(Client* client_rqst, int signe, std::string const& user);
+		int	mode_l(Client* client_rqst, int signe, std::string const& limit);
+		int	mode_k(Client* client_rqst, int signe, std::string const& key);
 		int	mode_i(Client* client_rqst, int signe);
 
 		size_t	countClient(void) const;

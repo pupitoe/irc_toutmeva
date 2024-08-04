@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 02:17:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:22:53 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	Channel::RPL_NAMREPLY(Client *client)
 	it = this->_client.begin();
 	while (it != this->_client.end())
 	{
-		if (it != this->_client.end())
+		if (it != this->_client.begin())
 			buffer += " ";
 		if (this->inOpLst(*it))
 			buffer += "@";

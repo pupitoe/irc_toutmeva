@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 02:19:18 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:38:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	Channel::mode_t(Client* client_rqst, int signe)
 }
 
 // cas non gerer: s'il n'y a pas dargument pour l'username il vas renvoyer une erreur (dans se cas il ne dois rien print)
-int	Channel::mode_o(Client* client_rqst, int signe, std::string& user)
+int	Channel::mode_o(Client* client_rqst, int signe, std::string const& user)
 {
 	int		status;
 	Client *target_client;
@@ -84,11 +84,11 @@ void	Channel::RPL_MODE_L(Client *client_rqst)
 	ss << this->_limit;
 	ss >> buffer;
 	
-	client_rqst->addRPLBuffer(":" + client_rqst->getNickName() + " MODE " +
+	this->sendAll(":" + client_rqst->getNickName() + " MODE " +
 		this->_name + " +l " + buffer + "\n");
 }
 
-int	Channel::mode_l(Client* client_rqst, int signe, std::string& limit)
+int	Channel::mode_l(Client* client_rqst, int signe, std::string const& limit)
 {
 	int			status;
 	long		buffer;
@@ -108,8 +108,66 @@ int	Channel::mode_l(Client* client_rqst, int signe, std::string& limit)
 			this->RPL_MODE_L(client_rqst);
 		}
 		else
-			client_rqst->addRPLBuffer(":" + client_rqst->getNickName() +
-				" MODE " + this->_name + " -l" + "\n");
+			this->sendAll(":" + client_rqst->getNickName() +
+				" MODE " + this->_name + " -l\n");
+	}
+	else
+		client_rqst->addRPLBuffer("482\n");
+	return (status);
+}
+
+int	Channel::mode_k_analyse(Client* client_rqst, std::string const& key)
+{
+	int			status;
+	std::string	error;
+	std::string	parameter;
+
+	status = 0;
+	parameter = "*";
+	if (key.empty())
+		error = "the key must not be empty\n";
+	if (error.empty() && key.find_first_of(": ,\t\v") < key.length())
+		error = "the key must not have space, comma and colon\n";
+	if (error.empty() && key.length() > 32)
+	{
+		error = "the key must have no more than 32 characters\n";
+		parameter = key;
+	}
+	if (error.empty() == 0)
+	{
+		status = 1;
+		client_rqst->addRPLBuffer(":696 " + client_rqst->getNickName() + " "
+			+ this->_name + " k "+ parameter + " :" + error);
+		client_rqst->addRPLBuffer(":525 " + client_rqst->getNickName() + " "
+			+ this->_name + " :Key is not well-formed\n");
+	}
+	return (status);
+}
+
+int	Channel::mode_k(Client* client_rqst, int signe, std::string const& key)
+{
+	int			status;
+
+	status = ERR_CHANOPRIVSNEEDED;
+	if (this->inOpLst(client_rqst))
+	{
+		status = 0;
+		if (signe)
+		{
+			status = mode_k_analyse(client_rqst, key);
+			if (status == SUCCESS)
+			{
+				this->_key = key;
+				this->sendAll(":" + client_rqst->getNickName()
+					+ " MODE " + this->_name + " +k " + key + "\n");
+			}
+		}
+		else
+		{
+			this->_key.erase();
+			this->sendAll(":" + client_rqst->getNickName()
+				+ " MODE " + this->_name + " -k *\n");
+		}
 	}
 	else
 		client_rqst->addRPLBuffer("482\n");
@@ -124,5 +182,5 @@ int	Channel::mode(Client* client_rqst)
 	buffer += "\n";
 	client_rqst->addRPLBuffer(buffer);
 	RPL_CREATIONTIME(client_rqst);
-	return (0);
+	return (SUCCESS);
 }

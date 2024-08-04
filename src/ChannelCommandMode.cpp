@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 01:50:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:29:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,14 @@ int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 			ret = FLAG_NO_USED;
 			break;
 		case 'k':
+			status = channel->mode_k(client, signe, arg);
+			ret = (signe)? FLAG_USED: FLAG_NO_USED;
 			break;
 		default:
 			client->addRPLBuffer("tu es une merde\n");
 			break;
 	}
-	std::cout << "le mode tkt " << (mode & RESERV_BITS) << std::endl;
-	(void)client;
-	(void)channel;
-	(void)mode;
-	(void)arg;
-	if (status)
+	if (status == ERR_CHANOPRIVSNEEDED)
 		return (status);
 	return (ret);
 }
