@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/03 18:49:54 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:10:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class ChannelCommand : public Command
 		void	errorMessage(int error, Client *);
 
 		int	join_channel(Client* user_rqts, std::string const& channelName,
-			std::map<std::string, Channel *>& channels);
+			std::map<std::string, Channel *>& channels, std::string const& key);
 		int	part_channel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels,
 			std::string const& reason);

@@ -41,7 +41,8 @@ int	ChannelCommand::channelFormating(std::string const& name)
 }
 
 int	ChannelCommand::join_channel(Client* user_rqts,
-	std::string const& channelName, std::map<std::string, Channel *>& channels)
+	std::string const& channelName, std::map<std::string, Channel *>& channels,
+	std::string const& key)
 {
 	int		status;
 	Channel	*buffer;
@@ -59,7 +60,7 @@ int	ChannelCommand::join_channel(Client* user_rqts,
 	else
 		buffer = channels[channelName];
 	if (status == SUCCESS)
-		status = buffer->join(user_rqts);
+		status = buffer->join(user_rqts, key);
 	return (status);
 }
 
@@ -78,11 +79,10 @@ int	ChannelCommand::join(Client *client,
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == 0)
 	{
-		//std::cout << getPart(channels_name, i) << " with key: '"
-		//	<< getPart(channels_key, i) << "'"<< std::endl;
 		status = this->channelFormating(buffer_channel_name);
 		if (status == SUCCESS)
-			status = this->join_channel(client, buffer_channel_name, channels);
+			status = this->join_channel(client, buffer_channel_name,
+				channels, channels_key);
 		this->errorMessage(status, client);
 		i++;
 		buffer_channel_name = getPart(channels_name, i);

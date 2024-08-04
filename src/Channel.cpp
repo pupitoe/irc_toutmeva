@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 15:22:53 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:08:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 		+ " " + this->_name + " :Cannot join channel (+" + type +")\n");
 }
 
-int	Channel::join_check(Client *client_rqst)
+int	Channel::join_check(Client *client_rqst, std::string const& key)
 {
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
@@ -129,19 +129,25 @@ int	Channel::join_check(Client *client_rqst)
 		this->RPL_JOIN_MSG_ERR(client_rqst, "471", 'l');
 		return (ERR_CHANNELISFULL);
 	}
-	if (this->inInvitLst(client_rqst) == false && this->_invite_only)
+	if (this->_invite_only && this->inInvitLst(client_rqst) == false)
 	{
 		this->RPL_JOIN_MSG_ERR(client_rqst, "473", 'i');
 		return (ERR_INVITEONLYCHAN);
 	}
+	if (this->_invite_only == false && this->_key.empty() == false
+		&& this->_key != key)
+	{
+		this->RPL_JOIN_MSG_ERR(client_rqst, "473", 'k');
+		return (ERR_BADCHANNELKEY);
+	}
 	return (0);
 }
 
-int	Channel::join(Client *client_rqst)
+int	Channel::join(Client *client_rqst, std::string const& key)
 {
 	int status;
 
-	status = this->join_check(client_rqst);
+	status = this->join_check(client_rqst, key);
 	if (status)
 		return (status);
 	if (this->_super_user_set == false)

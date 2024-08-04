@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 15:37:26 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:07:49 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ class	Channel
 
 		void	join_super_user(Client* client_rqst);
 		int	userGrade(std::string const& nickName);
-		int	join_check(Client *client_rqst);
+		int	join_check(Client *client_rqst, std::string const& key);
 
 		void	kickActiv(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
@@ -112,7 +112,7 @@ class	Channel
 		Channel(std::string const& str);
 		~Channel(void);
 
-		int	join(Client* client_rqst);
+		int	join(Client* client_rqst, std::string const& key);
 		int	part(Client* client_rqst, std::string const& reason,
 			bool quitServe);
 		int	kick(Client* client_rqst, std::string const& userKick,
