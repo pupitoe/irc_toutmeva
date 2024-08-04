@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 18:07:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:50:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,16 @@ class	Channel
 			int topicHaveArg);
 		int	invite(Client* client_rqst, std::string const& userName,
 			std::map<int, Client *>& clientsLst);
+
 		int	mode(Client* client_rqst);
 		int	mode_t(Client* client_rqst, int signe);
 		int	mode_o(Client* client_rqst, int signe, std::string const& user);
 		int	mode_l(Client* client_rqst, int signe, std::string const& limit);
 		int	mode_k(Client* client_rqst, int signe, std::string const& key);
 		int	mode_i(Client* client_rqst, int signe);
+
+		bool mode_t_signe(void) const;
+		bool mode_i_signe(void) const;
 
 		size_t	countClient(void) const;
 		void	eraseInviteLst(Client *client);

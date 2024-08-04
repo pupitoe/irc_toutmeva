@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 21:10:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 21:50:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,4 +201,14 @@ int	Channel::mode(Client* client_rqst)
 		+ this->_name + " :" + ((modes.length() > 1)? modes: "") + args + "\n");
 	RPL_CREATIONTIME(client_rqst);
 	return (SUCCESS);
+}
+
+bool Channel::mode_t_signe(void) const
+{
+	return (this->_topic_priv_need);
+}
+
+bool Channel::mode_i_signe(void) const
+{
+	return (this->_invite_only);
 }

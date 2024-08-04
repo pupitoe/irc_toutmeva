@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/04 18:10:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 23:06:47 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,16 @@
 # include <string>
 # include <sstream>
 # include <iostream>
+# include <cstring>
 # include "irc_tout_me_va.hpp"
+
+typedef struct s_modePreParserUtils
+{
+	size_t		usedArg;
+	int			signe;
+	std::string	retFlags;
+	std::string	oldFlags;
+}	t_modePreParserUtils;
 
 class ChannelCommand : public Command
 {
@@ -32,6 +41,10 @@ class ChannelCommand : public Command
 		int	modeFlags(Client *client, Channel *channel, std::string& flagLst);
 		int	modeFlagsUse(Client *client, Channel *channel, int mode,
 			std::string& arg);
+		int	modePreParserCondition(Channel *channelUse, size_t &usedArg,
+			int &signe, int caracter) const;
+
+		std::string	modePreParser(Channel *channelUse);
 
 		int	channelFormating(std::string const& name);
 		
@@ -50,7 +63,7 @@ class ChannelCommand : public Command
 			int topicHaveArg, std::map<std::string, Channel *>& channels);
 	
 		std::string getPart(std::string str, size_t pos);
-
+	
 		std::string	getArg(void);
 
     public :

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 15:29:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 23:07:27by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,58 @@ int	ChannelCommand::modeFlags(Client *client, Channel *channel,
 	return (SUCCESS);
 }
 
+int	ChannelCommand::modePreParserCondition(Channel *channelUse, size_t &usedArg,
+	int &signe, int caracter) const
+{
+	int	retCar;
+
+	retCar = '\0';
+	if (caracter == '+')
+		signe = 1;
+	else if (caracter == '-')
+		signe = 0;
+	if (std::strchr("lko", caracter))
+	{
+		if (usedArg < this->_args.size())
+			retCar = caracter;
+		usedArg++;
+	}
+	else if (std::strchr("ti", caracter))
+	{
+		if ((caracter == 't' && signe != channelUse->mode_t_signe())
+			|| (caracter == 'i' && signe != channelUse->mode_i_signe()))
+			retCar = caracter;
+	}
+	else
+		retCar = caracter;
+	return (retCar);
+}
+
+std::string ChannelCommand::modePreParser(Channel *channelUse)	
+{
+	size_t					i;
+	int						buffer_caracter;
+	t_modePreParserUtils	utils;
+
+	i = 0;
+	utils.retFlags = "";
+	utils.oldFlags = this->getArg();
+	utils.signe = 2;
+	utils.usedArg = 0;
+	while (utils.oldFlags[i])
+	{
+		buffer_caracter = this->modePreParserCondition(channelUse,
+			utils.usedArg, utils.signe, utils.oldFlags[i]);
+		if (buffer_caracter)
+			utils.retFlags += buffer_caracter;
+		i++;
+	}
+	if (utils.retFlags.find_first_not_of("+-") >= utils.retFlags.length())
+		utils.retFlags.erase();
+	std::cout << "flagi " << utils.retFlags << std::endl;
+	return (utils.retFlags);
+}
+
 int	ChannelCommand::mode(Client *client,
 	std::map<std::string, Channel *>& channels)
 {
@@ -95,7 +147,6 @@ int	ChannelCommand::mode(Client *client,
 	int				status;
 	
 	arg[MODE_CHANNEL] = this->getArg();
-	arg[MODE_FLAGS] = this->getArg();
 	status = ERR_NEEDMOREPARAMS;
 	if (arg[MODE_CHANNEL].empty() == 0)
 	{
@@ -103,6 +154,7 @@ int	ChannelCommand::mode(Client *client,
 		if (this->channelFormating(arg[MODE_CHANNEL]) == SUCCESS
 			&& channelExist(arg[MODE_CHANNEL], channels))
 		{
+			arg[MODE_FLAGS] = this->modePreParser(channels[arg[MODE_CHANNEL]]);
 			if (arg[MODE_FLAGS].empty())
 				status = channels[arg[MODE_CHANNEL]]->mode(client);
 			else
