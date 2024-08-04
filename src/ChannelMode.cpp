@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 16:10:28 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 02:19:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,46 @@ int	Channel::mode_o(Client* client_rqst, int signe, std::string& user)
 		}
 		else
 			client_rqst->addRPLBuffer("441\n");
+	}
+	else
+		client_rqst->addRPLBuffer("482\n");
+	return (status);
+}
+
+void	Channel::RPL_MODE_L(Client *client_rqst)
+{
+	std::stringstream	ss;
+	std::string 		buffer;
+
+	ss << this->_limit;
+	ss >> buffer;
+	
+	client_rqst->addRPLBuffer(":" + client_rqst->getNickName() + " MODE " +
+		this->_name + " +l " + buffer + "\n");
+}
+
+int	Channel::mode_l(Client* client_rqst, int signe, std::string& limit)
+{
+	int			status;
+	long		buffer;
+
+	status = ERR_CHANOPRIVSNEEDED;
+	if (this->inOpLst(client_rqst))
+	{
+		status = 0;
+		this->_limit = 0;
+		if (signe)
+		{
+			buffer = std::strtol(limit.c_str(), NULL, 10);
+			if (buffer > LIMIT_USER_IN_CHANNEL
+				|| limit.find_first_not_of("0123456789") < limit.length())
+				buffer = 0;
+			this->_limit = buffer;
+			this->RPL_MODE_L(client_rqst);
+		}
+		else
+			client_rqst->addRPLBuffer(":" + client_rqst->getNickName() +
+				" MODE " + this->_name + " -l" + "\n");
 	}
 	else
 		client_rqst->addRPLBuffer("482\n");

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/27 19:42:04 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 16:07:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 01:50:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 	int		status;
 	bool	signe;
 
-	ret = FLAG_USED;
 	status = 0;
 	signe = ((mode & MODE_SIGNE_BIT) > 0);
+	ret = FLAG_USED;
 	switch (mode & RESERV_BITS)
 	{
 		case 'l':
+			status = channel->mode_l(client, signe, arg);
+			ret = (signe)? FLAG_USED: FLAG_NO_USED;
 			break;
 		case 'i':
 			status = channel->mode_i(client, signe);

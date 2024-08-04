@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 20:26:01 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 02:17:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Channel::Channel(std::string const& name): _name(name)
 	this->_super_user_set = false;
 	this->_topic_priv_need = true;
 	this->_invite_only = false;
+	this->_limit = 0;
 }
 
 Channel::~Channel(void)
@@ -112,16 +113,37 @@ void	Channel::join_super_user(Client* client_rqst)
 	this->_super_user_set = true;
 }
 
-int	Channel::join(Client *client_rqst)
+void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
+	char type)
+{
+	client_rqst->addRPLBuffer(":" + error + " " + client_rqst->getNickName()
+		+ " " + this->_name + " :Cannot join channel (+" + type +")\n");
+}
+
+int	Channel::join_check(Client *client_rqst)
 {
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
+	if (this->_limit && this->countClient() >= this->_limit)
+	{
+		this->RPL_JOIN_MSG_ERR(client_rqst, "471", 'l');
+		return (ERR_CHANNELISFULL);
+	}
 	if (this->inInvitLst(client_rqst) == false && this->_invite_only)
 	{
-		client_rqst->addRPLBuffer(":473 " + client_rqst->getNickName()
-			+ " " + this->_name + " :Cannot join channel (+i)\n");
+		this->RPL_JOIN_MSG_ERR(client_rqst, "473", 'i');
 		return (ERR_INVITEONLYCHAN);
 	}
+	return (0);
+}
+
+int	Channel::join(Client *client_rqst)
+{
+	int status;
+
+	status = this->join_check(client_rqst);
+	if (status)
+		return (status);
 	if (this->_super_user_set == false)
 		this->join_super_user(client_rqst);
 	this->_client.push_back(client_rqst);

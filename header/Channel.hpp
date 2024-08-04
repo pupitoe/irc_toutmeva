@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 20:15:14 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/04 02:14:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 
 # define MODE_ADD 1
 # define MODE_REMOVE 0
+# define LIMIT_USER_IN_CHANNEL 4048
+
+typedef	unsigned int	userlimit;
 
 enum	retChannel
 {
@@ -68,6 +71,7 @@ class	Channel
 
 		bool				_topic_priv_need;
 		bool				_invite_only;
+		userlimit			_limit;
 
 		int	inLst(Client *client) const;
 		int	inOpLst(Client *client) const;
@@ -80,6 +84,7 @@ class	Channel
 
 		void	join_super_user(Client* client_rqst);
 		int	userGrade(std::string const& nickName);
+		int	join_check(Client *client_rqst);
 
 		void	kickActiv(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
@@ -96,6 +101,9 @@ class	Channel
 			Client *client_rqst);
 		void	sendInvitClient(Client* client_rqst,
 			std::string const& userName, std::map<int, Client *>& clientsLst);
+		void	RPL_MODE_L(Client *client_rqst);
+		void	RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
+			char type);
 
 	public:
 		Channel(std::string const& str);
@@ -113,6 +121,7 @@ class	Channel
 		int	mode(Client* client_rqst);
 		int	mode_t(Client* client_rqst, int signe);
 		int	mode_o(Client* client_rqst, int signe, std::string& user);
+		int	mode_l(Client* client_rqst, int signe, std::string& limit);
 		int	mode_i(Client* client_rqst, int signe);
 
 		size_t	countClient(void) const;
