@@ -96,14 +96,15 @@ int	ChannelCommand::modePreParserCondition(Channel *channelUse, size_t &usedArg,
 
 	retCar = '\0';
 	if (caracter == '+')
-		signe = 1;
+		signe = MORE;
 	else if (caracter == '-')
-		signe = 0;
+		signe = LESS;
 	if (std::strchr("lko", caracter))
 	{
-		if (usedArg < this->_args.size())
+		if (signe == LESS || usedArg < this->_args.size())
 			retCar = caracter;
-		usedArg++;
+		if (caracter == MORE)
+			usedArg++;
 	}
 	else if (std::strchr("ti", caracter))
 	{
