@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 17:43:14 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 01:09:49 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ class ChannelCommand : public Command
 			std::string& arg);
 		int	modePreParserCondition(Channel *channelUse, size_t &usedArg,
 			int &signe, int caracter) const;
+		int	privmsg(Client *client, std::map<std::string, Channel *>& channels,
+			std::map<int, Client *>& clientLst);
 
 		std::string	modePreParser(Channel *channelUse);
 
