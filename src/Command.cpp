@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 17:55:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:00:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,11 +113,4 @@ void	Command::errorMessage(int error, Client *client,
 	default:
 		break;
 	}
-}
-
-void	Command::ERR_CHANOPRIVSNEEDED_MSG(Client *client,
-	std::string const& channelName)
-{
-	client->addRPLBuffer(":482 " + client->getNickName()
-		+ " " + channelName + " :You're not channel operator\n");
 }

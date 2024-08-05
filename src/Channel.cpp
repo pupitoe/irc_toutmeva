@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 23:58:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:04:58 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,7 +262,7 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 				this->kickActiv(client_rqst, userKick, comment);
 			}
 			else
-				client_rqst->addRPLBuffer("482\n");
+				this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst, this->_name);
 		}
 		else
 			client_rqst->addRPLBuffer("441\n");
@@ -331,7 +331,7 @@ int	Channel::topic(Client* client_rqst, std::string const& newTopic,
 			this->topicActiv(client_rqst, newTopic, topicHaveArg);
 		}
 		else
-			client_rqst->addRPLBuffer("482\n");
+			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst, this->_name);
 	}
 	else
 		client_rqst->addRPLBuffer("442\n");
@@ -400,7 +400,7 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 				client_rqst->addRPLBuffer("443\n");
 		}
 		else
-			client_rqst->addRPLBuffer("482\n");
+			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst, this->_name);
 	}
 	else
 		client_rqst->addRPLBuffer("442\n");
@@ -411,4 +411,11 @@ void	Channel::RPL_CREATIONTIME(Client* client_rqst)
 {
 	client_rqst->addRPLBuffer(":329 " + client_rqst->getNickName() + " "
 		+ this->_name + " " + this->_creation_time + "\n");
+}
+
+void	Channel::ERR_CHANOPRIVSNEEDED_MSG(Client *client,
+	std::string const& channelName)
+{
+	client->addRPLBuffer(":482 " + client->getNickName()
+		+ " " + channelName + " :You're not channel operator\n");
 }

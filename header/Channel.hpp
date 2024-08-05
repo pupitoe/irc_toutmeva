@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 23:44:18 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:00:19 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ class	Channel
 		bool				_invite_only;
 		userlimit			_limit;
 		std::string			_key;
+
+		void	ERR_CHANOPRIVSNEEDED_MSG(Client *client,
+			std::string const& channelName);
 
 		int	inLst(Client *client) const;
 		int	inOpLst(Client *client) const;
