@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 17:42:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 01:13:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,15 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
+int	ChannelCommand::privmsg(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
+{
+	(void)client;
+	(void)channels;
+	(void)clientLst;
+	return (SUCCESS);
+}
+
 int	ChannelCommand::execute(Client *client, std::map<std::string,
 	Channel *>& channels, std::map<int, Client *>& clientLst)
 {
@@ -169,5 +178,7 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 		return (this->mode(client, channels));
 	if (buffer == "INVITE")
 		return (this->invite(client, channels, clientLst));
+	if (buffer == "PRIVMSG")
+		return (this->privmsg(client, channels, clientLst));
 	return (0);
 }
