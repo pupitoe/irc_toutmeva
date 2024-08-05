@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 17:45:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:53:21 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ class Command {
 		cmd_type				_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
 
 		void	errorMessage(int error, Client *client,
+			std::string const& channelName);
+		void	ERR_CHANOPRIVSNEEDED_MSG(Client *client,
 			std::string const& channelName);
 
 	public :

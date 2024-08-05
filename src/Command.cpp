@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 17:45:06 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:55:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,22 @@ Command::~Command(void) {
 
 }
 
+std::list<std::string>	Command::getArgs(void) const {
+	return (_args); // A modifier, copie partielle
+}
+
+cmd_type	Command::getType(void) const {
+	return (_type);
+}
+
+const char	*Command::UnrecognizedType::what(void) const throw() {
+	return ("Type of command received invalid.");
+};
+
+std::ostream	&operator<<(std::ostream &out, Command const &c) {
+	return (out << c.getArgs().front());
+}
+
 void	Command::errorMessage(int error, Client *client,
 	std::string const& channelName)
 {
@@ -99,18 +115,9 @@ void	Command::errorMessage(int error, Client *client,
 	}
 }
 
-std::list<std::string>	Command::getArgs(void) const {
-	return (_args); // A modifier, copie partielle
-}
-
-cmd_type	Command::getType(void) const {
-	return (_type);
-}
-
-const char	*Command::UnrecognizedType::what(void) const throw() {
-	return ("Type of command received invalid.");
-};
-
-std::ostream	&operator<<(std::ostream &out, Command const &c) {
-	return (out << c.getArgs().front());
+void	Command::ERR_CHANOPRIVSNEEDED_MSG(Client *client,
+	std::string const& channelName)
+{
+	client->addRPLBuffer(":482 " + client->getNickName()
+		+ " " + channelName + " :You're not channel operator\n");
 }

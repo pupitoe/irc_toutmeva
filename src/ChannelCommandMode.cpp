@@ -137,7 +137,6 @@ std::string ChannelCommand::modePreParser(Channel *channelUse)
 	}
 	if (utils.retFlags.find_first_not_of("+-") >= utils.retFlags.length())
 		utils.retFlags.erase();
-	std::cout << "flagi " << utils.retFlags << std::endl;
 	return (utils.retFlags);
 }
 
