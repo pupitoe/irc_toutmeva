@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/04 23:06:47 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:43:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ class ChannelCommand : public Command
 		std::string	modePreParser(Channel *channelUse);
 
 		int	channelFormating(std::string const& name);
-		
-		void	errorMessage(int error, Client *);
 
 		int	join_channel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels, std::string const& key);

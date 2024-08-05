@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 00:00:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:42:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,6 @@ std::string	ChannelCommand::getArg(void)
 		this->_args.pop_front();
 	}
 	return (buffer);
-}
-
-void	ChannelCommand::errorMessage(int error, Client *client)
-{
-	switch (error)
-	{
-	case ERR_NEEDMOREPARAMS:
-		client->addRPLBuffer("<client> <command> :Not enough parameters\n");
-		break;
-	case ERR_NOSUCHCHANNEL:
-		client->addRPLBuffer("<client> <channel> :No such channel\n");
-	default:
-		break;
-	}
 }
 
 int	ChannelCommand::kick_channel(Client* user_rqts,
@@ -91,12 +77,12 @@ int	ChannelCommand::kick(Client *client,
 		if (status == SUCCESS)
 			status = this->kick_channel(client, channel, buffer_user_name,
 				comment, channels);
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channel);
 		i++;
 		buffer_user_name = getPart(user_name, i);
 	}
 	if (user_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channel);
 	return (SUCCESS);
 }
 
@@ -132,10 +118,10 @@ int	ChannelCommand::topic(Client *client,
 		if (status == SUCCESS)
 			status = this->topic_channel(client,
 				channelName, newTopic, topicHaveArg, channels);
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channelName);
 	}
 	else
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channelName);
 	return (0);
 }
 
@@ -158,10 +144,10 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 				status = channels[channelName]->invite(client,
 					userName, clientLst);
 		}
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channelName);
 	}
 	else
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channelName);
 	return (SUCCESS);
 }
 

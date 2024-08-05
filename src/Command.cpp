@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 19:56:31 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:45:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 		_args.push_back(word);
 	}
 	this->_type = EMPTY;
+	this->_command_name = this->_args.front();
 }
 
 Command::Command(Command const &ref) : _args(ref.getArgs()),
@@ -79,6 +80,23 @@ Command::Command(Command const &ref) : _args(ref.getArgs()),
 
 Command::~Command(void) {
 
+}
+
+void	Command::errorMessage(int error, Client *client,
+	std::string const& channelName)
+{
+	switch (error)
+	{
+	case ERR_NEEDMOREPARAMS:
+		client->addRPLBuffer(":461 " + client->getNickName()
+			+ " " + this->_command_name + " :Not enough parameters\n");
+		break;
+	case ERR_NOSUCHCHANNEL:
+		client->addRPLBuffer(":403 " + client->getNickName()
+			+ " " + channelName + " :No such channel\n");
+	default:
+		break;
+	}
 }
 
 std::list<std::string>	Command::getArgs(void) const {

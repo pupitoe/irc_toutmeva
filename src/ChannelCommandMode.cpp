@@ -163,6 +163,6 @@ int	ChannelCommand::mode(Client *client,
 					arg[MODE_FLAGS]);
 		}
 	}
-	this->errorMessage(status, client);
+	this->errorMessage(status, client, arg[MODE_CHANNEL]);
 	return (SUCCESS);
 }

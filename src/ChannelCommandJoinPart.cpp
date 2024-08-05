@@ -83,12 +83,12 @@ int	ChannelCommand::join(Client *client,
 		if (status == SUCCESS)
 			status = this->join_channel(client, buffer_channel_name,
 				channels, channels_key);
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channels_name);
 		i++;
 		buffer_channel_name = getPart(channels_name, i);
 	}
 	if (channels_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channels_name);
 	return (0);
 }
 
@@ -110,12 +110,12 @@ int	ChannelCommand::part(Client *client,
 		std::cout << getPart(channels_name, i) << std::endl;
 		status = this->part_channel(client, buffer_channel_name, channels,
 			reason);
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channels_name);
 		i++;
 		buffer_channel_name = getPart(channels_name, i);
 	}
 	if (channels_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channels_name);
 	return (0);
 }
 
@@ -131,7 +131,5 @@ int	ChannelCommand::part_channel(Client* user_rqts,
 		status = channels[channelName]->part(user_rqts, reason, false);
 		closeChannel(channelName, channels);
 	}
-	//user_rqts->addRPLBuffer(":403 " + user_rqts->getNickName()
-	//	+ " " + channelName + " :No such channel\n");
 	return (status);
 }
