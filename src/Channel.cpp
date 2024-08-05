@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:12:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:16:28 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,8 +376,7 @@ void	Channel::sendInvitClient(Client* client_rqst,
 			+ userName + " " + this->_name + "\n");
 	}
 	else
-		client_rqst->addRPLBuffer(":401 " + client_rqst->getNickName() +
-			" " + userName + " :No such nick\n");
+		this->ERR_NOSUCHNICK_MSG(client_rqst, userName);
 }
 
 int	Channel::invite(Client* client_rqst, std::string const& userName,
@@ -422,4 +421,10 @@ void	Channel::ERR_NOTONCHANNEL_MSG(Client *client)
 {
 	client->addRPLBuffer(":442 " + client->getNickName()
 		+ " " + this->_name + " :You're not channel operator\n");
+}
+
+void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
+{
+	client->addRPLBuffer(":401 " + client->getNickName() +
+		" " + nick + " :No such nick\n");
 }
