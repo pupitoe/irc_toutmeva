@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 01:13:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 01:36:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,12 +151,42 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
-int	ChannelCommand::privmsg(Client *client, std::map<std::string,
-	Channel *>& channels, std::map<int, Client *>& clientLst)
+int	ChannelCommand::privmsg_exec(Client *client,
+	std::map<std::string, Channel *>& channels,
+	std::map<int, Client *>& clientLst, std::string const& target,
+	std::string const& message)
 {
 	(void)client;
 	(void)channels;
 	(void)clientLst;
+	(void)target;
+	(void)message;
+	return (SUCCESS);
+}
+
+int	ChannelCommand::privmsg(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
+{
+	int			status;
+	size_t		i;
+	std::string	targets;
+	std::string	message;
+	std::string	target_buffer;
+
+	targets = this->getArg();
+	message = this->getArg();
+	i = 0;
+	target_buffer = getPart(targets, i);
+	while (i < 100 && target_buffer.empty() == false && !message.empty())
+	{
+		status = this->privmsg_exec(client, channels, clientLst,
+			target_buffer, message);
+		this->errorMessage(status, client, targets);
+		i++;
+		target_buffer = getPart(targets, i);
+	}
+	if (targets.empty())
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, targets);
 	return (SUCCESS);
 }
 

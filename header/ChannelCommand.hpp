@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 01:09:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 01:31:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ class ChannelCommand : public Command
 			int &signe, int caracter) const;
 		int	privmsg(Client *client, std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst);
+		int	privmsg_exec(Client *client,
+			std::map<std::string, Channel *>& channels,
+			std::map<int, Client *>& clientLst, std::string const& target,
+			std::string const& message);
 
 		std::string	modePreParser(Channel *channelUse);
 
