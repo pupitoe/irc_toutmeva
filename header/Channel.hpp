@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:00:19 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:09:39 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ class	Channel
 		userlimit			_limit;
 		std::string			_key;
 
-		void	ERR_CHANOPRIVSNEEDED_MSG(Client *client,
-			std::string const& channelName);
+		void	ERR_CHANOPRIVSNEEDED_MSG(Client *client);
+		void	ERR_NOTONCHANNEL_MSG(Client *client);
 
 		int	inLst(Client *client) const;
 		int	inOpLst(Client *client) const;

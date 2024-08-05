@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:04:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:12:10 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ int	Channel::part(Client *client_rqst, std::string const& reason,
 	if (buffer == this->_client.end())
 	{
 		if (quitServe == false)
-			client_rqst->addRPLBuffer(":442 " + client_rqst->getNickName() +
-				+ " " + this->_name + " :You're not on that channel\n");
+			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
 		return (ECHAN_NOT_REGISTERED);
 	}
 	this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name +
@@ -262,13 +261,13 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 				this->kickActiv(client_rqst, userKick, comment);
 			}
 			else
-				this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst, this->_name);
+				this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
 		}
 		else
 			client_rqst->addRPLBuffer("441\n");
 	}
 	else
-		client_rqst->addRPLBuffer("442\n");
+		this->ERR_NOTONCHANNEL_MSG(client_rqst);
 	return (status);
 }
 
@@ -331,10 +330,10 @@ int	Channel::topic(Client* client_rqst, std::string const& newTopic,
 			this->topicActiv(client_rqst, newTopic, topicHaveArg);
 		}
 		else
-			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst, this->_name);
+			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
 	}
 	else
-		client_rqst->addRPLBuffer("442\n");
+		this->ERR_NOTONCHANNEL_MSG(client_rqst);
 	return (status);
 }
 
@@ -400,10 +399,10 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 				client_rqst->addRPLBuffer("443\n");
 		}
 		else
-			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst, this->_name);
+			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
 	}
 	else
-		client_rqst->addRPLBuffer("442\n");
+		this->ERR_NOTONCHANNEL_MSG(client_rqst);
 	return (status);
 }
 
@@ -413,9 +412,14 @@ void	Channel::RPL_CREATIONTIME(Client* client_rqst)
 		+ this->_name + " " + this->_creation_time + "\n");
 }
 
-void	Channel::ERR_CHANOPRIVSNEEDED_MSG(Client *client,
-	std::string const& channelName)
+void	Channel::ERR_CHANOPRIVSNEEDED_MSG(Client *client)
 {
 	client->addRPLBuffer(":482 " + client->getNickName()
-		+ " " + channelName + " :You're not channel operator\n");
+		+ " " + this->_name + " :You're not channel operator\n");
+}
+
+void	Channel::ERR_NOTONCHANNEL_MSG(Client *client)
+{
+	client->addRPLBuffer(":442 " + client->getNickName()
+		+ " " + this->_name + " :You're not channel operator\n");
 }
