@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:09:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:22:39 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	Channel::mode_o(Client* client_rqst, int signe, std::string const& user)
 				this->_name + " " + ((signe)? "+": "-") + "o " + user + "\n");
 		}
 		else
-			client_rqst->addRPLBuffer("441\n");
+			this->ERR_USERNOTINCHANNEL_MSG(client_rqst, user);
 	}
 	else
 		this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
