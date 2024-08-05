@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:23:04 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 18:27:40 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,8 @@ void	Channel::RPL_NAMREPLY(Client *client)
 
 void	Channel::RPL_ENDOFNAMES(Client *client)
 {
-	std::string	buffer;
-
-	buffer = ":366 " + client->getNickName() + " " + this->_name
-		+ " :End of NAMES list\n";
-	client->addRPLBuffer(buffer);
+	client->addRPLBuffer(":366 " + client->getNickName() + " " + this->_name
+		+ " :End of NAMES list\n");
 }
 
 void	Channel::join_super_user(Client* client_rqst)
@@ -403,35 +400,4 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 	else
 		this->ERR_NOTONCHANNEL_MSG(client_rqst);
 	return (status);
-}
-
-void	Channel::RPL_CREATIONTIME(Client* client_rqst)
-{
-	client_rqst->addRPLBuffer(":329 " + client_rqst->getNickName() + " "
-		+ this->_name + " " + this->_creation_time + "\n");
-}
-
-void	Channel::ERR_CHANOPRIVSNEEDED_MSG(Client *client)
-{
-	client->addRPLBuffer(":482 " + client->getNickName()
-		+ " " + this->_name + " :You're not channel operator\n");
-}
-
-void	Channel::ERR_NOTONCHANNEL_MSG(Client *client)
-{
-	client->addRPLBuffer(":442 " + client->getNickName()
-		+ " " + this->_name + " :You're not channel operator\n");
-}
-
-void	Channel::ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
-{
-	client->addRPLBuffer(":401 " + client->getNickName() +
-		" " + nick + " :No such nick\n");
-}
-
-void	Channel::ERR_USERNOTINCHANNEL_MSG(Client *client,
-	std::string const& nick)
-{
-	client->addRPLBuffer(":441 " + client->getNickName() +
-		" " + nick +  + " " + this->_name + " :They aren't on that channel\n");
 }
