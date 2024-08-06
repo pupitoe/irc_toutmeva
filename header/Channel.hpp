@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 15:22:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:47:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "Client.hpp"
 # include "irc_tout_me_va.hpp"
+# include "IRCError.hpp"
 # include <list>
 # include <string>
 # include <algorithm>
@@ -77,7 +78,6 @@ class	Channel
 
 		void	ERR_CHANOPRIVSNEEDED_MSG(Client *client);
 		void	ERR_NOTONCHANNEL_MSG(Client *client);
-		void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick);
 		void	ERR_USERNOTINCHANNEL_MSG(Client *client,
 			std::string const& nick);
 		void	ERR_USERONCHANNEL_MSG(Client *client,
@@ -151,5 +151,8 @@ void	closeChannel(std::string const& channelName,
 	std::map<std::string, Channel *>& channels);
 bool	channelExist(std::string const& channelName,
 	std::map<std::string, Channel *>& channels);
+
+void	RPL_PRIVMSG(Client *client_rqst, Client *dest,
+	std::string const& message);
 
 #endif

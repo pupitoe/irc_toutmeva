@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 18:22:28 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:27:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 
 # include <exception>
 # include <string>
+# include "Client.hpp"
 
 # define ERR_UNKNOWNERROR		400
 # define ERR_INPUTTOOLONG		417
 # define ERR_NEEDMOREPARAMS		461
+# define ERR_NOSUCHNICK			401
 
 // Don't forget to see if everything is correctly used.
 class IRCError : public std::exception {
@@ -40,7 +42,8 @@ class IRCError : public std::exception {
 		std::string	getError();
 
 		const char  *what(void) const throw();
-
 };
+
+void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick);
 
 #endif

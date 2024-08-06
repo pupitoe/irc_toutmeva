@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 16:09:20 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:51:20 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,22 @@ int	ChannelCommand::privmsg_exec_channel(Client *client,
 	return (status);
 }
 
+int	ChannelCommand::privmsg_exec_client(Client *client,
+	std::map<int, Client *>& clientLst, std::string const& target,
+	std::string const& message)
+{
+	int	status;
+	Client	*buffer;
+
+	status = ERR_NOSUCHNICK;
+	buffer = getClientMap(target, clientLst);
+	if (buffer)
+		RPL_PRIVMSG(client, buffer, message);
+	else
+		ERR_NOSUCHNICK_MSG(client, target);
+	return (status);
+}
+
 int	ChannelCommand::privmsg_exec(Client *client,
 	std::map<std::string, Channel *>& channels,
 	std::map<int, Client *>& clientLst, std::string const& target,
@@ -181,6 +197,8 @@ int	ChannelCommand::privmsg_exec(Client *client,
 	status = SUCCESS;
 	if (!target.compare(0, 1, "#") || !target.compare(0, 2, "@#"))
 		status = this->privmsg_exec_channel(client, channels, target, message);	
+	else
+		status = this->privmsg_exec_client(client, clientLst, target, message);
 	return (status);
 }
 
@@ -201,7 +219,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 	{
 		status = this->privmsg_exec(client, channels, clientLst,
 			target_buffer, message);
-		this->errorMessage(status, client, targets);
+		this->errorMessage(status, client, target_buffer);
 		i++;
 		target_buffer = getPart(targets, i);
 	}

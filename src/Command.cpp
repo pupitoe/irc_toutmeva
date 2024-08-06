@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 15:35:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:29:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	Command::errorMessage(int error, Client *client,
 		case ERR_NOSUCHCHANNEL:
 			client->addRPLBuffer(":403 " + client->getNickName()
 				+ " " + channelName + " :No such channel\n");
+			break;
 		default:
 			break;
 	}
