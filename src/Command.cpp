@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/05 18:00:43 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:35:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 		_args.push_back(word);
 	}
 	this->_type = EMPTY;
-	this->_command_name = this->_args.front();
+	if (this->_args.size())
+		this->_command_name = this->_args.front();
+	this->_nb_arg = this->_args.size();
 }
 
 Command::Command(Command const &ref) : _args(ref.getArgs()),
@@ -103,14 +105,14 @@ void	Command::errorMessage(int error, Client *client,
 {
 	switch (error)
 	{
-	case ERR_NEEDMOREPARAMS:
-		client->addRPLBuffer(":461 " + client->getNickName()
-			+ " " + this->_command_name + " :Not enough parameters\n");
-		break;
-	case ERR_NOSUCHCHANNEL:
-		client->addRPLBuffer(":403 " + client->getNickName()
-			+ " " + channelName + " :No such channel\n");
-	default:
-		break;
+		case ERR_NEEDMOREPARAMS:
+			client->addRPLBuffer(":461 " + client->getNickName()
+				+ " " + this->_command_name + " :Not enough parameters\n");
+			break;
+		case ERR_NOSUCHCHANNEL:
+			client->addRPLBuffer(":403 " + client->getNickName()
+				+ " " + channelName + " :No such channel\n");
+		default:
+			break;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 14:44:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:11:26 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,5 +399,31 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 	}
 	else
 		this->ERR_NOTONCHANNEL_MSG(client_rqst);
+	return (status);
+}
+
+int		Channel::sendMsg(Client* client_rqst, std::string const& message,
+	int op)
+{
+	int 							status;
+	std::list<Client *>::iterator	it;
+	std::list<Client *>::iterator	itend;
+
+	status = FAIL;
+	if (this->inLst(client_rqst) || (this->_key.empty()
+		&& this->_invite_only == false))
+	{
+		it = (op)? this->_operators.begin() :this->_client.begin();
+		itend = (op)? this->_operators.end() :this->_client.end();
+		while (it != itend)
+		{
+			if (*it != client_rqst)
+				(*it)->addRPLBuffer(message);
+			it++;
+		}
+	}
+	else
+		client_rqst->addRPLBuffer(":404 " + client_rqst->getNickName()
+			+ " " + this->_name + " :Cannot send to channel\n");
 	return (status);
 }

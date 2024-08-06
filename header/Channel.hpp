@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 14:43:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:22:09 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ class	Channel
 
 		size_t	countClient(void) const;
 		void	eraseInviteLst(Client *client);
+		int		sendMsg(Client* client_rqst,
+			std::string const& message, int op);
 };
 
 void	closeChannel(std::string const& channelName,

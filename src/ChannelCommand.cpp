@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 01:36:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:09:20 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,17 +151,37 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
+int	ChannelCommand::privmsg_exec_channel(Client *client,
+	std::map<std::string, Channel *>& channels,
+	std::string const& target, std::string const& message)
+{
+	int			status;
+	int			op;
+	std::string	channelName;
+
+	op = (target[0] == '@')? 1: 0;
+	channelName = target.substr(op, target.length());
+	status = this->channelFormating(channelName);
+	if (status == SUCCESS)
+	{
+		status = ERR_NOSUCHCHANNEL;
+		if (channelExist(channelName, channels))
+			status = channels[channelName]->sendMsg(client, message, op);
+	}
+	return (status);
+}
+
 int	ChannelCommand::privmsg_exec(Client *client,
 	std::map<std::string, Channel *>& channels,
 	std::map<int, Client *>& clientLst, std::string const& target,
 	std::string const& message)
 {
-	(void)client;
-	(void)channels;
-	(void)clientLst;
-	(void)target;
-	(void)message;
-	return (SUCCESS);
+	int	status;
+
+	status = SUCCESS;
+	if (!target.compare(0, 1, "#") || !target.compare(0, 2, "@#"))
+		status = this->privmsg_exec_channel(client, channels, target, message);	
+	return (status);
 }
 
 int	ChannelCommand::privmsg(Client *client, std::map<std::string,
@@ -185,7 +205,10 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		i++;
 		target_buffer = getPart(targets, i);
 	}
-	if (targets.empty())
+	if (this->_nb_arg >= 3 && message.empty())
+		client->addRPLBuffer(":412 " + client->getNickName()
+			+ " :No text to send");
+	else if (message.empty())
 		this->errorMessage(ERR_NEEDMOREPARAMS, client, targets);
 	return (SUCCESS);
 }
