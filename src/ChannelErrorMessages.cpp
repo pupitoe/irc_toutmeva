@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:25:25 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:25:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:44:12 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,11 @@ void	Channel::ERR_USERNOTINCHANNEL_MSG(Client *client,
 {
 	client->addRPLBuffer(":441 " + client->getNickName() +
 		" " + nick +  + " " + this->_name + " :They aren't on that channel\n");
+}
+
+void	Channel::ERR_USERONCHANNEL_MSG(Client *client,
+	std::string const& nick)
+{
+	client->addRPLBuffer(":443 " + client->getNickName() +
+		" " + nick +  + " " + this->_name + " :is already on channel\n");
 }

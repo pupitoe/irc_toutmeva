@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/05 18:27:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:44:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,7 +392,7 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 				this->sendInvitClient(client_rqst, userName, clientsLst);
 			}
 			else
-				client_rqst->addRPLBuffer("443\n");
+				this->ERR_USERONCHANNEL_MSG(client_rqst, userName);
 		}
 		else
 			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
