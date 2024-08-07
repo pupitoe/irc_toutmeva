@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 15:38:58 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/07/28 19:45:45 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ int	ChannelCommand::execute(int)
 
 ChannelCommand::~ChannelCommand(void) {
 	
+}
+
+std::string	ChannelCommand::getArg(void)
+{
+	std::string	buffer;
+	
+	if (this->_args.size())
+	{
+		buffer = this->_args.front();
+		this->_args.pop_front();
+	}
+	return (buffer);
 }
 
 void	ChannelCommand::errorMessage(int error, Client *client)
@@ -57,7 +69,7 @@ int	ChannelCommand::kick_channel(Client* user_rqts,
 }
 
 int	ChannelCommand::kick(Client *client,
-	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+	std::map<std::string, Channel *>& channels)
 {
 	int			status;
 	size_t		i;
@@ -66,9 +78,9 @@ int	ChannelCommand::kick(Client *client,
 	std::string	comment;
 	std::string	buffer_user_name;
 
-	ss >> channel;
-	ss >> user_name;
-	ss >> comment;
+	channel = this->getArg();
+	user_name = this->getArg();
+	comment = this->getArg();
 	i = 0;
 	buffer_user_name = getPart(user_name, i);
 	while (i < 100 && buffer_user_name.empty() == 0)
@@ -90,31 +102,36 @@ int	ChannelCommand::kick(Client *client,
 
 int	ChannelCommand::topic_channel(Client* user_rqts,
 	std::string const& channelName, std::string const& newTopic,
-	std::map<std::string, Channel *>& channels)
+	int topicHaveArg, std::map<std::string, Channel *>& channels)
 {
 	int		status;
 
 	status = ERR_NOSUCHCHANNEL;
 	if (channelExist(channelName, channels) == true)
-		status = channels[channelName]->topic(user_rqts, newTopic);
+		status = channels[channelName]->topic(user_rqts,
+			newTopic, topicHaveArg);
 	return (status);
 }
 
 int	ChannelCommand::topic(Client *client,
-	std::map<std::string, Channel *>& channels, std::stringstream& ss)
+	std::map<std::string, Channel *>& channels)
 {
 	int			status;
+	int			topicHaveArg;
 	std::string	channelName;
 	std::string	newTopic;
 
-	ss >> channelName;
-	ss >> newTopic;
+	topicHaveArg = 0;
+	if (this->_args.size() > 1)
+		topicHaveArg = 1;
+	channelName = this->getArg();
+	newTopic = this->getArg();
 	if (channelName.empty() == 0)
 	{
 		status = this->channelFormating(channelName);
 		if (status == SUCCESS && channelName.empty() == 0)
 			status = this->topic_channel(client,
-				channelName, newTopic, channels);
+				channelName, newTopic, topicHaveArg, channels);
 		this->errorMessage(status, client);
 	}
 	else
@@ -125,17 +142,16 @@ int	ChannelCommand::topic(Client *client,
 int	ChannelCommand::execute(Client *client,
 	std::map<std::string, Channel *>& channels)
 {
-	std::stringstream	ss(this->_args.front());
 	std::string			buffer;
 
-	ss >> buffer;
+	buffer = this->getArg();
 	if (buffer == "JOIN")
-		return (this->join(client, channels, ss));
+		return (this->join(client, channels));
 	if (buffer == "PART")
-		return (this->part(client, channels, ss));
+		return (this->part(client, channels));
 	if (buffer == "KICK")
-		return (this->kick(client, channels, ss));
+		return (this->kick(client, channels));
 	if (buffer == "TOPIC")
-		return (this->topic(client, channels, ss));
+		return (this->topic(client, channels));
 	return (0);
 }

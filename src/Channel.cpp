@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/27 01:38:17 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/07/28 19:51:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ int	Channel::kick(Client* client_rqst, std::string const& userKick,
 void	Channel::topicRPL(Client *client_rqst)
 {
 	client_rqst->addRPLBuffer(":332 " + client_rqst->getNickName()
-		+ " " + this->_name + " " + this->_topic + "\n");
+		+ " " + this->_name + " :" + this->_topic + "\n");
 	client_rqst->addRPLBuffer(":333 " + client_rqst->getNickName()
 		+ " " + this->_name + " " + this->_topic_usr + "\n");
 }
@@ -209,7 +209,7 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 	std::stringstream	ss;
 	std::string			buffer;
 
-	if (newTopic == ":")
+	if (newTopic.empty())
 	{
 		this->_topic_usr.erase();
 		this->_topic.erase();
@@ -221,14 +221,14 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 		this->_topic = newTopic.c_str() + ((newTopic[0] == ':')? 1: 0);
 		this->_topic_usr = client_rqst->getNickName() + " " + buffer;
 		this->sendAll(":" + client_rqst->getNickName()
-			+ " TOPIC " + this->_name + " " + this->_topic + "\n");
+			+ " TOPIC " + this->_name + " :" + this->_topic + "\n");
 	}
 }
 
-void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic)
+void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic,
+	int topicHaveArg)
 {
-
-	if (newTopic.empty())
+	if (topicHaveArg == 0)
 	{
 		if (this->_topic.empty())
 			client_rqst->addRPLBuffer(":331 " + client_rqst->getNickName()
@@ -240,7 +240,8 @@ void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic)
 		this->topicChange(client_rqst, newTopic);
 }
 
-int	Channel::topic(Client* client_rqst, std::string const& newTopic)
+int	Channel::topic(Client* client_rqst, std::string const& newTopic,
+	int topicHaveArg)
 {
 	int status;
 
@@ -250,7 +251,7 @@ int	Channel::topic(Client* client_rqst, std::string const& newTopic)
 		if (newTopic.empty() || this->inOpLst(client_rqst))
 		{
 			status = 0;
-			this->topicActiv(client_rqst, newTopic);
+			this->topicActiv(client_rqst, newTopic, topicHaveArg);
 		}
 		else
 			client_rqst->addRPLBuffer("482\n");
