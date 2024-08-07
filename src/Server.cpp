@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/03 20:16:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:01:40 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,8 @@ void	Server::parse(std::string cmd, Client &c) {
 		}
 	}
 	catch (IRCError &e) {
-		std::cout << e.what() << std::endl;
+		std::cout << e.what() << std::endl; // to remove, only used for tests.
+		c.addRPLBuffer(e.getError());
 	}
 	catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
@@ -303,6 +304,6 @@ void	Server::executeRequests(Client& client, Command *rqst) {
 	if (rqst->getType() == CHANNEL)
 		rqst->execute(&client, this->_channels, this->_clientList);
 	else
-		rqst->execute(client.getFd());
+		rqst->execute(client);
 	delete (rqst);
 }
