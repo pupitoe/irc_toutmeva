@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 15:35:06 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:00:44 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ class Command {
 		std::list<std::string>	getArgs(void) const;
 		virtual enum type getType(void) const;
 
-		virtual int	execute(int socket) = 0;
+		virtual int	execute(Client &client) = 0;
 		virtual int	execute(Client *client,
 			std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst) = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 16:51:20 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/07 17:01:20 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ ChannelCommand::ChannelCommand(std::string msg) : Command(msg) {
 	std::cout << "channel creation" << std::endl;
 }
 
-int	ChannelCommand::execute(int)
+int	ChannelCommand::execute(Client &)
 {
 	return (0);
 }
