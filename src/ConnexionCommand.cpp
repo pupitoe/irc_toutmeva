@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 17:53:35 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/03 20:08:54 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ ConnexionCommand::ConnexionCommand(std::string msg)
 	if (!msg.compare(0, 5, "PASS ", 5)){
 		test_password(msg.c_str() + 5);
 	}
-	
-	
 }
 
 ConnexionCommand::~ConnexionCommand(void) {
@@ -38,7 +36,8 @@ int	ConnexionCommand::execute(int socket) {
 	return (0);
 }
 
-int	ConnexionCommand::execute(Client *, std::map<std::string, Channel *>&)
+int	ConnexionCommand::execute(Client *, std::map<std::string, Channel *>&,
+	std::map<int, Client *>&)
 {
 	return (0);
 }

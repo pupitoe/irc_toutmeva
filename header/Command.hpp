@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 15:22:15 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:59:59 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@ enum type {
 class Command {
 
 	protected :
+		std::string 			_command_name;
 		std::list<std::string>	_args;
 		cmd_type				_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
+
+		void	errorMessage(int error, Client *client,
+			std::string const& channelName);
 
 	public :
 		Command(std::string msg) 
@@ -49,7 +53,8 @@ class Command {
 
 		virtual int	execute(int socket) = 0;
 		virtual int	execute(Client *client,
-			std::map<std::string, Channel *>& channels) = 0;
+			std::map<std::string, Channel *>& channels,
+			std::map<int, Client *>& clientLst) = 0;
 
 		class UnrecognizedType : public std::exception {
 			const char	*what(void) const throw();

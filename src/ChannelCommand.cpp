@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/28 19:45:45 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:42:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,6 @@ std::string	ChannelCommand::getArg(void)
 		this->_args.pop_front();
 	}
 	return (buffer);
-}
-
-void	ChannelCommand::errorMessage(int error, Client *client)
-{
-	switch (error)
-	{
-	case ERR_NEEDMOREPARAMS:
-		client->addRPLBuffer("<client> <command> :Not enough parameters\n");
-		break;
-	case ERR_NOSUCHCHANNEL:
-		client->addRPLBuffer("<client> <channel> :No such channel\n");
-	default:
-		break;
-	}
 }
 
 int	ChannelCommand::kick_channel(Client* user_rqts,
@@ -91,13 +77,13 @@ int	ChannelCommand::kick(Client *client,
 		if (status == SUCCESS)
 			status = this->kick_channel(client, channel, buffer_user_name,
 				comment, channels);
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channel);
 		i++;
 		buffer_user_name = getPart(user_name, i);
 	}
 	if (user_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
-	return (0);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channel);
+	return (SUCCESS);
 }
 
 int	ChannelCommand::topic_channel(Client* user_rqts,
@@ -121,26 +107,52 @@ int	ChannelCommand::topic(Client *client,
 	std::string	channelName;
 	std::string	newTopic;
 
-	topicHaveArg = 0;
+	topicHaveArg = false;
 	if (this->_args.size() > 1)
-		topicHaveArg = 1;
+		topicHaveArg = true;
 	channelName = this->getArg();
 	newTopic = this->getArg();
-	if (channelName.empty() == 0)
+	if (channelName.empty() == false)
 	{
 		status = this->channelFormating(channelName);
-		if (status == SUCCESS && channelName.empty() == 0)
+		if (status == SUCCESS)
 			status = this->topic_channel(client,
 				channelName, newTopic, topicHaveArg, channels);
-		this->errorMessage(status, client);
+		this->errorMessage(status, client, channelName);
 	}
 	else
-		this->errorMessage(ERR_NEEDMOREPARAMS, client);
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channelName);
 	return (0);
 }
 
-int	ChannelCommand::execute(Client *client,
-	std::map<std::string, Channel *>& channels)
+int	ChannelCommand::invite(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
+{
+	int			status;
+	std::string	userName;
+	std::string	channelName;
+
+	userName = this->getArg();
+	channelName = this->getArg();
+	if (channelName.empty() == 0)
+	{
+		status = this->channelFormating(channelName);
+		if (status == SUCCESS)
+		{
+			status = ERR_NOSUCHCHANNEL;
+			if (channelExist(channelName, channels))
+				status = channels[channelName]->invite(client,
+					userName, clientLst);
+		}
+		this->errorMessage(status, client, channelName);
+	}
+	else
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, channelName);
+	return (SUCCESS);
+}
+
+int	ChannelCommand::execute(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
 {
 	std::string			buffer;
 
@@ -153,5 +165,9 @@ int	ChannelCommand::execute(Client *client,
 		return (this->kick(client, channels));
 	if (buffer == "TOPIC")
 		return (this->topic(client, channels));
+	if (buffer == "MODE")
+		return (this->mode(client, channels));
+	if (buffer == "INVITE")
+		return (this->invite(client, channels, clientLst));
 	return (0);
 }
