@@ -43,6 +43,18 @@ class ChannelCommand : public Command
 			std::string& arg);
 		int	modePreParserCondition(Channel *channelUse, size_t &usedArg,
 			int &signe, int caracter) const;
+		int	privmsg(Client *client, std::map<std::string, Channel *>& channels,
+			std::map<int, Client *>& clientLst);
+		int	privmsg_exec(Client *client,
+			std::map<std::string, Channel *>& channels,
+			std::map<int, Client *>& clientLst, std::string const& target,
+			std::string const& message);
+		int	privmsg_exec_channel(Client *client,
+			std::map<std::string, Channel *>& channels,
+			std::string const& target, std::string const& message);
+		int	privmsg_exec_client(Client *client,
+			std::map<int, Client *>& clientLst, std::string const& target,
+			std::string const& message);
 
 		std::string	modePreParser(Channel *channelUse);
 
@@ -59,9 +71,9 @@ class ChannelCommand : public Command
 		int	topic_channel(Client* user_rqts,
 			std::string const& channelName, std::string const& newTopic,
 			int topicHaveArg, std::map<std::string, Channel *>& channels);
-	
+
 		std::string getPart(std::string str, size_t pos);
-	
+
 		std::string	getArg(void);
 
     public :

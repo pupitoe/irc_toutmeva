@@ -38,6 +38,7 @@ class Command {
 		std::string 			_command_name;
 		std::list<std::string>	_args;
 		cmd_type				_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
+		size_t					_nb_arg;
 
 		void	errorMessage(int error, Client *client,
 			std::string const& channelName);

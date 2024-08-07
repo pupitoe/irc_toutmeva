@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
 /*   Updated: 2024/08/07 17:09:49 by ggiboury         ###   ########.fr       */
@@ -40,6 +40,11 @@ const char  *IRCError::what(void) const throw() {
 	return ("wip");
 }
 
+void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
+{
+	client->addRPLBuffer(":401 " + client->getNickName() +
+		" " + nick + " :No such nick\n");
+}
 
 std::string	IRCError::_gen_reply(void) const {
 	if (_err == ERR_NEEDMOREPARAMS) {

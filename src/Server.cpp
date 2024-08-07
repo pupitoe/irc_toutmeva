@@ -25,6 +25,9 @@ Server::Server(void) : _socket(0) {
 Server::Server(char *psw, int port) : _password(psw), _socket(port)
 {
 	FD_ZERO(&this->_rfds);
+	FD_ZERO(&this->_rfds_error);
+	FD_ZERO(&this->_rfds_read);
+	FD_ZERO(&this->_rfds_write);
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
 	this->_status_server = SUCCESS;
@@ -261,7 +264,8 @@ static enum type guessType(std::string msg) {
 	else if (!msg.compare(0, 5, "JOIN ", 5) || !msg.compare(0, 5, "PART ", 5)
 		|| !msg.compare(0, 6, "TOPIC ", 6) || !msg.compare(0, 6, "NAMES ", 6)
 		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 7, "INVITE ", 7)
-		|| !msg.compare(0, 5, "KICK ", 5) || !msg.compare(0, 5, "MODE ", 5))
+		|| !msg.compare(0, 5, "KICK ", 5) || !msg.compare(0, 5, "MODE ", 5)
+		|| !msg.compare(0, 8, "PRIVMSG ", 8))
 		return (CHANNEL);
 	else if (msg.empty())
 		return (EMPTY);

@@ -151,6 +151,86 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
+int	ChannelCommand::privmsg_exec_channel(Client *client,
+	std::map<std::string, Channel *>& channels,
+	std::string const& target, std::string const& message)
+{
+	int			status;
+	int			op;
+	std::string	channelName;
+
+	op = (target[0] == '@')? 1: 0;
+	channelName = target.substr(op, target.length());
+	status = this->channelFormating(channelName);
+	if (status == SUCCESS)
+	{
+		status = ERR_NOSUCHCHANNEL;
+		if (channelExist(channelName, channels))
+			status = channels[channelName]->sendMsg(client, message, op);
+	}
+	return (status);
+}
+
+int	ChannelCommand::privmsg_exec_client(Client *client,
+	std::map<int, Client *>& clientLst, std::string const& target,
+	std::string const& message)
+{
+	int	status;
+	Client	*buffer;
+
+	status = ERR_NOSUCHNICK;
+	buffer = getClientMap(target, clientLst);
+	if (buffer)
+		RPL_PRIVMSG(client, buffer, message);
+	else
+		ERR_NOSUCHNICK_MSG(client, target);
+	return (status);
+}
+
+int	ChannelCommand::privmsg_exec(Client *client,
+	std::map<std::string, Channel *>& channels,
+	std::map<int, Client *>& clientLst, std::string const& target,
+	std::string const& message)
+{
+	int	status;
+
+	status = SUCCESS;
+	if (!target.compare(0, 1, "#") || !target.compare(0, 2, "@#"))
+		status = this->privmsg_exec_channel(client, channels, target, message);	
+	else
+		status = this->privmsg_exec_client(client, clientLst, target, message);
+	return (status);
+}
+
+int	ChannelCommand::privmsg(Client *client, std::map<std::string,
+	Channel *>& channels, std::map<int, Client *>& clientLst)
+{
+	int			status;
+	size_t		i;
+	std::string	targets;
+	std::string	message;
+	std::string	target_buffer;
+
+	targets = this->getArg();
+	message = this->getArg();
+	i = 0;
+	target_buffer = getPart(targets, i);
+	while (i < 100 && target_buffer.empty() == false && !message.empty())
+	{
+		status = this->privmsg_exec(client, channels, clientLst,
+			target_buffer, message);
+		this->errorMessage(status, client, target_buffer);
+		i++;
+		target_buffer = getPart(targets, i);
+	}
+	if (this->_nb_arg >= 3 && message.empty())
+		client->addRPLBuffer(":412 " + client->getNickName()
+			+ " :No text to send");
+	else if (message.empty())
+		this->errorMessage(ERR_NEEDMOREPARAMS, client, targets);
+	return (SUCCESS);
+}
+
 int	ChannelCommand::execute(Client *client, std::map<std::string,
 	Channel *>& channels, std::map<int, Client *>& clientLst)
 {
@@ -169,5 +249,7 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 		return (this->mode(client, channels));
 	if (buffer == "INVITE")
 		return (this->invite(client, channels, clientLst));
+	if (buffer == "PRIVMSG")
+		return (this->privmsg(client, channels, clientLst));
 	return (0);
 }

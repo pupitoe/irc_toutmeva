@@ -137,3 +137,20 @@ std::string const&	Client::getNickName(void) const
 {
 	return (this->_nickName);
 }
+
+Client	*getClientMap(std::string const& nickName,
+	std::map<int, Client*>clientsLst)
+{
+	std::map<int, Client *>::iterator	it;
+	std::map<int, Client *>::iterator	itend;
+	Client								*buffer;
+
+	buffer = NULL;
+	it = clientsLst.begin();
+	itend = clientsLst.end();
+	while (it != itend && it->second->getNickName() != nickName)
+		it++;
+	if (it != itend)
+		buffer = it->second;
+	return (buffer);
+}

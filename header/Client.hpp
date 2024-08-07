@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 16:43:07 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:32:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CLIENT_HPP
 
 # include <queue>
+# include <map>
 # include <string>
 
 enum	CStatus
@@ -67,5 +68,8 @@ class	Client
 
 		std::string const&	getNickName(void) const;
 };
+
+Client	*getClientMap(std::string const& nickName,
+	std::map<int, Client*>clientsLst);
 
 #endif

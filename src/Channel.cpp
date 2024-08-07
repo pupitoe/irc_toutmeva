@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 14:44:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:48:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,23 +187,6 @@ Client	*Channel::getClient(std::string const& nickName)
 	return (buffer);
 }
 
-Client	*getClientMap(std::string const& nickName,
-	std::map<int, Client*>clientsLst)
-{
-	std::map<int, Client *>::iterator	it;
-	std::map<int, Client *>::iterator	itend;
-	Client								*buffer;
-
-	buffer = NULL;
-	it = clientsLst.begin();
-	itend = clientsLst.end();
-	while (it != itend && it->second->getNickName() != nickName)
-		it++;
-	if (it != itend)
-		buffer = it->second;
-	return (buffer);
-}
-
 void	Channel::sendAll(std::string const& msg)
 {
 	std::list<Client *>::iterator	it;
@@ -373,7 +356,7 @@ void	Channel::sendInvitClient(Client* client_rqst,
 			+ userName + " " + this->_name + "\n");
 	}
 	else
-		this->ERR_NOSUCHNICK_MSG(client_rqst, userName);
+		ERR_NOSUCHNICK_MSG(client_rqst, userName);
 }
 
 int	Channel::invite(Client* client_rqst, std::string const& userName,
@@ -400,4 +383,39 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 	else
 		this->ERR_NOTONCHANNEL_MSG(client_rqst);
 	return (status);
+}
+
+int		Channel::sendMsg(Client* client_rqst, std::string const& message,
+	int op)
+{
+	int 							status;
+	std::list<Client *>::iterator	it;
+	std::list<Client *>::iterator	itend;
+
+	status = FAIL;
+	if (this->inLst(client_rqst) || (this->_key.empty()
+		&& this->_invite_only == false))
+	{
+		status = SUCCESS;
+		it = (op)? this->_operators.begin() :this->_client.begin();
+		itend = (op)? this->_operators.end() :this->_client.end();
+		while (it != itend)
+		{
+			if (*it != client_rqst)
+				RPL_PRIVMSG(client_rqst, *it, message);
+			it++;
+		}
+	}
+	else
+		client_rqst->addRPLBuffer(":404 " + client_rqst->getNickName()
+			+ " " + this->_name + " :Cannot send to channel\n");
+	return (status);
+}
+
+
+void	RPL_PRIVMSG(Client *client_rqst, Client *dest,
+	std::string const& message)
+{
+	dest->addRPLBuffer(":" +client_rqst->getNickName() + " PRIVMSG "
+		+ dest->getNickName() + " :" + message + "\n");
 }
