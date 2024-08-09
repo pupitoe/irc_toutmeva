@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/09 10:00:31 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/09 11:05:01 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,43 @@ int	ConnexionCommand::_exec_pass(Client &c) {
 	std::string &pass = *_args.begin();
 	if (pass != _password)
 		throw (IRCError(ERR_PASSWDMISMATCH));
+	//Verifications a terminer
 	c.changeStatus(CS_SETPASS);
 	return (0);
 }
 
+static void	registration(Client &c) {
+	// RPL WELCOME
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" :Welcome to the ");
+	c.addRPLBuffer("TMP");
+	c.addRPLBuffer(" Network ");
+	c.addRPLBuffer(c.getNickName()); // Modulable comme on le souhaite
+
+	//RPL YOUR HOST
+
+}
+
 int	ConnexionCommand::_exec_nick(Client &c) {
-	(void) c;
+	_args.pop_front();
+	c.setNickName(_args.front());
+
+	if (c.getStatusClient() == CS_CONNECTED) {
+		; // changing nickname;
+	}
+	else if (c.getStatusClient() == CS_FINISH_REGISTER)	
+		registration(c);
 	return (0);
 }
 
 int	ConnexionCommand::_exec_user(Client &c) {
-	(void) c;
+	_args.pop_front();
+	c.setUserName(_args.front());
+	_args.pop_front();
+	_args.pop_front();
+	c.setUserFullName(_args.front());
+	if (c.getStatusClient() == CS_FINISH_REGISTER)	
+		registration(c);
 	return (0);
 }
 

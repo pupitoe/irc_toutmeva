@@ -80,7 +80,7 @@ void	Client::setServerName(std::string const& str)
 }
 
 void	Client::changeStatus(enum CStatus new_status) {
-	this->_status_connection = new_status;
+	this->_status_connection |= new_status;
 }
 
 std::string const&	Client::getCommandBuffer(void) const
