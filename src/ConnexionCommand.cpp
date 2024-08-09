@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/09 11:05:01 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/09 16:05:07 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,33 @@ static void	registration(Client &c) {
 	// RPL WELCOME
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Welcome to the ");
-	c.addRPLBuffer("TMP");
+	c.addRPLBuffer("ft_irc");
 	c.addRPLBuffer(" Network ");
 	c.addRPLBuffer(c.getNickName()); // Modulable comme on le souhaite
+	c.addRPLBuffer("\n");
 
 	//RPL YOUR HOST
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" :Your host is ");
+	c.addRPLBuffer("servername");
+	c.addRPLBuffer(", running version 1.0.0.1");
+	c.addRPLBuffer("\n");
 
+	// RPL CREATED
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" : This server was created 01/01/0\n"); //date to include
+
+	// RPL MYINFO
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" ");
+	c.addRPLBuffer("servername");
+	c.addRPLBuffer("\n"); //date to include
 }
 
 int	ConnexionCommand::_exec_nick(Client &c) {
 	_args.pop_front();
 	c.setNickName(_args.front());
-
+	c.changeStatus(CS_SETNICKNAME);
 	if (c.getStatusClient() == CS_CONNECTED) {
 		; // changing nickname;
 	}
@@ -69,6 +84,7 @@ int	ConnexionCommand::_exec_user(Client &c) {
 	_args.pop_front();
 	_args.pop_front();
 	c.setUserFullName(_args.front());
+	c.changeStatus(CS_SETUSER);
 	if (c.getStatusClient() == CS_FINISH_REGISTER)	
 		registration(c);
 	return (0);

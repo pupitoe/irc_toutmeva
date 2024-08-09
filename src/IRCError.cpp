@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/07 17:09:49 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/09 15:49:46 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
 
 std::string	IRCError::_gen_reply(void) const {
 	if (_err == ERR_NEEDMOREPARAMS) {
-		return (_str + " " +_str2 + " :Not enough parameters");
+		return (_str + " " +_str2 + " :Not enough parameters\n");
 	}
-	return ("Unknown error");
+	else if (_err == ERR_PASSWDMISMATCH) {
+		return (_str + " :Password incorrect\n");
+	}
+	return ("Unknown error\n");
 }
