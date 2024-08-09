@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 16:32:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/09 09:59:48 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class	Client
 		void	setUserName(std::string const& str);
 		void	setHostName(std::string const& str);
 		void	setUserFullName(std::string const& str);
+		void	changeStatus(enum CStatus new_status);
 
 		void	setServerName(std::string const& str);
 

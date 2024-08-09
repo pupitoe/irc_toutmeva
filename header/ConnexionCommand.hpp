@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/07 17:01:01 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/09 09:54:59 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,17 @@
 
 class ConnexionCommand : public Command {
 
-    public :
-        ConnexionCommand(std::string msg) throw (IRCError);
-        ~ConnexionCommand(void);
+	private :
+		std::string	_password;
+		int _exec_pass(Client &);
+		int _exec_nick(Client &);
+		int _exec_user(Client &);
 
-        int execute(Client &client);
+	public :
+		ConnexionCommand(std::string msg, std::string password) throw (IRCError);
+		~ConnexionCommand(void);
+
+		int execute(Client &client);
 		int	execute(Client *client, std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst);
 };
