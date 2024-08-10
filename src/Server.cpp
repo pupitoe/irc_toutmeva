@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/09 09:53:02 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:22:51 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ void	Server::parse(std::string cmd, Client &c) {
 	}
 	catch (IRCError &e) {
 		std::cout << e.what() << std::endl; // to remove, only used for tests.
-		c.addRPLBuffer(e.getError());
+		c.addRPLBuffer(e.getReply());
 	}
 	catch (std::exception &e) {
 		std::cout << e.what() << std::endl;

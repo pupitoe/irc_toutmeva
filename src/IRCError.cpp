@@ -6,17 +6,20 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 13:24:56 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:36:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <IRCError.hpp>
 
-IRCError::IRCError(int err) : _err(err) {
+#include <cstdlib>
+#include <stdlib.h>
+
+IRCError::IRCError(std::string err) : _err(err) {
 	
 }
 
-IRCError::IRCError(int err, std::string str) : _err(err), _str(str) {
+IRCError::IRCError(std::string err, std::string str) : _err(err), _str(str) {
 	
 }
 
@@ -28,11 +31,11 @@ IRCError::IRCError(IRCError const &ref) {
 	_err = ref.getErr();
 }
 
-int IRCError::getErr(void) const {
+std::string	IRCError::getErr(void) const {
 	return (_err);
 }
 
-std::string IRCError::getError(void) const {
+std::string IRCError::getReply(void) const {
 	return (this->_gen_reply());
 }
 
@@ -47,11 +50,17 @@ void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
 }
 
 std::string	IRCError::_gen_reply(void) const {
+	std::string res(_err);
+	res.append("\n");
 	if (_err == ERR_NEEDMOREPARAMS) {
-		return (_str + " " +_str2 + " :Not enough parameters\n");
+		res.append(_str);
+		res.append(" ");
+		res.append(_str2);
+		res.append(" :Not enough parameters");
 	}
 	else if (_err == ERR_PASSWDMISMATCH) {
-		return (_str + " :Password incorrect\n");
+		res.append(_str);
+		res.append(" :Password incorrect\n");
 	}
-	return ("Unknown error\n");
+	return (res);
 }

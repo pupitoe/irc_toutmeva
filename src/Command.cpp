@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/06 16:29:43 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:26:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,17 +103,10 @@ std::ostream	&operator<<(std::ostream &out, Command const &c) {
 void	Command::errorMessage(int error, Client *client,
 	std::string const& channelName)
 {
-	switch (error)
-	{
-		case ERR_NEEDMOREPARAMS:
-			client->addRPLBuffer(":461 " + client->getNickName()
-				+ " " + this->_command_name + " :Not enough parameters\n");
-			break;
-		case ERR_NOSUCHCHANNEL:
-			client->addRPLBuffer(":403 " + client->getNickName()
-				+ " " + channelName + " :No such channel\n");
-			break;
-		default:
-			break;
-	}
+	if (error == std::atoi(ERR_NEEDMOREPARAMS))
+		client->addRPLBuffer(":461 " + client->getNickName()
+			+ " " + this->_command_name + " :Not enough parameters\n");
+	else if (error == ERR_NOSUCHCHANNEL)
+		client->addRPLBuffer(":403 " + client->getNickName()
+			+ " " + channelName + " :No such channel\n");
 }

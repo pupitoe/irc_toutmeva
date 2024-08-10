@@ -148,7 +148,7 @@ int	ChannelCommand::mode(Client *client,
 	int				status;
 	
 	arg[MODE_CHANNEL] = this->getArg();
-	status = ERR_NEEDMOREPARAMS;
+	status = std::atoi(ERR_NEEDMOREPARAMS);
 	if (arg[MODE_CHANNEL].empty() == false)
 	{
 		status = ERR_NOSUCHCHANNEL;
