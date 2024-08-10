@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 16:32:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/09 10:45:39 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ enum	CStatus
 	CS_SETNICKNAME = 1 << 1,
 	CS_SETUSER = 1 << 2,
 	CS_SETPASS = 1 << 3,
-	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER | CS_SETPASS
+	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER | CS_SETPASS,
+	CS_CONNECTED = 1 << 4
 };
 
 class	Client
@@ -54,6 +55,7 @@ class	Client
 		void	setUserName(std::string const& str);
 		void	setHostName(std::string const& str);
 		void	setUserFullName(std::string const& str);
+		void	changeStatus(enum CStatus new_status);
 
 		void	setServerName(std::string const& str);
 

@@ -88,7 +88,7 @@ int	ChannelCommand::join(Client *client,
 		buffer_channel_name = getPart(channels_name, i);
 	}
 	if (channels_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client, channels_name);
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, channels_name);
 	return (0);
 }
 
@@ -115,7 +115,7 @@ int	ChannelCommand::part(Client *client,
 		buffer_channel_name = getPart(channels_name, i);
 	}
 	if (channels_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client, channels_name);
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, channels_name);
 	return (0);
 }
 

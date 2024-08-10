@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/07 17:01:20 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:28:34 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	ChannelCommand::kick(Client *client,
 		buffer_user_name = getPart(user_name, i);
 	}
 	if (user_name.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client, channel);
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, channel);
 	return (SUCCESS);
 }
 
@@ -121,7 +121,7 @@ int	ChannelCommand::topic(Client *client,
 		this->errorMessage(status, client, channelName);
 	}
 	else
-		this->errorMessage(ERR_NEEDMOREPARAMS, client, channelName);
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, channelName);
 	return (0);
 }
 
@@ -147,7 +147,7 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 		this->errorMessage(status, client, channelName);
 	}
 	else
-		this->errorMessage(ERR_NEEDMOREPARAMS, client, channelName);
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, channelName);
 	return (SUCCESS);
 }
 
@@ -178,7 +178,7 @@ int	ChannelCommand::privmsg_exec_client(Client *client,
 	int	status;
 	Client	*buffer;
 
-	status = ERR_NOSUCHNICK;
+	status = std::atoi(ERR_NOSUCHNICK);
 	buffer = getClientMap(target, clientLst);
 	if (buffer)
 		RPL_PRIVMSG(client, buffer, message);
@@ -227,7 +227,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		client->addRPLBuffer(":412 " + client->getNickName()
 			+ " :No text to send");
 	else if (message.empty())
-		this->errorMessage(ERR_NEEDMOREPARAMS, client, targets);
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, targets);
 	return (SUCCESS);
 }
 
