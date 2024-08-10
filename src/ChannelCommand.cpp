@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 17:30:02 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:17:58 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ int	ChannelCommand::kick(Client *client,
 	buffer_user_name = getPart(user_name, i);
 	while (i < 100 && buffer_user_name.empty() == 0)
 	{
-		std::cout << getPart(user_name, i) << " with key: '"
-			<< getPart(comment, i) << "'"<< std::endl;
 		status = this->channelFormating(channel);
 		if (status == SUCCESS)
 			status = this->kick_channel(client, channel, buffer_user_name,
@@ -227,7 +225,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		target_buffer = getPart(targets, i);
 	}
 	if (this->_nb_arg >= 3 && message.empty())
-		client->addRPLBuffer("412\n" + client->getNickName()
+		client->addRPLBuffer(": 412 " + client->getNickName()
 			+ " :No text to send");
 	else if (message.empty())
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, targets);
@@ -242,7 +240,7 @@ int	ChannelCommand::pong(Client *client)
 	{
 		msg = this->getArg();
 		if (msg.empty())
-			client->addRPLBuffer("409\n" + 
+			client->addRPLBuffer(": 409 " + 
 				client->getNickName() + " :No origin specified\n");
 		else
 			client->addRPLBuffer("PONG " + msg + "\n");
@@ -257,8 +255,8 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 {
 	std::string			buffer;
 
-	if (client->getStatusClient() != CS_CONNECTED)
-		return (FAIL);
+	//if (client->getStatusClient() != CS_CONNECTED)
+	//	return (FAIL);
 	buffer = this->getArg();
 	if (buffer == "JOIN")
 		return (this->join(client, channels));

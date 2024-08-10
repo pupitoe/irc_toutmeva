@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/10 15:22:51 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:06:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	Server::searchClient(void)
 		if (new_client != -1)
 		{
 			this->addClient(new_client);
-			std::cout << "client fd: " << new_client << std::endl;
 		}
 	}
 }
@@ -152,6 +151,7 @@ void	Server::clientSendMessage(int const client_fd, Client& client)
 	std::string	buffer;
 
 	buffer = client.getRPL();
+	std::cout << "send to client: " << buffer << std::endl;
 	send(client_fd, buffer.c_str(), buffer.length(), 0);
 }
 
@@ -202,7 +202,6 @@ void	Server::eraseClient(void)
 		itNext++;
 		if (it->second->getStatusClient() == CS_TERMINATED)
 		{
-			std::cout << "client: " << it->first << "; closed" << std::endl;
 			this->deletClient(it->first);
 		}
 		it = itNext;
@@ -240,9 +239,7 @@ void	Server::parseInput(void) {
 		client = it->second;
 		while (client->getCommandValible()){
 			tkt = client->getCommand();		
-			std::cout << "!cmd: " << tkt << std::endl;
 			this->parse(tkt, *client);
-			std::cout << "bijour" << std::endl;
 		}
 		it++;
 	}
@@ -278,7 +275,6 @@ void	Server::parse(std::string cmd, Client &c) {
 	try {
 		Command	*rqst = NULL;
 		enum type t = guessType(cmd);
-		std::cout << t << std::endl;
 		if (t == ERR)
 			throw (Command::UnrecognizedType());
 		else if (t == CONNEXION)
@@ -287,7 +283,6 @@ void	Server::parse(std::string cmd, Client &c) {
 			rqst = new ChannelCommand(cmd);
 		if (rqst)
 		{
-			std::cout << *rqst << std::endl;
 			this->executeRequests(c, rqst);
 		}
 	}
