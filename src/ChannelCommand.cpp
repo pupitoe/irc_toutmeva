@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 17:14:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:30:02 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,24 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
+int	ChannelCommand::pong(Client *client)
+{
+	std::string	msg;
+
+	if (this->_args.size() > 0)
+	{
+		msg = this->getArg();
+		if (msg.empty())
+			client->addRPLBuffer("409\n" + 
+				client->getNickName() + " :No origin specified\n");
+		else
+			client->addRPLBuffer("PONG " + msg + "\n");
+	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
+	return (SUCCESS);
+}
+
 int	ChannelCommand::execute(Client *client, std::map<std::string,
 	Channel *>& channels, std::map<int, Client *>& clientLst)
 {
@@ -256,5 +274,7 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 		return (this->invite(client, channels, clientLst));
 	if (buffer == "PRIVMSG")
 		return (this->privmsg(client, channels, clientLst));
+	if (buffer == "PING")
+		return (this->pong(client));
 	return (SUCCESS);
 }
