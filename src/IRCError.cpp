@@ -6,14 +6,11 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 15:36:32 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:09:13 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <IRCError.hpp>
-
-#include <cstdlib>
-#include <stdlib.h>
 
 IRCError::IRCError(std::string err) : _err(err) {
 	

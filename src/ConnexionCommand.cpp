@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 14:09:34 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:06:31 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	registration(Client &c) {
 	c.addRPLBuffer("004\n");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :absent 1.2.3.4");
-	c.addRPLBuffer(" :itkol ");
+	c.addRPLBuffer(" :itkol");
 	c.addRPLBuffer("\n"); //date to include
 
 	// RPL ISUPPORT
