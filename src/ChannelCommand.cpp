@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 16:31:54 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 17:14:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		target_buffer = getPart(targets, i);
 	}
 	if (this->_nb_arg >= 3 && message.empty())
-		client->addRPLBuffer(":412 " + client->getNickName()
+		client->addRPLBuffer("412\n" + client->getNickName()
 			+ " :No text to send");
 	else if (message.empty())
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, targets);
@@ -239,6 +239,8 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 {
 	std::string			buffer;
 
+	if (client->getStatusClient() != CS_CONNECTED)
+		return (FAIL);
 	buffer = this->getArg();
 	if (buffer == "JOIN")
 		return (this->join(client, channels));
@@ -254,5 +256,5 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 		return (this->invite(client, channels, clientLst));
 	if (buffer == "PRIVMSG")
 		return (this->privmsg(client, channels, clientLst));
-	return (0);
+	return (SUCCESS);
 }
