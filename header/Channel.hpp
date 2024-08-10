@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 16:47:06 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:19:04 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,6 @@ bool	channelExist(std::string const& channelName,
 	std::map<std::string, Channel *>& channels);
 
 void	RPL_PRIVMSG(Client *client_rqst, Client *dest,
-	std::string const& message);
+	std::string const& message, std::string const& target);
 
 #endif

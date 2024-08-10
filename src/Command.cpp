@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 16:48:19 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 19:30:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ void	Command::errorMessage(int error, Client *client,
 	std::string const& channelName)
 {
 	if (error == std::atoi(ERR_NEEDMOREPARAMS))
-		client->addRPLBuffer("461\n" + client->getNickName()
+		client->addRPLBuffer(": 461 " + client->getNickName()
 			+ " " + this->_command_name + " :Not enough parameters\n");
 	else if (error == ERR_NOSUCHCHANNEL)
-		client->addRPLBuffer("403\n" + client->getNickName()
+		client->addRPLBuffer(": 403 " + client->getNickName()
 			+ " " + channelName + " :No such channel\n");
 }

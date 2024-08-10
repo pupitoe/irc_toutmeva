@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 19:17:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:19:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int	ChannelCommand::privmsg_exec_client(Client *client,
 	if (buffer)
 	{
 		status = SUCCESS;
-		RPL_PRIVMSG(client, buffer, message);
+		RPL_PRIVMSG(client, buffer, message, buffer->getNickName());
 	}
 	else
 		ERR_NOSUCHNICK_MSG(client, target);

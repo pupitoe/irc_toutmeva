@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/10 19:17:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:20:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,7 +402,7 @@ int		Channel::sendMsg(Client* client_rqst, std::string const& message,
 		while (it != itend)
 		{
 			if (*it != client_rqst)
-				RPL_PRIVMSG(client_rqst, *it, message);
+				RPL_PRIVMSG(client_rqst, *it, message, this->_name);
 			it++;
 		}
 	}
@@ -414,8 +414,8 @@ int		Channel::sendMsg(Client* client_rqst, std::string const& message,
 
 
 void	RPL_PRIVMSG(Client *client_rqst, Client *dest,
-	std::string const& message)
+	std::string const& message, std::string const& target)
 {
-	dest->addRPLBuffer(":" + client_rqst->getNickName() + " PRIVMSG "
-		+ dest->getNickName() + " :" + message + "\n");
+	dest->addRPLBuffer(":" +client_rqst->getNickName() + " PRIVMSG "
+		+ target + " :" + message + "\n");
 }
