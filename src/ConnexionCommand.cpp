@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/09 17:40:07 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 13:36:25 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	ConnexionCommand::_exec_pass(Client &c) {
 
 static void	registration(Client &c) {
 	// RPL WELCOME
+	c.addRPLBuffer("001\n");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Welcome to the ");
 	c.addRPLBuffer("ft_irc");
@@ -50,20 +51,24 @@ static void	registration(Client &c) {
 	c.addRPLBuffer("\n");
 
 	//RPL YOUR HOST
+	c.addRPLBuffer("002\n");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Your host is absent, running version 1.2.3.4\n");
 
 	// RPL CREATED
+	c.addRPLBuffer("003\n");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\n"); //date to include
 
 	// RPL MYINFO
+	c.addRPLBuffer("004\n");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :absent 1.2.3.4");
 	c.addRPLBuffer(" :itkol ");
 	c.addRPLBuffer("\n"); //date to include
 
 	// RPL ISUPPORT
+	c.addRPLBuffer("005\n");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :MODES");
 	c.addRPLBuffer(" :are supported by this server\n");
