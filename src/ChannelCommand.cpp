@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 15:28:34 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:31:54 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,10 @@ int	ChannelCommand::privmsg_exec_client(Client *client,
 	status = std::atoi(ERR_NOSUCHNICK);
 	buffer = getClientMap(target, clientLst);
 	if (buffer)
+	{
+		status = SUCCESS;
 		RPL_PRIVMSG(client, buffer, message);
+	}
 	else
 		ERR_NOSUCHNICK_MSG(client, target);
 	return (status);
