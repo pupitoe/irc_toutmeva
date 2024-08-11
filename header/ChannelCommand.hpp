@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 16:26:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:24:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ class ChannelCommand : public Command
 		std::string getPart(std::string str, size_t pos);
 
 		std::string	getArg(void);
+		void	 ERR_NOORIGIN_MSG(Client *client);
 
     public :
         ChannelCommand(std::string msg);

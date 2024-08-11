@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 21:58:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:25:33 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,29 +236,44 @@ int	ChannelCommand::ping(Client *client)
 {
 	std::string	msg;
 
-	//if (this->_args.size() > 0)
-	//{
-	//	msg = this->getArg();
-	//	if (msg.empty())
-	//		client->addRPLBuffer(": 409 " + 
-	//			client->getNickName() + " :No origin specified\n");
-	//	else
-	//}
-	//else
-	//	this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
-	msg = this->getArg();
-	client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+	if (this->_args.size() > 0)
+	{
+		msg = this->getArg();
+		if (msg.empty())
+			this->ERR_NOORIGIN_MSG(client);
+		else
+			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
 	return (SUCCESS);
 }
 
 int	ChannelCommand::pong(Client *client)
 {
-	if (client->getSendPing() && this->getArg() == "coucou")
+	std::string	msg;
+
+	if (this->_args.size() > 0)
 	{
-		client->setLastPing(std::time(NULL));
-		client->setSendPing(false);
+		msg = this->getArg();
+		if (msg.empty())
+			this->ERR_NOORIGIN_MSG(client);
+		else if (client->getSendPing() && this->getArg() == "coucou")
+		{
+			client->setLastPing(std::time(NULL));
+			client->setSendPing(false);
+		}
+			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
 	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
 	return (SUCCESS);
+}
+
+void	 ChannelCommand::ERR_NOORIGIN_MSG(Client *client)
+{
+	client->addRPLBuffer(":irctoutmevas 409 " + 
+		client->getNickName() + " :No origin specified\n");
 }
 
 int	ChannelCommand::execute(Client *client, std::map<std::string,
