@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 19:19:43 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 14:41:44 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,10 @@ void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
 }
 
 std::string	IRCError::_gen_reply(void) const {
-	std::string res(_err);
-	res.append("\n");
+	std::string	res(": ");
+
+	res.append(_err);
+	res.append(" ");
 	if (_err == ERR_NEEDMOREPARAMS) {
 		res.append(_str);
 		res.append(" ");
