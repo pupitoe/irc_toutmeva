@@ -19,6 +19,7 @@ Client::Client(int const client_fd): _client_fd(client_fd)
 	this->_lastPing = std::time(NULL);
 	this->_nickName = "mielpops/nesquik";
 	this->_sendPing = false;
+	this->_bot = false;
 	std::cout << "client created: " << client_fd << std::endl;
 }
 
@@ -163,4 +164,9 @@ Client	*getClientMap(std::string const& nickName,
 time_t	Client::lastPingTime(time_t ctime) const
 {
 	return (ctime - this->_lastPing);
+}
+
+bool	Client::getBot(void) const
+{
+	return (this->_bot);
 }

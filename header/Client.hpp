@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 16:21:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 23:09:20 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ enum	CStatus
 
 class	Client
 {
-	private:
+	protected:
 		int const	_client_fd;
 		int			_status_connection;
 
@@ -47,10 +47,11 @@ class	Client
 		time_t		_lastPing;
 
 		bool		_sendPing;
+		bool		_bot;
 
 	public:
 		Client(int const client_fd);
-		~Client(void);
+		virtual ~Client(void);
 		
 		int		getStatusClient(void) const;
 		int		getFd(void) const;
@@ -79,6 +80,7 @@ class	Client
 		void				setLastPing(time_t ctime);
 		void				setSendPing(bool set);
 		bool				getSendPing(void) const;
+		bool				getBot(void) const;
 };
 
 Client	*getClientMap(std::string const& nickName,

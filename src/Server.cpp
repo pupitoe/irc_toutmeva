@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 16:50:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 00:27:42 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,19 @@ Server::Server(char *psw, int port) : _password(psw), _socket(port)
 	FD_ZERO(&this->_rfds_write);
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
+	this->addBot();
 	this->_status_server = SUCCESS;
+}
+
+void	Server::addBot(void)
+{
+	Client	*buffer;
+	int		botFd;
+
+	botFd = -666;
+	buffer = new (std::nothrow) Bot(botFd);
+	if (buffer)
+		this->_clientList.insert(std::pair<int, Client *>(botFd, buffer));
 }
 
 Server::~Server(void)
@@ -172,6 +184,25 @@ void	Server::clientRecv(void)
 	}
 }
 
+void	Server::sendBot(Client *bot)
+{
+	Bot			*cbot;
+	std::string	rplBuffer;
+	size_t		len;
+
+	cbot = dynamic_cast<Bot *>(bot);
+	rplBuffer = bot->getRPL();
+	if (bot)
+	{
+		while (rplBuffer.empty() == false)
+		{
+			len = rplBuffer.find_first_of('\n');
+			cbot->RPL(rplBuffer.substr(0, len));
+			rplBuffer.erase(0, ((len <= rplBuffer.length())? len + 1 :len));
+		}
+	}
+}
+
 void	Server::clientSend(void)
 {
 	std::map<int, Client*>::iterator	it;
@@ -182,9 +213,13 @@ void	Server::clientSend(void)
 		while (it != this->_clientList.end())
 		{
 			// to check if the requested fd is in the list
-			if (it->second->getRPLBuffer().empty() == false &&
-				FD_ISSET(it->first, &this->_rfds_write))
-				this->clientSendMessage(it->first, *it->second);
+			if (it->second->getRPLBuffer().empty() == false)
+			{
+				if (FD_ISSET(it->first, &this->_rfds_write))
+					this->clientSendMessage(it->first, *it->second);
+				else if (it->second->getBot())
+					this->sendBot(it->second);
+			}
 			it++;
 		}
 	}
