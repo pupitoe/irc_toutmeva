@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 14:48:02 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 15:10:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ int	ChannelCommand::pong(Client *client)
 	//else
 	//	this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
 	msg = this->getArg();
-	client->addRPLBuffer("PONG :" + msg + "\n");
+	client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
 	return (SUCCESS);
 }
 
