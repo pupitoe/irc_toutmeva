@@ -13,26 +13,12 @@
 #include <Client.hpp>
 # include <iostream>
 
-unsigned int i = 0; // adelet car jai toujour pas de quoi me co
-
 Client::Client(int const client_fd): _client_fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
-	switch (i++ % 3)
-	{
-	case 0:
-		this->_nickName = "mielpops/nesquik";
-		break;
-	case 1:
-		this->_nickName = "sr";	
-		break;
-	case 2:
-		this->_nickName = "pelo";
-		break;
-	default:
-		this->_nickName = "?????";
-		break;
-	}
+	this->_lastPing = std::time(NULL);
+	this->_nickName = "mielpops/nesquik";
+	this->_sendPing = false;
 	std::cout << "client created: " << client_fd << std::endl;
 }
 
@@ -86,6 +72,21 @@ void	Client::changeStatus(enum CStatus new_status) {
 std::string const&	Client::getCommandBuffer(void) const
 {
 	return (this->_bufferCommand);
+}
+
+void	Client::setLastPing(time_t ctime)
+{
+	this->_lastPing = ctime;
+}
+
+void	Client::setSendPing(bool set)
+{
+	this->_sendPing = set;
+}
+
+bool	Client::getSendPing(void) const
+{
+	return (this->_sendPing);
 }
 
 std::string	Client::getCommand(void)
@@ -157,4 +158,9 @@ Client	*getClientMap(std::string const& nickName,
 	if (it != itend)
 		buffer = it->second;
 	return (buffer);
+}
+
+time_t	Client::lastPingTime(time_t ctime) const
+{
+	return (ctime - this->_lastPing);
 }

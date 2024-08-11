@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 15:10:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:32:58 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
-int	ChannelCommand::pong(Client *client)
+int	ChannelCommand::ping(Client *client)
 {
 	std::string	msg;
 
@@ -248,6 +248,16 @@ int	ChannelCommand::pong(Client *client)
 	//	this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
 	msg = this->getArg();
 	client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+	return (SUCCESS);
+}
+
+int	ChannelCommand::pong(Client *client)
+{
+	if (client->getSendPing() && this->getArg() == "coucou")
+	{
+		client->setLastPing(std::time(NULL));
+		client->setSendPing(false);
+	}
 	return (SUCCESS);
 }
 
@@ -274,6 +284,8 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 	if (buffer == "PRIVMSG")
 		return (this->privmsg(client, channels, clientLst));
 	if (buffer == "PING")
+		return (this->ping(client));
+	if (buffer == "PONG")
 		return (this->pong(client));
 	return (SUCCESS);
 }

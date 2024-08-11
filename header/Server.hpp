@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/25 11:23:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:51:42 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <map>
 # include <utility>
 # include <string>
+# include <ctime>
 
 # include "IRCSocket.hpp"
 # include "Client.hpp"
@@ -27,6 +28,7 @@
 # include <Channel.hpp>
 
 # define SIZE_MESSAGE_BUFFER 1024
+# define MAX_TIME_PING 60
 
 class	Server
 {
@@ -61,6 +63,8 @@ class	Server
 		void	eraseClient(void);
 
 		void	useSelect(void);
+
+		void	userPing(void);
 
 	public:
 		Server(void);

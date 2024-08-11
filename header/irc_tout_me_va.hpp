@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:00:34 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/04 23:53:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:29:41 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,6 @@
 # include <cstdlib>
 # define MORE 1
 # define LESS 0
-
+# define PING_WORD "coucou"
 
 #endif

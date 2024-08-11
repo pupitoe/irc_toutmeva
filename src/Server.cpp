@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/10 19:28:20 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:50:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,11 +235,37 @@ void	Server::parseInput(void) {
 	it = this->_clientList.begin();
 	ite = this->_clientList.end();
 	while (it != ite){
-		std::string tkt;
+		std::string tkt; // a enveler ca
 		client = it->second;
 		while (client->getCommandValible()){
 			tkt = client->getCommand();		
 			this->parse(tkt, *client);
+		}
+		it++;
+	}
+}
+
+void	Server::userPing(void)
+{
+	time_t								ctime;
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	ite;
+	Client								*client;
+
+	it = this->_clientList.begin();
+	ite = this->_clientList.end();
+	ctime = std::time(NULL);
+	while (it != ite)
+	{
+		client = it->second;
+		if (client->lastPingTime(ctime) > MAX_TIME_PING)
+		{
+			if (client->getSendPing())
+				client->terminateConnection();
+			else
+				client->addRPLBuffer("PING :coucou\n");
+			client->setLastPing(ctime);
+			client->setSendPing(true);
 		}
 		it++;
 	}
@@ -250,6 +276,7 @@ void	Server::execut(void) {
 	this->searchClient();
 	this->clientRecv();
 	this->parseInput();
+	this->userPing();
 	this->eraseClient();
 	this->clientSend();
 }
@@ -262,7 +289,8 @@ static enum type guessType(std::string msg) {
 		|| !msg.compare(0, 6, "TOPIC ", 6) || !msg.compare(0, 6, "NAMES ", 6)
 		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 7, "INVITE ", 7)
 		|| !msg.compare(0, 5, "KICK ", 5) || !msg.compare(0, 5, "MODE ", 5)
-		|| !msg.compare(0, 8, "PRIVMSG ", 8) || !msg.compare(0, 5, "PING ", 5))
+		|| !msg.compare(0, 8, "PRIVMSG ", 8) || !msg.compare(0, 5, "PING ", 5)
+		|| !msg.compare(0, 5, "PONG ", 5))
 		return (CHANNEL);
 	else if (msg.empty())
 		return (EMPTY);

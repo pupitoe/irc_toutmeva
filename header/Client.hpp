@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/09 10:45:39 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:21:09 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <queue>
 # include <map>
 # include <string>
+# include <ctime>
 
 enum	CStatus
 {
@@ -43,6 +44,10 @@ class	Client
 		std::string	_bufferCommand;
 		std::string	_bufferRPL;
 
+		time_t		_lastPing;
+
+		bool		_sendPing;
+
 	public:
 		Client(int const client_fd);
 		~Client(void);
@@ -69,6 +74,11 @@ class	Client
 		std::string			getRPL(void);
 
 		std::string const&	getNickName(void) const;
+
+		time_t				lastPingTime(time_t ctime) const;
+		void				setLastPing(time_t ctime);
+		void				setSendPing(bool set);
+		bool				getSendPing(void) const;
 };
 
 Client	*getClientMap(std::string const& nickName,
