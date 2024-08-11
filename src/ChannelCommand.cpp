@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 16:32:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 21:58:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,7 +225,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		target_buffer = getPart(targets, i);
 	}
 	if (this->_nb_arg >= 3 && message.empty())
-		client->addRPLBuffer(": 412 " + client->getNickName()
+		client->addRPLBuffer(":irctoutmevas 412 " + client->getNickName()
 			+ " :No text to send");
 	else if (message.empty())
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, targets);
