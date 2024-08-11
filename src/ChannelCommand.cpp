@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 22:25:33 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 00:53:53 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,7 +263,6 @@ int	ChannelCommand::pong(Client *client)
 			client->setLastPing(std::time(NULL));
 			client->setSendPing(false);
 		}
-			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
 	}
 	else
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");

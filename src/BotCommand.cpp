@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Bot.cpp                                            :+:      :+:    :+:   */
+/*   BotCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 00:43:08 by tlassere         ###   ########.fr       */
+/*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
+/*   Updated: 2024/08/12 00:51:15 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Bot.hpp>
 #include <BotCommand.hpp>
 
-Bot::Bot(int const client_fd): Client(client_fd)
+BotCommand::BotCommand(std::string msg) : Command(msg)
 {
-	this->_nickName = BOT_NAME;
-	this->_bot = true;
-	this->_status_connection = CS_CONNECTED;
-	this->_hostName = "irctoutmevas";
-	this->_userName = BOT_NAME;
-	this->_userNameFull = BOT_NAME;
-	this->_serverName = "irctoutmevas";
+	//TODO Verifier ici les cmmd;
+	this->_type = CHANNEL;
+	std::cout << "channel creation" << std::endl;
 }
 
-Bot::~Bot(void)
+BotCommand::~BotCommand(void)
 {
 }
 
-void	Bot::RPL(std::string const str)
+int BotCommand::execute(Client &)
 {
-	std::cout << "RPL BOT STR: " << str << std::endl;
+	
+	return (SUCCESS);
+}
+int	BotCommand::execute(Client *, std::map<std::string, Channel *>&,
+	std::map<int, Client *>&)
+{
+	return (SUCCESS);
 }
