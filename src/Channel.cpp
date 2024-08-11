@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 21:58:25 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:14:40 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ void	Channel::RPL_NAMREPLY(Client *client)
 
 void	Channel::RPL_ENDOFNAMES(Client *client)
 {
-	client->addRPLBuffer(":irctoutmevas 366 " + client->getNickName() + " " + this->_name
+	client->addRPLBuffer(":irctoutmevas 366 "
+		+ client->getNickName() + " " + this->_name
 		+ " :End of NAMES list\n");
 }
 
@@ -112,7 +113,8 @@ void	Channel::join_super_user(Client* client_rqst)
 void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 	char type)
 {
-	client_rqst->addRPLBuffer(":irctoutmevas " + error + " " + client_rqst->getNickName()
+	client_rqst->addRPLBuffer(":irctoutmevas "
+		+ error + " " + client_rqst->getNickName()
 		+ " " + this->_name + " :Cannot join channel (+" + type +")\n");
 }
 
@@ -286,7 +288,8 @@ void	Channel::topicActiv(Client* client_rqst, std::string const& newTopic,
 	if (topicHaveArg == false)
 	{
 		if (this->_topic.empty())
-			client_rqst->addRPLBuffer(":irctoutmevas 331 " + client_rqst->getNickName()
+			client_rqst->addRPLBuffer(":irctoutmevas 331 "
+				+ client_rqst->getNickName()
 				+ " " + this->_name + " :No topic is set\n");
 		else
 			this->topicRPL(client_rqst);
@@ -347,7 +350,8 @@ void	Channel::sendInvitClient(Client* client_rqst,
 	buffer = getClientMap(userName, clientsLst);
 	if (buffer)
 	{
-		client_rqst->addRPLBuffer(":irctoutmevas 341 " + client_rqst->getNickName() +
+		client_rqst->addRPLBuffer(":irctoutmevas 341 "
+			+ client_rqst->getNickName() +
 			" " + userName + " " + this->_name + "\n");
 		if (std::find(this->_invite_lst.begin(), this->_invite_lst.end(),
 				buffer) == this->_invite_lst.end())
@@ -407,7 +411,8 @@ int		Channel::sendMsg(Client* client_rqst, std::string const& message,
 		}
 	}
 	else
-		client_rqst->addRPLBuffer(":irctoutmevas 404 " + client_rqst->getNickName()
+		client_rqst->addRPLBuffer(":irctoutmevas 404 "
+			+ client_rqst->getNickName()
 			+ " " + this->_name + " :Cannot send to channel\n");
 	return (status);
 }

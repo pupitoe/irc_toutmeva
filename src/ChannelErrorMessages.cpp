@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:25:25 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 21:58:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:13:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	Channel::RPL_CREATIONTIME(Client* client_rqst)
 {
-	client_rqst->addRPLBuffer(":irctoutmevas 329 " + client_rqst->getNickName() + " "
+	client_rqst->addRPLBuffer(":irctoutmevas 329 "
+		+ client_rqst->getNickName() + " "
 		+ this->_name + " " + this->_creation_time + "\n");
 }
 
