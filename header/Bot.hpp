@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:15 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 00:20:50 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 01:13:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include "Client.hpp"
 # include <iostream>
-
-# define BOT_NAME "giveyouup"
 
 class	Bot: public Client 
 {

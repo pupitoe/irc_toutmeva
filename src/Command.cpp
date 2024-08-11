@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 21:59:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 00:59:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,16 @@ void	Command::errorMessage(int error, Client *client,
 	else if (error == ERR_NOSUCHCHANNEL)
 		client->addRPLBuffer(":irctoutmevas 403 " + client->getNickName()
 			+ " " + channelName + " :No such channel\n");
+}
+
+std::string	Command::getArg(void)
+{
+	std::string	buffer;
+	
+	if (this->_args.size())
+	{
+		buffer = this->_args.front();
+		this->_args.pop_front();
+	}
+	return (buffer);
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 00:46:44 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 01:06:21 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 
 class BotCommand: public Command
 {
+	private:
+		std::string	_user;
+		std::string	_cmd;
+
+		std::string	getUserName(std::string const& user) const;
+
 	public:
     	BotCommand(std::string msg);
         ~BotCommand(void);

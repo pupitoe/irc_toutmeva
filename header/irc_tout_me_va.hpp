@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 12:00:34 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 16:29:41 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 01:14:05 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,6 @@
 # define MORE 1
 # define LESS 0
 # define PING_WORD "coucou"
+# define BOT_NAME "giveyouup"
 
 #endif

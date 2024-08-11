@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 00:53:53 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 00:59:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,6 @@ int	ChannelCommand::execute(Client &)
 
 ChannelCommand::~ChannelCommand(void) {
 	
-}
-
-std::string	ChannelCommand::getArg(void)
-{
-	std::string	buffer;
-	
-	if (this->_args.size())
-	{
-		buffer = this->_args.front();
-		this->_args.pop_front();
-	}
-	return (buffer);
 }
 
 int	ChannelCommand::kick_channel(Client* user_rqts,

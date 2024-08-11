@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 00:38:41 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 01:00:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ class Command {
 
 		void	errorMessage(int error, Client *client,
 			std::string const& channelName);
+
+		std::string	getArg(void);
 
 	public :
 		Command(std::string msg) 
