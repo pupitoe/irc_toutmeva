@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 22:16:17 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 22:33:25 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,10 @@ int	Channel::mode_o(Client* client_rqst, int signe, std::string const& user)
 		{
 			if (signe && inOpLst(target_client) == false)
 				this->_operators.push_front(target_client);
-			else if (signe == LESS && inOpLst(target_client) == true)
+			else if (signe == LESS && inOpLst(target_client) == true
+				&& target_client->getBot() == false)
 				this->_operators.erase(std::find(this->_operators.begin(),
-				this->_operators.end(), target_client));
+					this->_operators.end(), target_client));
 			else
 				return (status);
 			this->sendAll(":" + client_rqst->getNickName() + " MODE " +
