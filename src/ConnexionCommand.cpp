@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 13:50:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 14:32:00 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,9 @@ int	ConnexionCommand::_exec_user(Client &c) {
 	_args.pop_front();
 	c.setHostName(_args.front());
 	_args.pop_front();
-	c.setUserFullName(_args.front()); //realname ??
+	c.setServerName(_args.front());
+	_args.pop_front();
+	c.setRealName(_args.front());
 	c.changeStatus(CS_SETUSER);
 	if (c.getStatusClient() == CS_FINISH_REGISTER)	
 		registration(c);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 16:21:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 14:27:24 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class	Client
 		std::string	_nickName;
 		std::string	_userName;
 		std::string	_hostName;
-		std::string _userNameFull;
+		std::string _userRealName;
 		std::string	_serverName;
 
 		std::string	_bufferCommand;
@@ -59,7 +59,7 @@ class	Client
 		void	setNickName(std::string const& str);
 		void	setUserName(std::string const& str);
 		void	setHostName(std::string const& str);
-		void	setUserFullName(std::string const& str);
+		void	setRealName(std::string const& str);
 		void	changeStatus(enum CStatus new_status);
 
 		void	setServerName(std::string const& str);

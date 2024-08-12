@@ -55,9 +55,9 @@ void	Client::setHostName(std::string const& str)
 	this->_hostName = str;
 }
 
-void	Client::setUserFullName(std::string const& str)
+void	Client::setRealName(std::string const& str)
 {
-	this->_userNameFull = str;
+	this->_userRealName = str;
 }
 
 void	Client::setServerName(std::string const& str)
