@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 00:27:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 13:40:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,8 @@ void	Server::userPing(void)
 	while (it != ite)
 	{
 		client = it->second;
-		if (client->lastPingTime(ctime) > MAX_TIME_PING)
+		if (client->getBot() == false
+			&& client->lastPingTime(ctime) > MAX_TIME_PING)
 		{
 			if (client->getSendPing())
 				client->terminateConnection();
@@ -317,6 +318,7 @@ void	Server::execut(void) {
 }
 
 static enum type guessType(std::string msg) {
+	std::cout << "FULL MSG: " << msg << std::endl;
 	if (!msg.compare(0, 5, "PASS ", 5)|| !msg.compare(0, 5, "NICK ", 5)
 		|| !msg.compare(0, 5, "USER ", 5) || !msg.compare(0, 4, "CAP ", 4))
 		return (CONNEXION);

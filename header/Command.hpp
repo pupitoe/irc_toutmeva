@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 01:00:43 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 13:29:09 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ class Command {
 };
 
 std::ostream   &operator<<(std::ostream &, Command const &);
+void	ft_split_word(std::string const& msg, std::list<std::string>& args);
 
 # endif
