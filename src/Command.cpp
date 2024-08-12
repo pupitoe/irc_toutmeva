@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 13:37:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 15:07:50 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,17 @@ void	Command::errorMessage(int error, Client *client,
 
 std::string	Command::getArg(void)
 {
+	return (ft_getArg(this->_args));
+}
+
+std::string	ft_getArg(std::list<std::string>& args)
+{
 	std::string	buffer;
 	
-	if (this->_args.size())
+	if (args.size())
 	{
-		buffer = this->_args.front();
-		this->_args.pop_front();
+		buffer = args.front();
+		args.pop_front();
 	}
 	return (buffer);
 }
