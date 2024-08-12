@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 10:52:20 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/12 13:50:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ static void	registration(Client &c) {
 	c.addRPLBuffer(" :are supported by this server\n");
 
 	//RPL MOTD
-	c.addCommandBuffer(":irctoutmevas 375 ");
+	c.addRPLBuffer(":irctoutmevas 375 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :- Message of the day -\n");	
 	
 	c.addRPLBuffer("Good morning.\n");
-	c.addCommandBuffer(":irctoutmevas 376 ");
+	c.addRPLBuffer(":irctoutmevas 376 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :End of MOTD command\n");
 }
