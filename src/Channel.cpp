@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 22:16:11 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 22:27:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,8 @@ int	Channel::join(Client *client_rqst, std::string const& key)
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
 	this->eraseInviteLst(client_rqst);
+	if (client_rqst->getBot())
+		this->mode_o(this->getClient(key), MORE, client_rqst->getNickName());
 	return (GOOD_REGISTER);
 }
 
