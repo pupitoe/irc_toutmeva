@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/10 15:22:51 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/11 16:50:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	Server::searchClient(void)
 		if (new_client != -1)
 		{
 			this->addClient(new_client);
-			std::cout << "client fd: " << new_client << std::endl;
 		}
 	}
 }
@@ -152,6 +151,7 @@ void	Server::clientSendMessage(int const client_fd, Client& client)
 	std::string	buffer;
 
 	buffer = client.getRPL();
+	std::cout << "send to client: " << buffer << std::endl;
 	send(client_fd, buffer.c_str(), buffer.length(), 0);
 }
 
@@ -202,7 +202,6 @@ void	Server::eraseClient(void)
 		itNext++;
 		if (it->second->getStatusClient() == CS_TERMINATED)
 		{
-			std::cout << "client: " << it->first << "; closed" << std::endl;
 			this->deletClient(it->first);
 		}
 		it = itNext;
@@ -236,13 +235,37 @@ void	Server::parseInput(void) {
 	it = this->_clientList.begin();
 	ite = this->_clientList.end();
 	while (it != ite){
-		std::string tkt;
+		std::string tkt; // a enveler ca
 		client = it->second;
 		while (client->getCommandValible()){
 			tkt = client->getCommand();		
-			std::cout << "!cmd: " << tkt << std::endl;
 			this->parse(tkt, *client);
-			std::cout << "bijour" << std::endl;
+		}
+		it++;
+	}
+}
+
+void	Server::userPing(void)
+{
+	time_t								ctime;
+	std::map<int, Client*>::iterator	it;
+	std::map<int, Client*>::iterator	ite;
+	Client								*client;
+
+	it = this->_clientList.begin();
+	ite = this->_clientList.end();
+	ctime = std::time(NULL);
+	while (it != ite)
+	{
+		client = it->second;
+		if (client->lastPingTime(ctime) > MAX_TIME_PING)
+		{
+			if (client->getSendPing())
+				client->terminateConnection();
+			else
+				client->addRPLBuffer("PING :coucou\n");
+			client->setLastPing(ctime);
+			client->setSendPing(true);
 		}
 		it++;
 	}
@@ -253,6 +276,7 @@ void	Server::execut(void) {
 	this->searchClient();
 	this->clientRecv();
 	this->parseInput();
+	this->userPing();
 	this->eraseClient();
 	this->clientSend();
 }
@@ -265,7 +289,8 @@ static enum type guessType(std::string msg) {
 		|| !msg.compare(0, 6, "TOPIC ", 6) || !msg.compare(0, 6, "NAMES ", 6)
 		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 7, "INVITE ", 7)
 		|| !msg.compare(0, 5, "KICK ", 5) || !msg.compare(0, 5, "MODE ", 5)
-		|| !msg.compare(0, 8, "PRIVMSG ", 8))
+		|| !msg.compare(0, 8, "PRIVMSG ", 8) || !msg.compare(0, 5, "PING ", 5)
+		|| !msg.compare(0, 5, "PONG ", 5))
 		return (CHANNEL);
 	else if (msg.empty())
 		return (EMPTY);
@@ -278,7 +303,6 @@ void	Server::parse(std::string cmd, Client &c) {
 	try {
 		Command	*rqst = NULL;
 		enum type t = guessType(cmd);
-		std::cout << t << std::endl;
 		if (t == ERR)
 			throw (Command::UnrecognizedType());
 		else if (t == CONNEXION)
@@ -287,7 +311,6 @@ void	Server::parse(std::string cmd, Client &c) {
 			rqst = new ChannelCommand(cmd);
 		if (rqst)
 		{
-			std::cout << *rqst << std::endl;
 			this->executeRequests(c, rqst);
 		}
 	}

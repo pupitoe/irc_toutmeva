@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 16:06:31 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/11 21:59:14 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ConnexionCommand::_exec_pass(Client &c) {
 
 static void	registration(Client &c) {
 	// RPL WELCOME
-	c.addRPLBuffer("001\n");
+	c.addRPLBuffer(":irctoutmevas 001 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Welcome to the ");
 	c.addRPLBuffer("ft_irc");
@@ -51,35 +51,35 @@ static void	registration(Client &c) {
 	c.addRPLBuffer("\n");
 
 	//RPL YOUR HOST
-	c.addRPLBuffer("002\n");
+	c.addRPLBuffer(":irctoutmevas 002 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Your host is absent, running version 1.2.3.4\n");
 
 	// RPL CREATED
-	c.addRPLBuffer("003\n");
+	c.addRPLBuffer(":irctoutmevas 003 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\n"); //date to include
 
 	// RPL MYINFO
-	c.addRPLBuffer("004\n");
+	c.addRPLBuffer(":irctoutmevas 004 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :absent 1.2.3.4");
 	c.addRPLBuffer(" :itkol");
 	c.addRPLBuffer("\n"); //date to include
 
 	// RPL ISUPPORT
-	c.addRPLBuffer("005\n");
+	c.addRPLBuffer(":irctoutmevas 005 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :MODES");
 	c.addRPLBuffer(" :are supported by this server\n");
 
 	//RPL MOTD
-	c.addCommandBuffer("375\n");
+	c.addCommandBuffer(":irctoutmevas 375 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :- Message of the day -\n");	
 	
 	c.addRPLBuffer("Good morning.\n");
-	c.addCommandBuffer("376\n");
+	c.addCommandBuffer(":irctoutmevas 376 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :End of MOTD command\n");
 }

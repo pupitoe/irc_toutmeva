@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 15:28:34 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:25:33 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ int	ChannelCommand::kick(Client *client,
 	buffer_user_name = getPart(user_name, i);
 	while (i < 100 && buffer_user_name.empty() == 0)
 	{
-		std::cout << getPart(user_name, i) << " with key: '"
-			<< getPart(comment, i) << "'"<< std::endl;
 		status = this->channelFormating(channel);
 		if (status == SUCCESS)
 			status = this->kick_channel(client, channel, buffer_user_name,
@@ -181,7 +179,10 @@ int	ChannelCommand::privmsg_exec_client(Client *client,
 	status = std::atoi(ERR_NOSUCHNICK);
 	buffer = getClientMap(target, clientLst);
 	if (buffer)
-		RPL_PRIVMSG(client, buffer, message);
+	{
+		status = SUCCESS;
+		RPL_PRIVMSG(client, buffer, message, buffer->getNickName());
+	}
 	else
 		ERR_NOSUCHNICK_MSG(client, target);
 	return (status);
@@ -224,11 +225,55 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		target_buffer = getPart(targets, i);
 	}
 	if (this->_nb_arg >= 3 && message.empty())
-		client->addRPLBuffer(":412 " + client->getNickName()
+		client->addRPLBuffer(":irctoutmevas 412 " + client->getNickName()
 			+ " :No text to send");
 	else if (message.empty())
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, targets);
 	return (SUCCESS);
+}
+
+int	ChannelCommand::ping(Client *client)
+{
+	std::string	msg;
+
+	if (this->_args.size() > 0)
+	{
+		msg = this->getArg();
+		if (msg.empty())
+			this->ERR_NOORIGIN_MSG(client);
+		else
+			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
+	return (SUCCESS);
+}
+
+int	ChannelCommand::pong(Client *client)
+{
+	std::string	msg;
+
+	if (this->_args.size() > 0)
+	{
+		msg = this->getArg();
+		if (msg.empty())
+			this->ERR_NOORIGIN_MSG(client);
+		else if (client->getSendPing() && this->getArg() == "coucou")
+		{
+			client->setLastPing(std::time(NULL));
+			client->setSendPing(false);
+		}
+			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
+	return (SUCCESS);
+}
+
+void	 ChannelCommand::ERR_NOORIGIN_MSG(Client *client)
+{
+	client->addRPLBuffer(":irctoutmevas 409 " + 
+		client->getNickName() + " :No origin specified\n");
 }
 
 int	ChannelCommand::execute(Client *client, std::map<std::string,
@@ -236,6 +281,8 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 {
 	std::string			buffer;
 
+	//if (client->getStatusClient() != CS_CONNECTED)
+	//	return (FAIL);
 	buffer = this->getArg();
 	if (buffer == "JOIN")
 		return (this->join(client, channels));
@@ -251,5 +298,9 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 		return (this->invite(client, channels, clientLst));
 	if (buffer == "PRIVMSG")
 		return (this->privmsg(client, channels, clientLst));
-	return (0);
+	if (buffer == "PING")
+		return (this->ping(client));
+	if (buffer == "PONG")
+		return (this->pong(client));
+	return (SUCCESS);
 }

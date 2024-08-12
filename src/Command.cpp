@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 15:26:49 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/11 21:59:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 
 	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
-		
+	std::cout << "cmd all: " << msg << std::endl;	
 	//Command
 	str >> word;
 	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
@@ -104,9 +104,9 @@ void	Command::errorMessage(int error, Client *client,
 	std::string const& channelName)
 {
 	if (error == std::atoi(ERR_NEEDMOREPARAMS))
-		client->addRPLBuffer(":461 " + client->getNickName()
+		client->addRPLBuffer(":irctoutmevas 461 " + client->getNickName()
 			+ " " + this->_command_name + " :Not enough parameters\n");
 	else if (error == ERR_NOSUCHCHANNEL)
-		client->addRPLBuffer(":403 " + client->getNickName()
+		client->addRPLBuffer(":irctoutmevas 403 " + client->getNickName()
 			+ " " + channelName + " :No such channel\n");
 }

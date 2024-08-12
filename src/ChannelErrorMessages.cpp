@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:25:25 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/06 16:26:19 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/11 22:13:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,33 @@
 
 void	Channel::RPL_CREATIONTIME(Client* client_rqst)
 {
-	client_rqst->addRPLBuffer(":329 " + client_rqst->getNickName() + " "
+	client_rqst->addRPLBuffer(":irctoutmevas 329 "
+		+ client_rqst->getNickName() + " "
 		+ this->_name + " " + this->_creation_time + "\n");
 }
 
 void	Channel::ERR_CHANOPRIVSNEEDED_MSG(Client *client)
 {
-	client->addRPLBuffer(":482 " + client->getNickName()
+	client->addRPLBuffer(":irctoutmevas 482 " + client->getNickName()
 		+ " " + this->_name + " :You're not channel operator\n");
 }
 
 void	Channel::ERR_NOTONCHANNEL_MSG(Client *client)
 {
-	client->addRPLBuffer(":442 " + client->getNickName()
+	client->addRPLBuffer(":irctoutmevas 442 " + client->getNickName()
 		+ " " + this->_name + " :You're not channel operator\n");
 }
 
 void	Channel::ERR_USERNOTINCHANNEL_MSG(Client *client,
 	std::string const& nick)
 {
-	client->addRPLBuffer(":441 " + client->getNickName() +
+	client->addRPLBuffer(":irctoutmevas 441 " + client->getNickName() +
 		" " + nick +  + " " + this->_name + " :They aren't on that channel\n");
 }
 
 void	Channel::ERR_USERONCHANNEL_MSG(Client *client,
 	std::string const& nick)
 {
-	client->addRPLBuffer(":443 " + client->getNickName() +
+	client->addRPLBuffer(":irctoutmevas 443 " + client->getNickName() +
 		" " + nick +  + " " + this->_name + " :is already on channel\n");
 }
