@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 15:10:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 15:32:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Bot::~Bot(void)
 
 void	Bot::RPL(std::string const str)
 {
-	BotCommand	cmd(str);
+	BotCommand	cmd(str, this);
 
 	cmd.execute();
 	std::cout << "RPL BOT STR: " << str << std::endl;

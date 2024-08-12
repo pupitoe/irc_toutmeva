@@ -120,6 +120,11 @@ void	Client::addCommandBuffer(char const *cmd)
 	this->_bufferCommand += cmd;
 }
 
+void	Client::addCommandBuffer(std::string const& cmd)
+{
+	this->_bufferCommand += cmd;
+}
+
 void	Client::addRPLBuffer(std::string const& rpl)
 {
 	this->_bufferRPL += rpl;

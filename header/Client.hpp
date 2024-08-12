@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 23:09:20 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 15:31:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ class	Client
 		std::string			getCommand(void);
 		bool				getCommandValible(void);
 		void				addCommandBuffer(char const *cmd);
+		void				addCommandBuffer(std::string const& cmd);
 
 		void				addRPLBuffer(std::string const& rpl);
 		std::string const&	getRPLBuffer(void) const;

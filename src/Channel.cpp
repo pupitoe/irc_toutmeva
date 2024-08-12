@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 22:14:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 15:39:29 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	Channel::RPL_NAMREPLY(Client *client)
 	std::string						buffer;
 	std::list<Client *>::iterator	it;
 
-	buffer = ": 353 " + client->getNickName() + " = " + this->_name + " :";
+	buffer = ":irctoutmevas 353 " + client->getNickName() + " = " + this->_name + " :";
 	it = this->_client.begin();
 	while (it != this->_client.end())
 	{
