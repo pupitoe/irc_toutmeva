@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 21:59:14 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 10:52:20 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,14 @@ int	ConnexionCommand::_exec_nick(Client &c) {
 	return (0);
 }
 
+// https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
 int	ConnexionCommand::_exec_user(Client &c) {
 	_args.pop_front();
 	c.setUserName(_args.front());
 	_args.pop_front();
+	c.setHostName(_args.front());
 	_args.pop_front();
-	c.setUserFullName(_args.front());
+	c.setUserFullName(_args.front()); //realname ??
 	c.changeStatus(CS_SETUSER);
 	if (c.getStatusClient() == CS_FINISH_REGISTER)	
 		registration(c);
