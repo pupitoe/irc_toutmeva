@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 20:12:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 22:16:11 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	Channel::part(Client *client_rqst, std::string const& reason,
 			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
 		return (ECHAN_NOT_REGISTERED);
 	}
+	if ((*buffer)->getBot() && this->_client.size() > 1)
+		return (BOT_NOT_PART);
 	this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name +
 		((reason.empty())? "": " " + reason) + "\n");
 	this->_client.erase(buffer);

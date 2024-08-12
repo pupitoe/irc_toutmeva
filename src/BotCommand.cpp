@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 20:24:28 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 22:15:12 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,12 @@ void	BotCommand::badJoinChan(void)
 		+ channel);
 }
 
+void	BotCommand::part(void)
+{
+	if (this->_user != BOT_NAME)
+		this->_cbot->addCommandBuffer("PART " + this->getArg() + " :check\n");
+}
+
 void	BotCommand::execute(void)
 {
 	if (this->_cmd == "PRIVMSG")
@@ -78,6 +84,8 @@ void	BotCommand::execute(void)
 		this->invite();
 	else if (this->_cmd == "BADJOINCHAN")
 		this->badJoinChan();
+	else if (this->_cmd == "PART")
+		this->part();
 	if (this->_user == BOT_NAME)
 		std::cout << "oh non pas le bot :((((" << std::endl;
 	else

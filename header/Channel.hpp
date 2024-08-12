@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 20:14:25 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 22:10:54 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ enum	retChannel
 	RPL_ENDOFNAMES,
 
 	GOOD_REGISTER,
-	GOOD_PART
+	GOOD_PART,
+	BOT_NOT_PART
 };
 
 enum	userChannelGrade
