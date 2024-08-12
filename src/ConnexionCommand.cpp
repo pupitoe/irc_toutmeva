@@ -6,30 +6,46 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 14:32:00 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/12 22:35:48 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
 #include <iostream>
 
-static void	test_password(std::list<std::string> args) {
+static void	test_password(std::list<std::string> args)
+{
 	if (args.empty() || args.size() < 2) {
 		throw (IRCError(ERR_NEEDMOREPARAMS, args.front()));
 	}
 }
 
-static void test_nickname(std::list<std::string> args) {
+static void test_nickname(std::list<std::string> args,
+	std::map<int, Client *> clientList)
+{
+	std::map<int, Client *>::iterator	it = clientList.begin();
+	std::map<int, Client *>::iterator	ite = clientList.end();
+	
 	if (args.empty() || args.size() < 2)
 		throw (IRCError(ERR_NEEDMOREPARAMS, args.front()));
+
+	// Verification of uniqueness
+	while (it != ite)
+	{
+		if (args.front() == it->second->getNickName())
+			throw (IRCError(ERR_NICKNAMEINUSE));
+		it++;
+	}
 }
 
-static void test_username(std::list<std::string> args) {
+static void test_username(std::list<std::string> args)
+{
 	if (args.empty() || args.size() < 4)
 		throw (IRCError(ERR_NEEDMOREPARAMS, args.front()));
 }
 
-int	ConnexionCommand::_exec_pass(Client &c) {
+int	ConnexionCommand::_exec_pass(Client &c)
+{
 	_args.pop_front();
 	std::string &pass = *_args.begin();
 	if (pass != _password)
@@ -40,7 +56,9 @@ int	ConnexionCommand::_exec_pass(Client &c) {
 	return (0);
 }
 
-static void	registration(Client &c) {
+static void	registration(Client &c)
+{
+	c.changeStatus(CS_CONNECTED);
 	// RPL WELCOME
 	c.addRPLBuffer(":irctoutmevas 001 ");
 	c.addRPLBuffer(c.getNickName());
@@ -84,20 +102,31 @@ static void	registration(Client &c) {
 	c.addRPLBuffer(" :End of MOTD command\n");
 }
 
-int	ConnexionCommand::_exec_nick(Client &c) {
+int	ConnexionCommand::_exec_nick(Client &c)
+{
 	_args.pop_front();
+	
+	// INVALID CHARACTERS
+
 	c.setNickName(_args.front());
 	c.changeStatus(CS_SETNICKNAME);
-	if (c.getStatusClient() == CS_CONNECTED) {
-		; // changing nickname;
-	}
-	else if (c.getStatusClient() == CS_FINISH_REGISTER)	
+	
+	if (c.getStatusClient() == CS_CONNECTED)
+		; // changing nickname, condition written for clarity;
+	else if (c.getStatusClient() == CS_FINISH_REGISTER)
+	{
+		if (_args.front().find(' ') != std::string::npos
+			|| _args.front().find('#') != std::string::npos
+			|| _args.front().find(':') != std::string::npos)
+				throw (IRCError(ERR_ERRONEUSNICKNAME));
 		registration(c);
+	}
 	return (0);
 }
 
 // https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
-int	ConnexionCommand::_exec_user(Client &c) {
+int	ConnexionCommand::_exec_user(Client &c)
+{
 	_args.pop_front();
 	c.setUserName(_args.front());
 	_args.pop_front();
@@ -112,25 +141,27 @@ int	ConnexionCommand::_exec_user(Client &c) {
 	return (0);
 }
 
-ConnexionCommand::ConnexionCommand(std::string msg, std::string password)
-	throw (IRCError) : Command(msg), _password(password) {
+ConnexionCommand::ConnexionCommand(std::string msg,
+	const std::string password,
+	const std::map<int, Client *> clientList)
+	throw (IRCError) : Command(msg), _password(password)
+{
 	this->_type = CONNEXION;
 	if (!_args.front().compare(0, 4, "PASS", 4)) {
 		test_password(_args);
 	}
 	else if (!_args.front().compare(0, 4, "NICK", 4)) {
-		test_nickname(_args);
+		test_nickname(_args, clientList);
 	}
 	else if (!_args.front().compare(0, 4, "USER", 4)) {
 		test_username(_args);
 	}
 }
 
-ConnexionCommand::~ConnexionCommand(void) {
-	
-}
+ConnexionCommand::~ConnexionCommand(void){}
 
-int	ConnexionCommand::execute(Client &client) {
+int	ConnexionCommand::execute(Client &client)
+{
 	(void) client;
 	if (!_args.front().compare(0, 4, "PASS", 4))
 		return (_exec_pass(client));
@@ -141,7 +172,8 @@ int	ConnexionCommand::execute(Client &client) {
 	return (0);
 }
 
-int	ConnexionCommand::execute(Client *, std::map<std::string, Channel *>&,
+int	ConnexionCommand::execute(Client *,
+	std::map<std::string, Channel *>&,
 	std::map<int, Client *>&)
 {
 	

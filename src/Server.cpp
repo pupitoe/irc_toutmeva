@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 16:50:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 21:53:25 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,7 @@ void	Server::parse(std::string cmd, Client &c) {
 		if (t == ERR)
 			throw (Command::UnrecognizedType());
 		else if (t == CONNEXION)
-			rqst = new ConnexionCommand(cmd, _password);
+			rqst = new ConnexionCommand(cmd, _password, this->_clientList);
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
 		if (rqst)
