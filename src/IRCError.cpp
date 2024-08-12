@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 21:59:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 23:03:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ IRCError::IRCError(IRCError const &ref) {
 	_err = ref.getErr();
 }
 
-std::string	IRCError::getErr(void) const {
+std::string	IRCError::getErr(void) const
+{
 	return (_err);
 }
 
-std::string IRCError::getReply(void) const {
+std::string IRCError::getReply(void) const
+{
 	return (this->_gen_reply());
 }
 
@@ -51,15 +53,25 @@ std::string	IRCError::_gen_reply(void) const {
 
 	res.append(_err);
 	res.append(" ");
-	if (_err == ERR_NEEDMOREPARAMS) {
+	if (_err == ERR_UNKNOWNERROR)
+	{
+		res.append("to write\n");
+	}
+	else if (_err == ERR_ERRONEUSNICKNAME)
+	{
+		res.append("to write\n");
+	}
+	else if (_err == ERR_NEEDMOREPARAMS)
+	{
 		res.append(_str);
 		res.append(" ");
 		res.append(_str2);
 		res.append(" :Not enough parameters");
 	}
-	else if (_err == ERR_PASSWDMISMATCH) {
+	else if (_err == ERR_PASSWDMISMATCH)
+	{
 		res.append(_str);
-		res.append(" :Password incorrect\n");
+		res.append(" :Password incorrect");
 	}
 	return (res);
 }

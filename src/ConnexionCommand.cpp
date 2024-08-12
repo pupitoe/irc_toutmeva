@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 22:35:48 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/12 23:01:04 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,9 +105,6 @@ static void	registration(Client &c)
 int	ConnexionCommand::_exec_nick(Client &c)
 {
 	_args.pop_front();
-	
-	// INVALID CHARACTERS
-
 	c.setNickName(_args.front());
 	c.changeStatus(CS_SETNICKNAME);
 	
