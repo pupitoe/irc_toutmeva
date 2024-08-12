@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 15:53:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:24:28 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,20 @@ void	BotCommand::invite(void)
 
 	this->getArg();
 	channelTarget = this->getArg();
-	this->sendPrivmsg(this->_user, "tkt frefro");
+	this->_cbot->addCommandBuffer("JOIN " + channelTarget
+		+ " " + this->_user + "\n");
+	//this->sendPrivmsg(this->_user, "tkt frefro");
+}
+
+void	BotCommand::badJoinChan(void)
+{
+	std::string	channel;
+	std::string	user;
+
+	channel = this->getArg();
+	user = this->getArg();
+	this->sendPrivmsg(user, "you are not an operator of the channel "
+		+ channel);
 }
 
 void	BotCommand::execute(void)
@@ -63,6 +76,8 @@ void	BotCommand::execute(void)
 		this->privmsg();
 	else if (this->_cmd == "INVITE")
 		this->invite();
+	else if (this->_cmd == "BADJOINCHAN")
+		this->badJoinChan();
 	if (this->_user == BOT_NAME)
 		std::cout << "oh non pas le bot :((((" << std::endl;
 	else

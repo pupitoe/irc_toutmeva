@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 15:39:29 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 20:12:49 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void	Channel::RPL_NAMREPLY(Client *client)
 	std::string						buffer;
 	std::list<Client *>::iterator	it;
 
-	buffer = ":irctoutmevas 353 " + client->getNickName() + " = " + this->_name + " :";
+	buffer = ":irctoutmevas 353 "
+		+ client->getNickName() + " = " + this->_name + " :";
 	it = this->_client.begin();
 	while (it != this->_client.end())
 	{
@@ -120,6 +121,13 @@ void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 
 int	Channel::join_check(Client *client_rqst, std::string const& key)
 {
+	if (client_rqst->getBot() == true)
+	{
+		if (this->userGrade(key) == CH_OPERATOR)
+			return (SUCCESS);
+		this->ERR_BAT_JOIN_BOT(client_rqst, key, this->_name);
+		return (FAIL);
+	}
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
 	if (this->_limit && this->countClient() >= this->_limit)
