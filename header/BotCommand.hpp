@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 21:04:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 22:10:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ class BotCommand
 		void	invite(void);
 		void	badJoinChan(void);
 		void	part(void);
+		void	morfiGame(void);
 
 		bool	checkCMD(std::string& cmd, std::string const& cmp);
+
+		void	game(std::string const& params, std::string const& target);
 
 	public:
     	BotCommand(std::string msg, Bot *cbot);

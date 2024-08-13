@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 21:17:31 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 23:01:53 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ Bot::Bot(int const client_fd): Client(client_fd)
 
 Bot::~Bot(void)
 {
+	while (this->_morfiGames.begin() != this->_morfiGames.end())
+	{
+		delete this->_morfiGames.begin()->second;
+		this->_morfiGames.erase(this->_morfiGames.begin());
+	}
+	
 }
 
 void	Bot::RPL(std::string const str)
@@ -36,10 +42,40 @@ void	Bot::RPL(std::string const str)
 	std::cout << "RPL BOT STR: " << str << std::endl;
 }
 
-std::string	Bot::game(std::string const& params)
+std::map<std::string, Morfi*>&	Bot::getMorfi(void)
 {
-	if (this->_morfiGames.size() > MAX_MORFI_GAMES)
-		return ("trop de joueur joue");
-	(void)params;
-	return ("c bon tkt frefrot");
+	return (this->_morfiGames);
+}
+
+int	Bot::getMorfiStat(std::string const& target)
+{
+	std::map<std::string, Morfi*>::iterator	game;
+
+	game = this->_morfiGames.find(target);
+	if (game == this->_morfiGames.end())
+		return (MO_NOT_CREAT);
+	return (MO_NOTHING); 
+}
+
+bool	Bot::creatGame(std::string const& target, std::string const gameName)
+{
+	Morfi	*buffer;
+	bool	status;
+
+	status = false;
+	buffer = new (std::nothrow) Morfi(this->_nickName, target);
+	if (buffer)
+	{
+		try
+		{
+			this->_morfiGames.insert(std::pair<std::string, Morfi*>(gameName,
+				buffer));
+			status = SUCCESS;
+		}
+		catch(const std::exception& e)
+		{
+			delete buffer;
+		}
+	}
+	return (status);
 }

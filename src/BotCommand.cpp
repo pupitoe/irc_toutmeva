@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 21:03:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 22:59:40 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,10 @@ void	BotCommand::privmsg(void)
 	if (buffer[0] == '#')
 		dest = buffer;
 	if (this->checkCMD(msg, "MORFI"))
-		buffer = "how to basic";
+	{
+		this->game(msg, dest);
+		return ;
+	}
 	this->sendPrivmsg(dest, buffer);
 }
 
@@ -89,6 +92,31 @@ void	BotCommand::part(void)
 		this->_cbot->addCommandBuffer("PART " + this->getArg() + " :check\n");
 }
 
+void	BotCommand::morfiGame(void)
+{
+	int			gameStat;
+	std::string	arg;
+
+	gameStat = this->_cbot->getMorfiStat(this->_user);
+	if (this->_args.size() >= 1)
+	{
+		arg = this->getArg();
+		if (gameStat == MO_NOT_CREAT && arg == "new" && this->_args.size() >= 1)
+		{
+			if (this->_cbot->creatGame(this->_user, this->getArg()))
+				this->sendPrivmsg(this->_user,
+					"a new part has been created with "
+					+ this->_cbot->getNickName());
+			else
+				this->sendPrivmsg(this->_user, "an error was occured");
+		}
+		else
+			this->sendPrivmsg(this->_user, "invalid argument");
+	}
+	else if (gameStat == MO_NOT_CREAT)
+		this->sendPrivmsg(this->_user, "send 'MORFI new' to create a new game");
+}
+
 void	BotCommand::execute(void)
 {
 	if (this->_cmd == "PRIVMSG")
@@ -99,6 +127,8 @@ void	BotCommand::execute(void)
 		this->badJoinChan();
 	else if (this->_cmd == "PART")
 		this->part();
+	else if (this->_cmd == "MORFI")
+		this->morfiGame();
 }
 
 std::string	BotCommand::getUserName(std::string const& user) const
@@ -113,4 +143,16 @@ std::string	BotCommand::getUserName(std::string const& user) const
 		userName = user.substr(start, userName.find_first_of('!') - start);
 	}
 	return (userName);
+}
+
+void	BotCommand::game(std::string const& params, std::string const& target)
+{
+	std::string						ret;
+	std::map<std::string, Morfi*>&	morfiGames = this->_cbot->getMorfi();
+
+	if (morfiGames.find(target) != morfiGames.end()
+		|| morfiGames.size() <= MAX_MORFI_GAMES)
+		BotCommand(target + " " + params, this->_cbot).execute();
+	else
+		this->sendPrivmsg(target, "he's got too much game on, come back later");
 }
