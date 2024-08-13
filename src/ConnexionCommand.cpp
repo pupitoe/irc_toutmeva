@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 23:01:04 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:17:04 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,24 @@ int	ConnexionCommand::_exec_pass(Client &c)
 		throw (IRCError(ERR_PASSWDMISMATCH));
 	//Verifications a terminer
 	
-	c.changeStatus(CS_SETPASS);
+	c.addStatus(CS_SETPASS);
 	return (0);
 }
 
 static void	registration(Client &c)
 {
-	c.changeStatus(CS_CONNECTED);
+	if (c.getNickName().find(' ') != std::string::npos
+		|| c.getNickName().find('#') != std::string::npos
+		|| c.getNickName().find(':') != std::string::npos)
+	{
+		c.removeStatus(CS_SETNICKNAME);
+		c.setHostName("");
+		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
+	}
+
+	if (!(c.getStatusClient() & CS_SETPASS))
+		throw IRCError(ERR_PASSWDMISMATCH, c.getNickName());
+	c.addStatus(CS_CONNECTED);
 	// RPL WELCOME
 	c.addRPLBuffer(":irctoutmevas 001 ");
 	c.addRPLBuffer(c.getNickName());
@@ -106,18 +117,12 @@ int	ConnexionCommand::_exec_nick(Client &c)
 {
 	_args.pop_front();
 	c.setNickName(_args.front());
-	c.changeStatus(CS_SETNICKNAME);
+	c.addStatus(CS_SETNICKNAME);
 	
 	if (c.getStatusClient() == CS_CONNECTED)
 		; // changing nickname, condition written for clarity;
-	else if (c.getStatusClient() == CS_FINISH_REGISTER)
-	{
-		if (_args.front().find(' ') != std::string::npos
-			|| _args.front().find('#') != std::string::npos
-			|| _args.front().find(':') != std::string::npos)
-				throw (IRCError(ERR_ERRONEUSNICKNAME));
+	else if (c.getStatusClient() == CS_FINISH_REGISTER) //changing definition of cSFINISHREGISTER
 		registration(c);
-	}
 	return (0);
 }
 
@@ -132,7 +137,7 @@ int	ConnexionCommand::_exec_user(Client &c)
 	c.setServerName(_args.front());
 	_args.pop_front();
 	c.setRealName(_args.front());
-	c.changeStatus(CS_SETUSER);
+	c.addStatus(CS_SETUSER);
 	if (c.getStatusClient() == CS_FINISH_REGISTER)	
 		registration(c);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 14:27:24 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:13:10 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ enum	CStatus
 	CS_SETNICKNAME = 1 << 1,
 	CS_SETUSER = 1 << 2,
 	CS_SETPASS = 1 << 3,
-	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER | CS_SETPASS,
+	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER,
 	CS_CONNECTED = 1 << 4
 };
 
@@ -60,7 +60,8 @@ class	Client
 		void	setUserName(std::string const& str);
 		void	setHostName(std::string const& str);
 		void	setRealName(std::string const& str);
-		void	changeStatus(enum CStatus new_status);
+		void	addStatus(enum CStatus status);
+		void	removeStatus(enum CStatus status);
 
 		void	setServerName(std::string const& str);
 

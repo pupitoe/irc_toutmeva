@@ -65,8 +65,15 @@ void	Client::setServerName(std::string const& str)
 	this->_serverName = str;
 }
 
-void	Client::changeStatus(enum CStatus new_status) {
-	this->_status_connection |= new_status;
+void	Client::addStatus(enum CStatus status)
+{
+	this->_status_connection |= status;
+}
+
+void	Client::removeStatus(enum CStatus status)
+{
+	if (this->_status_connection & status) // JSUIS PAS SUR DU TOUT, A TESTER
+		this->_status_connection = this->_status_connection ^ status;
 }
 
 std::string const&	Client::getCommandBuffer(void) const

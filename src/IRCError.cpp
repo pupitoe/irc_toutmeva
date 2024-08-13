@@ -6,25 +6,22 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 23:03:53 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 10:17:25 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <IRCError.hpp>
 
-IRCError::IRCError(std::string err) : _err(err) {
-	
-}
+IRCError::IRCError(std::string err,
+	std::string str,
+	std::string str2) : _err(err), _str(str), _str2(str2)
+{}
 
-IRCError::IRCError(std::string err, std::string str) : _err(err), _str(str) {
-	
-}
+IRCError::~IRCError(void) throw()
+{}
 
-IRCError::~IRCError(void) throw() {
-
-}
-
-IRCError::IRCError(IRCError const &ref) {
+IRCError::IRCError(IRCError const &ref)
+{
 	_err = ref.getErr();
 }
 
@@ -38,7 +35,8 @@ std::string IRCError::getReply(void) const
 	return (this->_gen_reply());
 }
 
-const char  *IRCError::what(void) const throw() {
+const char  *IRCError::what(void) const throw()
+{
 	return ("wip");
 }
 
@@ -48,7 +46,8 @@ void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
 		" " + nick + " :No such nick\n");
 }
 
-std::string	IRCError::_gen_reply(void) const {
+std::string	IRCError::_gen_reply(void) const
+{
 	std::string	res(":irctoutmevas ");
 
 	res.append(_err);
@@ -59,19 +58,22 @@ std::string	IRCError::_gen_reply(void) const {
 	}
 	else if (_err == ERR_ERRONEUSNICKNAME)
 	{
-		res.append("to write\n");
+		res.append(_str);
+		res.append(" ");
+		res.append(_str2);
+		res.append(" :Erroneus nickname\n");
 	}
 	else if (_err == ERR_NEEDMOREPARAMS)
 	{
 		res.append(_str);
 		res.append(" ");
 		res.append(_str2);
-		res.append(" :Not enough parameters");
+		res.append(" :Not enough parameters\n");
 	}
 	else if (_err == ERR_PASSWDMISMATCH)
 	{
 		res.append(_str);
-		res.append(" :Password incorrect");
+		res.append(" :Password incorrect\n");
 	}
 	return (res);
 }
