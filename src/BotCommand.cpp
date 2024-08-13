@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 17:06:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 21:03:15 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ BotCommand::BotCommand(std::string msg, Bot *cbot): _cbot(cbot)
 	std::cout << "Bot cmd" << std::endl;
 	ft_split_word(msg, this->_args);
 	this->_user = this->getUserName(this->getArg());
-	this->_cmd = this->getArg();	
+	this->_cmd = this->getArg();
 }
 
 BotCommand::~BotCommand(void)
@@ -34,7 +34,7 @@ void	BotCommand::sendPrivmsg(std::string const& target,
 	this->_cbot->addCommandBuffer("PRIVMSG " + target + " :" + msg + "\n");
 }
 
-bool	BotCommand::checkCMD(std::string cmd, std::string const& cmp)
+bool	BotCommand::checkCMD(std::string& cmd, std::string const& cmp)
 {
 	for (size_t i = 0; i < cmp.length() && i < cmd.length(); i++)
 		cmd[i] = std::toupper(cmd[i]);
@@ -99,10 +99,6 @@ void	BotCommand::execute(void)
 		this->badJoinChan();
 	else if (this->_cmd == "PART")
 		this->part();
-	if (this->_user == BOT_NAME)
-		std::cout << "oh non pas le bot :((((" << std::endl;
-	else
-		std::cout << "ah oui c'est un autre user !!!!" << std::endl;
 }
 
 std::string	BotCommand::getUserName(std::string const& user) const

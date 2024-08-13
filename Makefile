@@ -6,7 +6,7 @@
 #    By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/08/12 00:45:34 by tlassere         ###   ########.fr        #
+#    Updated: 2024/08/13 20:55:04 by tlassere         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SOURCES_PATH 	::= src/
 SOURCES_UTIL	::= ft_error IRCSocket Server Client\
 					Command ConnexionCommand ChannelCommand IRCError Channel \
 					ChannelMode ChannelCommandJoinPart ChannelCommandMode \
-					ChannelErrorMessages Bot BotCommand
+					ChannelErrorMessages Bot BotCommand Morfi
 SOURCES_MAIN	::= irc_tout_me_va $(SOURCES_UTIL)
 SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(SOURCES_PATH)$(buffer).cpp)
 OBJS			::= $(SOURCES:.cpp=.o)

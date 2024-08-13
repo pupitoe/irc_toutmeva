@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 15:32:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 21:17:31 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,12 @@ void	Bot::RPL(std::string const str)
 
 	cmd.execute();
 	std::cout << "RPL BOT STR: " << str << std::endl;
+}
+
+std::string	Bot::game(std::string const& params)
+{
+	if (this->_morfiGames.size() > MAX_MORFI_GAMES)
+		return ("trop de joueur joue");
+	(void)params;
+	return ("c bon tkt frefrot");
 }
