@@ -50,12 +50,21 @@ int	ChannelCommand::join_channel(Client* user_rqts,
 	status = SUCCESS;
 	if (channelExist(channelName, channels) == false)
 	{
+		status = FAIL;
 		buffer = new (std::nothrow) Channel(channelName);
 		if (buffer)
-			channels.insert(std::pair<std::string,
-				Channel *>(channelName, buffer));
-		else
-			status = FAIL;
+		{
+			try
+			{
+				channels.insert(std::pair<std::string,
+					Channel *>(channelName, buffer));
+				status = SUCCESS;
+			}
+			catch(const std::exception& e)
+			{
+				delete buffer;
+			}
+		}
 	}
 	else
 		buffer = channels[channelName];

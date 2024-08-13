@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 22:17:21 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 23:07:15 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ Server::Server(char *psw, int port) : _password(psw), _socket(port)
 	this->_status_server = SUCCESS;
 }
 
-void	Server::addBot(void)
+void	Server::addBot(void) // cause des problem
 {
 	Client	*buffer;
 	int		botFd;
@@ -42,7 +42,16 @@ void	Server::addBot(void)
 	botFd = -666;
 	buffer = new (std::nothrow) Bot(botFd);
 	if (buffer)
-		this->_clientList.insert(std::pair<int, Client *>(botFd, buffer));
+	{
+		try
+		{
+			this->_clientList.insert(std::pair<int, Client *>(botFd, buffer));
+		}
+		catch(const std::exception&)
+		{
+			delete buffer;
+		}
+	}
 }
 
 Server::~Server(void)
@@ -82,8 +91,16 @@ void	Server::addClient(int const fd)
 		if (buffer)
 		{
 			// add the new client fd to the table
-			FD_SET(fd, &this->_rfds);
-			this->_clientList.insert(std::pair<int, Client *>(fd, buffer));
+			try
+			{
+				this->_clientList.insert(std::pair<int, Client *>(fd, buffer));
+				FD_SET(fd, &this->_rfds);
+			}
+			catch(const std::exception& )
+			{
+				close(fd);
+				delete buffer;
+			}
 		}
 		else
 			close(fd);
@@ -122,9 +139,12 @@ void	Server::deletClient(int const fd)
 			closeChannel(it_old_channel->first, this->_channels);
 		}
 		// remove the client from the table
-		FD_CLR(fd, &this->_rfds);
 		delete this->_clientList[fd];
-		close(fd);
+		if (fd >= 0)
+		{
+			FD_CLR(fd, &this->_rfds);
+			close(fd);
+		}
 		this->_clientList.erase(fd);
 	}
 }
