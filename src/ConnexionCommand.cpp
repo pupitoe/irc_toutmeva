@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 10:17:04 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:43:31 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,26 +49,40 @@ int	ConnexionCommand::_exec_pass(Client &c)
 	_args.pop_front();
 	std::string &pass = *_args.begin();
 	if (pass != _password)
+	{
+		std::cout << "		Status :" << c.getStatusClient() << std::endl;
+		c.removeStatus(CS_SETPASS);
+		std::cout << "		Status :" << c.getStatusClient() << std::endl;
 		throw (IRCError(ERR_PASSWDMISMATCH));
+	}
 	//Verifications a terminer
-	
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	c.addStatus(CS_SETPASS);
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	return (0);
 }
 
 static void	registration(Client &c)
 {
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	if (c.getNickName().find(' ') != std::string::npos
 		|| c.getNickName().find('#') != std::string::npos
 		|| c.getNickName().find(':') != std::string::npos)
 	{
+		std::cout << "		preStatus :" << c.getStatusClient() << std::endl;
 		c.removeStatus(CS_SETNICKNAME);
+		std::cout << "		aftStatus :" << c.getStatusClient() << std::endl;
 		c.setHostName("");
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
 
 	if (!(c.getStatusClient() & CS_SETPASS))
+	{
+		std::cout << "		preStatus :" << c.getStatusClient() << std::endl;
+		c.removeStatus(CS_FINISH_REGISTER);
+		std::cout << "		aftStatus :" << c.getStatusClient() << std::endl;
 		throw IRCError(ERR_PASSWDMISMATCH, c.getNickName());
+	}
 	c.addStatus(CS_CONNECTED);
 	// RPL WELCOME
 	c.addRPLBuffer(":irctoutmevas 001 ");
@@ -117,8 +131,9 @@ int	ConnexionCommand::_exec_nick(Client &c)
 {
 	_args.pop_front();
 	c.setNickName(_args.front());
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	c.addStatus(CS_SETNICKNAME);
-	
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	if (c.getStatusClient() == CS_CONNECTED)
 		; // changing nickname, condition written for clarity;
 	else if (c.getStatusClient() == CS_FINISH_REGISTER) //changing definition of cSFINISHREGISTER
@@ -137,7 +152,9 @@ int	ConnexionCommand::_exec_user(Client &c)
 	c.setServerName(_args.front());
 	_args.pop_front();
 	c.setRealName(_args.front());
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	c.addStatus(CS_SETUSER);
+	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	if (c.getStatusClient() == CS_FINISH_REGISTER)	
 		registration(c);
 	return (0);
@@ -160,11 +177,11 @@ ConnexionCommand::ConnexionCommand(std::string msg,
 	}
 }
 
-ConnexionCommand::~ConnexionCommand(void){}
+ConnexionCommand::~ConnexionCommand(void)
+{}
 
 int	ConnexionCommand::execute(Client &client)
 {
-	(void) client;
 	if (!_args.front().compare(0, 4, "PASS", 4))
 		return (_exec_pass(client));
 	else if (!_args.front().compare(0, 4, "NICK", 4))
