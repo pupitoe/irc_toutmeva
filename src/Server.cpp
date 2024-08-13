@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 15:34:44 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 21:22:41 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,18 +281,22 @@ void	Server::execut(void) {
 	this->eraseClient();
 }
 
-static enum type guessType(std::string msg) {
-	if (!msg.compare(0, 5, "PASS ", 5)|| !msg.compare(0, 5, "NICK ", 5)
-		|| !msg.compare(0, 5, "USER ", 5) || !msg.compare(0, 4, "CAP ", 4))
+static enum type guessType(std::stringstream &input)
+{
+	std::string cmd;
+	input >> cmd;
+	std::cout << cmd << std::endl;
+	if (!cmd.compare("PASS")|| !cmd.compare("NICK")
+		|| !cmd.compare("USER") || !cmd.compare("CAP"))
 		return (CONNEXION);
-	else if (!msg.compare(0, 5, "JOIN ", 5) || !msg.compare(0, 5, "PART ", 5)
-		|| !msg.compare(0, 6, "TOPIC ", 6) || !msg.compare(0, 6, "NAMES ", 6)
-		|| !msg.compare(0, 5, "LIST ", 5) || !msg.compare(0, 7, "INVITE ", 7)
-		|| !msg.compare(0, 5, "KICK ", 5) || !msg.compare(0, 5, "MODE ", 5)
-		|| !msg.compare(0, 8, "PRIVMSG ", 8) || !msg.compare(0, 5, "PING ", 5)
-		|| !msg.compare(0, 5, "PONG ", 5))
+	else if (!cmd.compare("JOIN") || !cmd.compare(0, 5, "PART")
+		|| !cmd.compare("TOPIC") || !cmd.compare(0, 6, "NAMES")
+		|| !cmd.compare("LIST") || !cmd.compare(0, 7, "INVITE")
+		|| !cmd.compare("KICK") || !cmd.compare(0, 5, "MODE")
+		|| !cmd.compare("PRIVMSG") || !cmd.compare(0, 5, "PING")
+		|| !cmd.compare("PONG"))
 		return (CHANNEL);
-	else if (msg.empty())
+	else if (cmd.empty())
 		return (EMPTY);
 	return (ERR);
 }
@@ -302,7 +306,8 @@ static enum type guessType(std::string msg) {
 void	Server::parse(std::string cmd, Client &c) {
 	try {
 		Command	*rqst = NULL;
-		enum type t = guessType(cmd);
+		std::stringstream preparsed_input(cmd);
+		enum type t = guessType(preparsed_input);
 		if (t == ERR)
 			throw (Command::UnrecognizedType());
 		else if (t == CONNEXION)
