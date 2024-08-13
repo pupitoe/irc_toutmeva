@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 23:07:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 00:12:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,22 +263,26 @@ void	Server::eraseClient(void)
 	}
 }
 
-void	Server::useSelect(void) {
+void	Server::useSelect(void)
+{
 	std::map<int, Client*>::iterator	buffer;
 	struct timeval						tv;
 	
 	if (this->_clientList.size() > 0)
 	{
-		tv.tv_sec = 0;
-		tv.tv_usec = 0;
-		this->_rfds_read = this->_rfds;
-		this->_rfds_write = this->_rfds;
-		this->_rfds_error = this->_rfds;
 		buffer = this->_clientList.end();
 		buffer--;
-		// find out who has communicated
-		select(buffer->first + 1, &this->_rfds_read,
-			&this->_rfds_write, &this->_rfds_error, &tv);
+		if (buffer->first >= 0)
+		{
+			tv.tv_sec = 0;
+			tv.tv_usec = 0;
+			this->_rfds_read = this->_rfds;
+			this->_rfds_write = this->_rfds;
+			this->_rfds_error = this->_rfds;
+			// find out who has communicated
+			select(buffer->first + 1, &this->_rfds_read,
+				&this->_rfds_write, &this->_rfds_error, &tv);
+		}
 	}
 }
 
