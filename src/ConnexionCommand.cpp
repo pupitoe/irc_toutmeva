@@ -6,13 +6,14 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 13:47:00 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:33:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
 #include <iostream>
 
+// Faire en sorte de fermer le client en cas de certaines erreur de connexion
 static void	test_password(std::list<std::string> args)
 {
 	if (args.empty() || args.size() < 2) {
@@ -27,21 +28,21 @@ static void test_nickname(std::list<std::string> args,
 	std::map<int, Client *>::iterator	ite = clientList.end();
 	
 	if (args.empty() || args.size() < 2)
-		throw (IRCError(ERR_NEEDMOREPARAMS, args.front()));
+		throw (IRCError(ERR_NEEDMOREPARAMS, "client"));
 
 	// Verification of uniqueness
 	while (it != ite)
 	{
 		if (args.front() == it->second->getNickName())
-			throw (IRCError(ERR_NICKNAMEINUSE));
+			throw (IRCError(ERR_NICKNAMEINUSE, "client"));
 		it++;
 	}
 }
 
 static void test_username(std::list<std::string> args)
 {
-	if (args.empty() || args.size() < 4)
-		throw (IRCError(ERR_NEEDMOREPARAMS, args.front()));
+	if (args.empty() || args.size() < 5)
+		throw (IRCError(ERR_NEEDMOREPARAMS, "client"));
 }
 
 int	ConnexionCommand::_exec_pass(Client &c)
@@ -56,23 +57,17 @@ int	ConnexionCommand::_exec_pass(Client &c)
 	std::string &pass = *_args.begin();
 	if (pass != _password)
 	{
-		std::cout << "		Status :" << c.getStatusClient() << std::endl;
 		c.removeStatus(CS_SETPASS);
-		std::cout << "		Status :" << c.getStatusClient() << std::endl;
 		return (0);
-		// throw (IRCError(ERR_PASSWDMISMATCH));
 	}
 	//Verifications a terminer
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	c.addStatus(CS_SETPASS);
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	return (0);
 }
 
 void	ConnexionCommand::_registration(Client &c) const
 {
 	std::cout << "REGISTER" << std::endl;
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	if (c.getNickName().find(' ') != std::string::npos
 		|| c.getNickName().find('#') != std::string::npos
 		|| c.getNickName().find(':') != std::string::npos)

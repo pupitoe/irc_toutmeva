@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 21:53:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 15:34:44 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,8 +277,8 @@ void	Server::execut(void) {
 	this->clientRecv();
 	this->parseInput();
 	this->userPing();
-	this->eraseClient();
 	this->clientSend();
+	this->eraseClient();
 }
 
 static enum type guessType(std::string msg) {
@@ -317,6 +317,10 @@ void	Server::parse(std::string cmd, Client &c) {
 	catch (IRCError &e) {
 		std::cout << e.what() << std::endl; // to remove, only used for tests.
 		c.addRPLBuffer(e.getReply());
+		if (e.getErr() == ERR_PASSWDMISMATCH){
+			std::cout << "fewoihgfiu" << std::endl;
+			c.terminateConnection();
+		}
 	}
 	catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
