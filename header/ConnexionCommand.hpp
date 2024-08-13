@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 09:51:47 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 13:17:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class ConnexionCommand : public Command {
 		int _exec_nick(Client &);
 		int _exec_user(Client &);
 
-		// static void	_registration(Client &c);
+		void	_registration(Client &c) const;
 
 	public :
 		ConnexionCommand(std::string msg,
