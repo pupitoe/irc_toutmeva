@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 20:35:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 16:49:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ class BotCommand
 		void	invite(void);
 		void	badJoinChan(void);
 		void	part(void);
+
+		bool	checkCMD(std::string cmd, std::string const& cmp);
 
 	public:
     	BotCommand(std::string msg, Bot *cbot);

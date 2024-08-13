@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 22:15:12 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 17:06:22 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ BotCommand::BotCommand(std::string msg, Bot *cbot): _cbot(cbot)
 	std::cout << "Bot cmd" << std::endl;
 	ft_split_word(msg, this->_args);
 	this->_user = this->getUserName(this->getArg());
-	this->_cmd = this->getArg();
-	
+	this->_cmd = this->getArg();	
 }
 
 BotCommand::~BotCommand(void)
@@ -35,16 +34,30 @@ void	BotCommand::sendPrivmsg(std::string const& target,
 	this->_cbot->addCommandBuffer("PRIVMSG " + target + " :" + msg + "\n");
 }
 
+bool	BotCommand::checkCMD(std::string cmd, std::string const& cmp)
+{
+	for (size_t i = 0; i < cmp.length() && i < cmd.length(); i++)
+		cmd[i] = std::toupper(cmd[i]);
+	return (cmd == cmp || !cmd.compare(0, cmp.length() + 1,
+		cmp + " ", 0, cmp.length() + 1));
+}
+
 void	BotCommand::privmsg(void)
 {
 	std::string	dest;
 	std::string	buffer;
+	std::string	msg;
 
 	dest = this->_user;
 	buffer = this->getArg();
+	msg = this->getArg();
+	buffer = "hello zizou";
+	if (msg[0] == ':')
+		msg.erase(0, 1);
 	if (buffer[0] == '#')
 		dest = buffer;
-	buffer = "hello zizou";
+	if (this->checkCMD(msg, "MORFI"))
+		buffer = "how to basic";
 	this->sendPrivmsg(dest, buffer);
 }
 
