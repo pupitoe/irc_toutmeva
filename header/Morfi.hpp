@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:51:51 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 21:49:04 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 22:41:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,21 @@
 # include <cstdlib>
 # include <ctime>
 # include <cstring>
+# include "irc_tout_me_va.hpp"
 
 # define CASE_NO_SET 0
 # define CASE_P1 1
 # define CASE_P2 2
 # define GRID_SIZE 9
 
+# define PLACE(x) (x == CASE_P1)? 'X': '0'
+
 enum MORFI_STAT
 {
 	MO_NOTHING = 0,
-	MO_NOT_CREAT,
 	MO_BOT_ROUND,
-	MO_TARGET_ROUND
+	MO_TARGET_ROUND,
+	MO_NOT_CREAT
 };
 
 class	Morfi
@@ -37,7 +40,8 @@ class	Morfi
 		std::string const	_p1;
 		std::string const	_p2;
 
-		int					_round;
+		int					_roundUser;
+		unsigned int		_roundStep;
 		int					_grid[GRID_SIZE];
 
 	public:
@@ -51,6 +55,7 @@ class	Morfi
 		std::string	const&	getP2(void) const;
 		int const			*getGrid(void) const;
 		
+		int					place(int width, int height);
 };
 
 #endif
