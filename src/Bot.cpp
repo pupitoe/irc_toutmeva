@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 23:01:53 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 19:44:09 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool	Bot::creatGame(std::string const& target, std::string const gameName)
 		{
 			this->_morfiGames.insert(std::pair<std::string, Morfi*>(gameName,
 				buffer));
-			status = SUCCESS;
+			status = true;
 		}
 		catch(const std::exception& e)
 		{
