@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/14 11:18:50 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:18:36 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	test_password(std::list<std::string> args)
 {
 	if (args.empty() || args.size() < 2) {
-		throw (IRCError(ERR_NEEDMOREPARAMS, args.front()));
+		throw (IRCError(ERR_NEEDMOREPARAMS, args.front(), "PASS"));
 	}
 }
 
@@ -27,7 +27,7 @@ static void test_nickname(std::list<std::string> args,
 	std::map<int, Client *>::iterator	ite = clientList.end();
 	
 	if (args.empty() || args.size() < 2)
-		throw (IRCError(ERR_NEEDMOREPARAMS, "client"));
+		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "NICK"));
 
 	// Verification of uniqueness
 	while (it != ite)
@@ -41,11 +41,13 @@ static void test_nickname(std::list<std::string> args,
 static void test_username(std::list<std::string> args)
 {
 	if (args.empty() || args.size() < 5)
-		throw (IRCError(ERR_NEEDMOREPARAMS, "client"));
+		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "USER"));
 }
 
 int	ConnexionCommand::_exec_pass(Client &c)
 {
+	if (c.getStatusClient() == CS_CONNECTED)
+		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
 	if (c.getStatusClient() == CS_SETUSER || c.getStatusClient() == CS_SETNICKNAME)
 	{
 		c.removeStatus(CS_SETUSER);
@@ -145,6 +147,8 @@ void	ConnexionCommand::_registration(Client &c) const
 int	ConnexionCommand::_exec_nick(Client &c)
 {
 	_args.pop_front();
+	if (_nick_already_used)
+		throw (IRCError(ERR_NICKNAMEINUSE, c.getNickName()));
 	c.setNickName(_args.front());
 	c.addStatus(CS_SETNICKNAME);
 	if (c.getStatusClient() == CS_CONNECTED)
@@ -176,14 +180,25 @@ int	ConnexionCommand::_exec_user(Client &c)
 ConnexionCommand::ConnexionCommand(std::string msg,
 	const std::string password,
 	const std::map<int, Client *> clientList)
-	throw (IRCError) : Command(msg), _password(password)
+	throw (IRCError)
+	: Command(msg), _password(password), _nick_already_used(false)
 {
 	this->_type = CONNEXION;
 	if (!_args.front().compare(0, 4, "PASS", 4)) {
 		test_password(_args);
 	}
 	else if (!_args.front().compare(0, 4, "NICK", 4)) {
-		test_nickname(_args, clientList);
+		try
+		{
+			test_nickname(_args, clientList);
+		}
+		catch (IRCError &e)
+		{
+			if (e.getErr() == ERR_NICKNAMEINUSE)
+				_nick_already_used = true;
+			else
+				throw (e);
+		}
 	}
 	else if (!_args.front().compare(0, 4, "USER", 4)) {
 		test_username(_args);

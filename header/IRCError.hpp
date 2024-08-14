@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 09:40:53 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:07:07 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define ERR_ERRONEUSNICKNAME	"432"
 # define ERR_NICKNAMEINUSE		"433"
 # define ERR_NEEDMOREPARAMS		"461"
+# define ERR_ALREADYREGISTERED	"462"
 # define ERR_PASSWDMISMATCH		"464" // also used when no password provided
 
 // Don't forget to see if everything is correctly used.

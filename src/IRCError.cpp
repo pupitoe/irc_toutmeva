@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 10:17:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/14 16:21:05 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,11 @@ std::string	IRCError::_gen_reply(void) const
 	{
 		res.append(_str);
 		res.append(" :Password incorrect\n");
+	}
+	else if (_err == ERR_NICKNAMEINUSE)
+	{
+		res.append(_str);
+		res.append(" :blablabla\n");
 	}
 	return (res);
 }
