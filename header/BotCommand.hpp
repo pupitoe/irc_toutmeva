@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 22:10:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 21:22:50 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <iostream>
 # include "irc_tout_me_va.hpp"
 # include "Bot.hpp"
+
+# define ERROR_CREAT_GAME "send 'MORFI new [gameName]' to create a new game"
 
 class BotCommand
 {
@@ -37,6 +39,11 @@ class BotCommand
 		void	badJoinChan(void);
 		void	part(void);
 		void	morfiGame(void);
+		void	morfiGameAct(std::string& arg, std::string& gameName,
+			int gameStat);
+		std::string	getLineMorfi(int const *grid, int line) const;
+
+		void	sendRound(std::string const& gameName);
 
 		bool	checkCMD(std::string& cmd, std::string const& cmp);
 

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 19:44:09 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 20:46:58 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	Bot::getMorfiStat(std::string const& target)
 	game = this->_morfiGames.find(target);
 	if (game == this->_morfiGames.end())
 		return (MO_NOT_CREAT);
-	return (MO_NOTHING); 
+	return (game->second->getRound());
 }
 
 bool	Bot::creatGame(std::string const& target, std::string const gameName)
@@ -63,7 +63,9 @@ bool	Bot::creatGame(std::string const& target, std::string const gameName)
 	bool	status;
 
 	status = false;
-	buffer = new (std::nothrow) Morfi(this->_nickName, target);
+	buffer = NULL;
+	if (this->_morfiGames.find(gameName) == this->_morfiGames.end())
+		buffer = new (std::nothrow) Morfi(this->_nickName, target);
 	if (buffer)
 	{
 		try

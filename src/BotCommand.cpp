@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 22:59:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 21:51:18 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,33 +92,89 @@ void	BotCommand::part(void)
 		this->_cbot->addCommandBuffer("PART " + this->getArg() + " :check\n");
 }
 
+void	BotCommand::morfiGameAct(std::string& arg, std::string& gameName,
+	int gameStat)
+{
+	(void)arg;
+	(void)gameName;
+	(void)gameStat;
+	this->sendPrivmsg(this->_user, "invalid argument");
+}
+
+std::string	BotCommand::getLineMorfi(int const *grid, int line) const
+{
+	std::string		lineRet;
+	unsigned int	i;
+
+	i = 0;
+	if (line == -1)
+	{
+		lineRet = "| 0 | 1 | 2 |  ";
+	}
+	else
+	{
+		lineRet = "| ~ | ~ | ~ | 0";
+		lineRet[15] += line;
+		while (i < 3)
+		{
+			if (grid[i + line * 3])
+				lineRet[2 + i * 4] = (grid[i + line * 3] == CASE_P1)? 'X': 'O';
+			i++;
+		}
+	}
+	return (lineRet);
+}
+
+void	BotCommand::sendRound(std::string const& gameName)
+{
+	int const	*grid;
+	std::string	targets;
+	Morfi*		morfi = this->_cbot->getMorfi()[gameName];
+
+	grid = morfi->getGrid();
+	targets = morfi->getP1() + "," + morfi->getP2();
+	this->sendPrivmsg(targets, "ROUND " + morfi->getUserRound() + " FOR "
+		+ gameName);
+	this->sendPrivmsg(targets, this->getLineMorfi(grid, -1));
+	this->sendPrivmsg(targets, this->getLineMorfi(grid, 0));
+	this->sendPrivmsg(targets, this->getLineMorfi(grid, 1));
+	this->sendPrivmsg(targets, this->getLineMorfi(grid, 2));
+}
+
 void	BotCommand::morfiGame(void)
 {
 	int			gameStat;
 	std::string	arg;
+	std::string	gameName;
 
 	gameStat = this->_cbot->getMorfiStat(this->_user);
 	if (this->_args.size() >= 1)
 	{
 		arg = this->getArg();
-		if (gameStat == MO_NOT_CREAT && arg == "new" && this->_args.size() >= 1)
+		gameName = this->getArg();
+		if (gameStat == MO_NOT_CREAT && arg == "new" && !gameName.empty())
 		{
-			if (this->_cbot->creatGame(this->_user, this->getArg()))
+			if (this->_cbot->creatGame(this->_user, gameName))
+			{
 				this->sendPrivmsg(this->_user,
 					"a new part has been created with "
 					+ this->_cbot->getNickName());
+				this->sendRound(gameName);
+			}
 			else
 				this->sendPrivmsg(this->_user, "an error was occured");
 		}
 		else
-			this->sendPrivmsg(this->_user, "invalid argument");
+			this->morfiGameAct(arg, gameName, gameStat);
 	}
 	else if (gameStat == MO_NOT_CREAT)
-		this->sendPrivmsg(this->_user, "send 'MORFI new' to create a new game");
+		this->sendPrivmsg(this->_user, ERROR_CREAT_GAME);
 }
 
 void	BotCommand::execute(void)
 {
+	if (this->_user == BOT_NAME)
+		return ;
 	if (this->_cmd == "PRIVMSG")
 		this->privmsg();
 	else if (this->_cmd == "INVITE")
