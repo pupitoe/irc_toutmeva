@@ -6,14 +6,13 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 15:33:32 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/14 11:18:50 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
 #include <iostream>
 
-// Faire en sorte de fermer le client en cas de certaines erreur de connexion
 static void	test_password(std::list<std::string> args)
 {
 	if (args.empty() || args.size() < 2) {
@@ -65,30 +64,50 @@ int	ConnexionCommand::_exec_pass(Client &c)
 	return (0);
 }
 
+static void	addMOTD(Client &c)
+{
+	c.addRPLBuffer(":");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" 375 ");
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" :- ");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" Message of the day -\n");
+
+	c.addRPLBuffer(":");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" 372 ");
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" :- Bienvenue sur ft_webserv x)\n");
+
+	c.addRPLBuffer(":");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" 376 ");
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" :End of /MOTD command\n");
+}
+
 void	ConnexionCommand::_registration(Client &c) const
 {
-	std::cout << "REGISTER" << std::endl;
 	if (c.getNickName().find(' ') != std::string::npos
 		|| c.getNickName().find('#') != std::string::npos
 		|| c.getNickName().find(':') != std::string::npos)
 	{
-		std::cout << "		preStatus :" << c.getStatusClient() << std::endl;
 		c.removeStatus(CS_SETNICKNAME);
-		std::cout << "		aftStatus :" << c.getStatusClient() << std::endl;
 		c.setHostName("");
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
 
 	if (!(c.getStatusClient() & CS_SETPASS))
 	{
-		std::cout << "		preStatus :" << c.getStatusClient() << std::endl;
 		c.removeStatus(CS_FINISH_REGISTER);
-		std::cout << "		aftStatus :" << c.getStatusClient() << std::endl;
 		throw IRCError(ERR_PASSWDMISMATCH, c.getNickName());
 	}
 	c.addStatus(CS_CONNECTED);
 	// RPL WELCOME
-	c.addRPLBuffer(":irctoutmevas 001 ");
+	c.addRPLBuffer(":");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" 001");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Welcome to the ");
 	c.addRPLBuffer("ft_irc");
@@ -104,14 +123,14 @@ void	ConnexionCommand::_registration(Client &c) const
 	// RPL CREATED
 	c.addRPLBuffer(":irctoutmevas 003 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\n"); //date to include
+	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\n");
 
 	// RPL MYINFO
 	c.addRPLBuffer(":irctoutmevas 004 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :absent 1.2.3.4");
 	c.addRPLBuffer(" :itkol");
-	c.addRPLBuffer("\n"); //date to include
+	c.addRPLBuffer("\n");
 
 	// RPL ISUPPORT
 	c.addRPLBuffer(":irctoutmevas 005 ");
@@ -120,23 +139,14 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer(" :are supported by this server\n");
 
 	//RPL MOTD
-	c.addRPLBuffer(":irctoutmevas 375 ");
-	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :- Message of the day -\n");	
-	
-	c.addRPLBuffer("Good morning.\n");
-	c.addRPLBuffer(":irctoutmevas 376 ");
-	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :End of MOTD command\n");
+	addMOTD(c);
 }
 
 int	ConnexionCommand::_exec_nick(Client &c)
 {
 	_args.pop_front();
 	c.setNickName(_args.front());
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	c.addStatus(CS_SETNICKNAME);
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	if (c.getStatusClient() == CS_CONNECTED)
 		; // changing nickname, condition written for clarity;
 	else if (c.getStatusClient() == CS_FINISH_REGISTER
@@ -156,9 +166,7 @@ int	ConnexionCommand::_exec_user(Client &c)
 	c.setServerName(_args.front());
 	_args.pop_front();
 	c.setRealName(_args.front());
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	c.addStatus(CS_SETUSER);
-	std::cout << "		Status :" << c.getStatusClient() << std::endl;
 	if (c.getStatusClient() == CS_FINISH_REGISTER
 		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))	
 		_registration(c);
