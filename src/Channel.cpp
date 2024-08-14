@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 15:03:44 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:44:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	Channel::part(Client *client_rqst, std::string const& reason,
 		return (ECHAN_NOT_REGISTERED);
 	}
 	if (quitServe == false)
-		this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name
+		this->sendAll(":" + client_rqst->getInfo() + " PART " + this->_name
 			+ ((reason.empty())? "": " " + reason) + "\n");
 	this->_client.erase(buffer);
 	buffer = std::find(this->_operators.begin(),
@@ -153,7 +153,7 @@ int	Channel::join(Client *client_rqst, std::string const& key)
 	if (this->_super_user_set == false)
 		this->join_super_user(client_rqst);
 	this->_client.push_back(client_rqst);
-	this->sendAll(":" + client_rqst->getNickName() + " JOIN " + this->_name
+	this->sendAll(":" + client_rqst->getInfo() + " JOIN " + this->_name
 		+ "\n");
 	if (this->_topic.empty() == false)
 		this->topicRPL(client_rqst);
@@ -214,7 +214,7 @@ void	Channel::kickActiv(Client* client_rqst, std::string const& userKick,
 	user = this->getClient(userKick);	
 	if (user)
 	{
-		buffer = ":" + client_rqst->getNickName() + " KICK "
+		buffer = ":" + client_rqst->getInfo() + " KICK "
 			+ this->_name + " " + user->getNickName() + " ";
 		if (comment.empty())
 			buffer += "a moderator kick u sorry\n";
@@ -280,7 +280,7 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 		this->_topic = newTopic.c_str();
 		this->_topic_usr = client_rqst->getNickName() + " " + buffer;
 	}
-	this->sendAll(":" + client_rqst->getNickName()
+	this->sendAll(":" + client_rqst->getInfo()
 		+ " TOPIC " + this->_name + " :" + this->_topic + "\n");
 }
 
@@ -358,7 +358,7 @@ void	Channel::sendInvitClient(Client* client_rqst,
 		if (std::find(this->_invite_lst.begin(), this->_invite_lst.end(),
 				buffer) == this->_invite_lst.end())
 			this->_invite_lst.push_back(buffer);
-		buffer->addRPLBuffer(":" + client_rqst->getNickName() + " INVITE "
+		buffer->addRPLBuffer(":" + client_rqst->getInfo() + " INVITE "
 			+ userName + " " + this->_name + "\n");
 	}
 	else
@@ -423,6 +423,6 @@ int		Channel::sendMsg(Client* client_rqst, std::string const& message,
 void	RPL_PRIVMSG(Client *client_rqst, Client *dest,
 	std::string const& message, std::string const& target)
 {
-	dest->addRPLBuffer(":" + client_rqst->getNickName() + " PRIVMSG "
+	dest->addRPLBuffer(":" + client_rqst->getInfo() + " PRIVMSG "
 		+ target + " :" + message + "\n");
 }
