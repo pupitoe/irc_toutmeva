@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 22:14:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/13 23:53:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ int	Channel::part(Client *client_rqst, std::string const& reason,
 	if (buffer == this->_client.end())
 	{
 		if (quitServe == false)
-			this->ERR_CHANOPRIVSNEEDED_MSG(client_rqst);
+			this->ERR_NOTONCHANNEL_MSG(client_rqst);
 		return (ECHAN_NOT_REGISTERED);
 	}
-	this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name +
-		((reason.empty())? "": " " + reason) + "\n");
+	if (quitServe == false)
+		this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name
+			+ ((reason.empty())? "": " " + reason) + "\n");
 	this->_client.erase(buffer);
 	buffer = std::find(this->_operators.begin(),
 		this->_operators.end(), client_rqst);
