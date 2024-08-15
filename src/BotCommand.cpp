@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 21:50:11 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 22:01:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ bool	BotCommand::morfiCheckCreatGame(void)
 	bool	ret;
 
 	ret = true;
+	this->_cbot->checkGames();
 	if (this->_cbot->getMorfi().size() > MAX_MORFI_GAMES)
 	{
 		this->sendPrivmsg(this->_user,
@@ -289,7 +290,7 @@ void	BotCommand::playRoundActFormat(unsigned int i,
 	rplMorfi = "MORFI P " + gameName + " ";
 	act[0] = '0' + i % 3;
 	act[1] = 'A' + i / 3;
-	act[2] = '\n';
+	act[2] = '\0';
 	rplMorfi += act;
 	this->sendPrivmsg(this->_cbot->getNickName(), rplMorfi);
 }
