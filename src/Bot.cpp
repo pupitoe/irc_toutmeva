@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 21:03:08 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:35:34 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,22 @@ void	Bot::deleteGame(std::string const& gameName)
 	{
 		delete game->second;
 		this->_morfiGames.erase(game);
+	}
+}
+
+void	Bot::checkGames(void)
+{
+	std::map<std::string, Morfi*>::iterator	buffer;
+	std::map<std::string, Morfi*>::iterator	next;
+	time_t									cTime;
+
+	next = this->_morfiGames.begin();
+	cTime = std::time(NULL);
+	while (next != this->_morfiGames.end())
+	{
+		buffer = next;
+		next++;
+		if (cTime - buffer->second->getLastTime() > GAME_MAX_TIME)
+			this->deleteGame(buffer->first);
 	}
 }

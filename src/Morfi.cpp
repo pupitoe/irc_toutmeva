@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:54:09 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 20:43:47 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:24:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ Morfi::Morfi(std::string const& p1, std::string const& p2): _p1(p1), _p2(p2)
 	std::srand(std::time(NULL));
 	this->_roundUser = MO_P1 + std::rand() % 2;
 	std::memset(this->_grid, CASE_NO_SET, sizeof(int) * 9);
-	_roundStep = 0;
+	this->_roundStep = 0;
+	this->_lastTime = std::time(NULL);
 }
 
 Morfi::~Morfi(void)
@@ -67,6 +68,7 @@ int	Morfi::place(int width, int height)
 			this->_roundStep++;
 			this->_roundUser ^= MO_P1 | MO_P2;
 			ret = SUCCESS;
+			this->_lastTime = std::time(NULL);
 		}
 	}
 	return (ret);
@@ -112,4 +114,9 @@ int	Morfi::finished(void)
 		&& this->_grid[2] == this->_grid[6])
 		buffer = this->_grid[4];
 	return (this->winner(buffer));
+}
+
+time_t	Morfi::getLastTime(void) const
+{
+	return (this->_lastTime);
 }

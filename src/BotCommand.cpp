@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 21:05:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:50:11 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,6 +205,20 @@ void	BotCommand::sendRound(std::string const& gameName)
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 2));
 }
 
+bool	BotCommand::morfiCheckCreatGame(void)
+{
+	bool	ret;
+
+	ret = true;
+	if (this->_cbot->getMorfi().size() > MAX_MORFI_GAMES)
+	{
+		this->sendPrivmsg(this->_user,
+			"he's got too much game on, come back later");
+		ret = false;
+	}
+	return (ret);
+}
+
 void	BotCommand::morfiGame(void)
 {
 	std::string	arg;
@@ -214,7 +228,7 @@ void	BotCommand::morfiGame(void)
 	{
 		arg = this->getArg();
 		gameName = this->getArg();
-		if (arg == "NEW" && !gameName.empty())
+		if (arg == "NEW" && !gameName.empty() && this->morfiCheckCreatGame())
 		{
 			if (this->_cbot->creatGame(this->_user, gameName))
 			{
@@ -327,14 +341,7 @@ std::string	BotCommand::getUserName(std::string const& user) const
 
 void	BotCommand::game(std::string const& params, std::string const& target)
 {
-	std::string						ret;
-	std::map<std::string, Morfi*>&	morfiGames = this->_cbot->getMorfi();
-
-	if (morfiGames.find(target) != morfiGames.end()
-		|| morfiGames.size() <= MAX_MORFI_GAMES)
-		BotCommand(target + " " + params, this->_cbot).execute();
-	else
-		this->sendPrivmsg(target, "he's got too much game on, come back later");
+	BotCommand(target + " " + params, this->_cbot).execute();
 }
 
 void	BotCommand::gameRound(std::string const& params)

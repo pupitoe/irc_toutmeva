@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:51:51 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 20:50:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:23:36 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define CASE_P2 2
 # define GRID_SIZE 9
 
-# define PLACE(x) (x == CASE_P1)? 'X': '0'
+# define PLACE(x) (x == CASE_P1)? 'X': 'W'
 
 enum MORFI_STAT
 {
@@ -46,6 +46,8 @@ class	Morfi
 		unsigned int		_roundStep;
 		int					_grid[GRID_SIZE];
 
+		time_t				_lastTime;
+
 		int					winner(int caseWin);
 
 	public:
@@ -57,6 +59,7 @@ class	Morfi
 		std::string	const&	getUserRound(void) const;
 		std::string	const&	getP1(void) const;
 		std::string	const&	getP2(void) const;
+		time_t				getLastTime(void) const;
 		int const			*getGrid(void) const;
 		
 		int					place(int width, int height);

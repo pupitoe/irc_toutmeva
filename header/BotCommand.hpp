@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 20:55:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:44:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class BotCommand
 		void	playRoundActFormat(unsigned int i, std::string const& gameName);
 
 		void	morfiGame(void);
+		bool	morfiCheckCreatGame(void);
 		void	morfiGameAct(std::string& arg, std::string& gameName);
 		std::string	getLineMorfi(int const *grid, int line) const;
 		void	morfiGamePlace(Morfi *game, std::string const& gameName);
