@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 23:18:47 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 19:35:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ void	BotCommand::privmsg(void)
 	if (buffer[0] == '#')
 		dest = buffer;
 	if (this->checkCMD(msg, "MORFI"))
-	{
 		this->game(msg, dest);
-		return ;
-	}
-	this->sendPrivmsg(dest, buffer);
+	else if (this->_user == BOT_NAME && this->checkCMD(msg, "ROUND"))
+		this->gameRound(msg);
+	else if (this->_user != BOT_NAME)
+		this->sendPrivmsg(dest, buffer);
 }
 
 void	BotCommand::invite(void)
@@ -113,7 +113,6 @@ void	BotCommand::morfiGamePlace(Morfi *game, std::string const& gameName)
 				height = pos[i] - 'A';
 			i++;
 		}
-		std::cout << "hei " << height << "wi " << width << std::endl;
 	}
 	if (game->place(width, height) == SUCCESS)
 		this->sendRound(gameName);
@@ -212,18 +211,80 @@ void	BotCommand::morfiGame(void)
 
 void	BotCommand::execute(void)
 {
-	if (this->_user == BOT_NAME)
-		return ;
 	if (this->_cmd == "PRIVMSG")
 		this->privmsg();
-	else if (this->_cmd == "INVITE")
+	else if (this->_cmd == "ROUND")
+		this->playRound();
+	else if (this->_cmd == "MORFI")
+		this->morfiGame();
+	if (this->_user == BOT_NAME)
+		return ;
+	if (this->_cmd == "INVITE")
 		this->invite();
 	else if (this->_cmd == "BADJOINCHAN")
 		this->badJoinChan();
 	else if (this->_cmd == "PART")
 		this->part();
-	else if (this->_cmd == "MORFI")
-		this->morfiGame();
+}
+
+void	BotCommand::playRound(void)
+{
+	std::string								gameName;
+	std::map<std::string, Morfi*>::iterator	game;
+
+	if (this->getArg() == BOT_NAME)
+	{
+		this->getArg();
+		gameName = this->getArg();
+		game = this->_cbot->getMorfi().find(gameName);
+		if (game != this->_cbot->getMorfi().end())
+			this->playRoundAct(game->second, gameName);
+	}
+}
+
+void	BotCommand::playRoundActFormat(unsigned int i,
+	std::string const& gameName)
+{
+	std::string	rplMorfi;
+	char		act[3];
+
+	rplMorfi = "MORFI P " + gameName + " ";
+	act[0] = '0' + i % 3;
+	act[1] = 'A' + i / 3;
+	act[2] = '\n';
+	rplMorfi += act;
+	this->sendPrivmsg(this->_cbot->getNickName(), rplMorfi);
+}
+
+void	BotCommand::playRoundAct(Morfi *game, std::string const& gameName)
+{
+	int const		*grid;
+	unsigned int	act;
+	unsigned int	i;
+
+	grid = game->getGrid();
+	i = 0;
+	act = 0;
+	while (i < GRID_SIZE)
+	{
+		if (!grid[i])
+			act++;
+		i++;
+	}
+	if (act)
+	{
+		std::srand(std::time(NULL));
+		act = std::rand() % act;
+		i = 0;
+		while (i < GRID_SIZE)
+		{
+			if (!grid[i] && act)
+				act--;
+			else if (!grid[i])
+				this->playRoundActFormat(i, gameName);
+			i++;
+		}
+	}
 }
 
 std::string	BotCommand::getUserName(std::string const& user) const
@@ -250,4 +311,10 @@ void	BotCommand::game(std::string const& params, std::string const& target)
 		BotCommand(target + " " + params, this->_cbot).execute();
 	else
 		this->sendPrivmsg(target, "he's got too much game on, come back later");
+}
+
+void	BotCommand::gameRound(std::string const& params)
+{
+	BotCommand(this->_cbot->getNickName()
+		+ " " + params, this->_cbot).execute();
 }

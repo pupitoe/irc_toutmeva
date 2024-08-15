@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 22:53:19 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 19:23:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ class BotCommand
 		void	invite(void);
 		void	badJoinChan(void);
 		void	part(void);
+		void	playRound(void);
+		void	playRoundAct(Morfi *game, std::string const& gameName);
+		void	playRoundActFormat(unsigned int i, std::string const& gameName);
+
 		void	morfiGame(void);
 		void	morfiGameAct(std::string& arg, std::string& gameName);
 		std::string	getLineMorfi(int const *grid, int line) const;
@@ -48,6 +52,8 @@ class BotCommand
 		bool	checkCMD(std::string& cmd, std::string const& cmp);
 
 		void	game(std::string const& params, std::string const& target);
+		void	gameRound(std::string const& params);
+
 
 	public:
     	BotCommand(std::string msg, Bot *cbot);
