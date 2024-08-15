@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/15 10:33:35 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/15 14:36:21 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ std::string	IRCError::_gen_reply(void) const
 	else if (_err == ERR_NICKNAMEINUSE)
 	{
 		res.append(_str);
-		res.append(" ");
-		res.append(_str2);
 		res.append(" :Nickname is already in use\n");
 	}
 	else

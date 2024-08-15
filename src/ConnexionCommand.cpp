@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/15 11:53:11 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/15 16:58:15 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,28 +48,6 @@ void ConnexionCommand::_test_username(void) const
 		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "USER"));
 }
 
-int	ConnexionCommand::_exec_pass(Client &c)
-{
-	if (c.getStatusClient() == CS_CONNECTED)
-		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
-	if (c.getStatusClient() == CS_SETUSER || c.getStatusClient() == CS_SETNICKNAME)
-	{
-		c.removeStatus(CS_SETUSER);
-		c.removeStatus(CS_SETNICKNAME);
-		throw (IRCError(ERR_PASSWDMISMATCH, c.getNickName()));
-	}
-	_args.pop_front();
-	std::string &pass = *_args.begin();
-	if (pass != _password)
-	{
-		c.removeStatus(CS_SETPASS);
-		return (0);
-	}
-	//Verifications a terminer
-	c.addStatus(CS_SETPASS);
-	return (0);
-}
-
 static void	addMOTD(Client &c)
 {
 	c.addRPLBuffer(":");
@@ -100,7 +78,7 @@ void	ConnexionCommand::_registration(Client &c) const
 		|| c.getNickName().find(':') != std::string::npos)
 	{
 		c.removeStatus(CS_SETNICKNAME);
-		// c.setHostName(""); //todo
+		// c.setHostName(""); //todo,
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
 	
@@ -113,7 +91,7 @@ void	ConnexionCommand::_registration(Client &c) const
 	// RPL WELCOME
 	c.addRPLBuffer(":");
 	c.addRPLBuffer(SERVERNAME);
-	c.addRPLBuffer(" 001");
+	c.addRPLBuffer(" 001 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Welcome to the ");
 	c.addRPLBuffer("ft_irc");
@@ -146,6 +124,28 @@ void	ConnexionCommand::_registration(Client &c) const
 
 	//RPL MOTD
 	addMOTD(c);
+}
+
+int	ConnexionCommand::_exec_pass(Client &c)
+{
+	if (c.getStatusClient() == CS_CONNECTED)
+		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
+	if (c.getStatusClient() == CS_SETUSER || c.getStatusClient() == CS_SETNICKNAME)
+	{
+		c.removeStatus(CS_SETUSER);
+		c.removeStatus(CS_SETNICKNAME);
+		throw (IRCError(ERR_PASSWDMISMATCH, c.getNickName()));
+	}
+	_args.pop_front();
+	std::string &pass = *_args.begin();
+	if (pass != _password)
+	{
+		c.removeStatus(CS_SETPASS);
+		return (0);
+	}
+	//Verifications a terminer
+	c.addStatus(CS_SETPASS);
+	return (0);
 }
 
 int	ConnexionCommand::_exec_nick(Client &c)
