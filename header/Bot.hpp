@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:15 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 20:00:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:01:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ class	Bot: public Client
 		void		RPL(std::string const str);
 
 		std::map<std::string, Morfi*>&	getMorfi(void);
-		int	getMorfiStat(std::string const& target);
+		int		getMorfiStat(std::string const& target);
 		bool	creatGame(std::string const& target,
 			std::string const gameName);
+		void	deleteGame(std::string const& gameName);
 };
 
 #endif

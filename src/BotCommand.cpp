@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 19:35:23 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:05:40 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,31 @@ std::string	BotCommand::getLineMorfi(int const *grid, int line) const
 	return (lineRet);
 }
 
+void	BotCommand::sendRoundHeader(std::string const& gameName, Morfi *morfi,
+	std::string const& targets)
+{
+	int			gameWin;
+	std::string	buffer;
+
+	gameWin = morfi->finished();
+	if (gameWin == MO_P1 || gameWin == MO_P2 || gameWin == MO_NULL)
+	{
+		if (gameWin == MO_P1)
+			buffer = morfi->getP1();
+		else if (gameWin == MO_P2)
+			buffer = morfi->getP2();
+		if (buffer.empty())
+			this->sendPrivmsg(targets, "FINISH NO WINNER FOR " + gameName);
+		else
+			this->sendPrivmsg(targets, "FINISH WINNER "
+				+ buffer + " FOR " + gameName);
+		this->_cbot->deleteGame(gameName);
+	}
+	else
+		this->sendPrivmsg(targets, "ROUND " + morfi->getUserRound() + " FOR "
+			+ gameName);
+}
+
 void	BotCommand::sendRound(std::string const& gameName)
 {
 	int const	*grid;
@@ -173,8 +198,7 @@ void	BotCommand::sendRound(std::string const& gameName)
 
 	grid = morfi->getGrid();
 	targets = morfi->getP1() + "," + morfi->getP2();
-	this->sendPrivmsg(targets, "ROUND " + morfi->getUserRound() + " FOR "
-		+ gameName);
+	this->sendRoundHeader(gameName, morfi, targets);
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, -1));
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 0));
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 1));

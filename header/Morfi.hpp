@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:51:51 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 22:41:08 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 20:50:23 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@
 enum MORFI_STAT
 {
 	MO_NOTHING = 0,
-	MO_BOT_ROUND,
-	MO_TARGET_ROUND,
+	MO_P1,
+	MO_P2,
+	MO_NOT_FINISH,
+	MO_NULL,
 	MO_NOT_CREAT
 };
 
@@ -44,6 +46,8 @@ class	Morfi
 		unsigned int		_roundStep;
 		int					_grid[GRID_SIZE];
 
+		int					winner(int caseWin);
+
 	public:
 		Morfi(std::string const& p1, std::string const& p2);
 		~Morfi(void);
@@ -56,6 +60,8 @@ class	Morfi
 		int const			*getGrid(void) const;
 		
 		int					place(int width, int height);
+
+		int					finished(void);
 };
 
 #endif

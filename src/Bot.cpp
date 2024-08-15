@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 22:59:59 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 21:03:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,16 @@ bool	Bot::creatGame(std::string const& target, std::string const gameName)
 		}
 	}
 	return (status);
+}
+
+void	Bot::deleteGame(std::string const& gameName)
+{
+	std::map<std::string, Morfi*>::iterator	game;
+
+	game = this->_morfiGames.find(gameName);
+	if (game != this->_morfiGames.end())
+	{
+		delete game->second;
+		this->_morfiGames.erase(game);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:54:09 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 22:50:16 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 20:43:47 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Morfi::Morfi(std::string const& p1, std::string const& p2): _p1(p1), _p2(p2)
 {
 	std::srand(std::time(NULL));
-	this->_roundUser = MO_BOT_ROUND + std::rand() % 2;
+	this->_roundUser = MO_P1 + std::rand() % 2;
 	std::memset(this->_grid, CASE_NO_SET, sizeof(int) * 9);
 	_roundStep = 0;
 }
@@ -31,7 +31,7 @@ int	Morfi::getRound(void) const
 
 std::string const&	Morfi::getUserRound(void) const
 {
-	if (this->_roundUser == MO_BOT_ROUND)
+	if (this->_roundUser == MO_P1)
 		return (this->_p1);
 	return (this->_p2);
 }
@@ -65,9 +65,51 @@ int	Morfi::place(int width, int height)
 		{
 			this->_grid[pos] = CASE_P1 + this->_roundStep % 2;
 			this->_roundStep++;
-			this->_roundUser ^= MO_BOT_ROUND | MO_TARGET_ROUND;
+			this->_roundUser ^= MO_P1 | MO_P2;
 			ret = SUCCESS;
 		}
 	}
 	return (ret);
+}
+
+int	Morfi::winner(int caseWin)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < GRID_SIZE && _grid[i])
+		i++;
+	if (i == GRID_SIZE)
+		return (MO_NULL);
+	else if (caseWin == CASE_P1 || caseWin == CASE_P2)
+		return (this->_roundUser ^ (MO_P1 | MO_P2));
+	return (MO_NOT_FINISH);
+}
+
+int	Morfi::finished(void)
+{
+	int				finished;
+	unsigned int	i;
+	int				buffer;
+
+	finished = MO_NOT_FINISH;
+	i = 0;
+	buffer = CASE_NO_SET;
+	while (i < 3 && !buffer)
+	{
+		if (this->_grid[i] == this->_grid[i + 3]
+			&& this->_grid[i] == this->_grid[i + 6])
+			buffer = this->_grid[i];
+		else if (this->_grid[i * 3] == this->_grid[i * 3 + 1]
+			&& this->_grid[i * 3] == this->_grid[i * 3 + 2])
+			buffer = this->_grid[i * 3];
+		i++;
+	}
+	if (!buffer && this->_grid[0] == this->_grid[4]
+		&& this->_grid[0] == this->_grid[8])
+		buffer = this->_grid[0];
+	else if (!buffer && this->_grid[2] == this->_grid[4]
+		&& this->_grid[2] == this->_grid[6])
+		buffer = this->_grid[4];
+	return (this->winner(buffer));
 }

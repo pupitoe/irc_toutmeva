@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 19:23:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 20:55:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ class BotCommand
 		void	morfiGamePlace(Morfi *game, std::string const& gameName);
 
 		void	sendRound(std::string const& gameName);
+		void	sendRoundHeader(std::string const& gameName, Morfi *morfi,
+			std::string const& target);
 
 		bool	checkCMD(std::string& cmd, std::string const& cmp);
 
