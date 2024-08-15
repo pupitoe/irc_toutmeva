@@ -6,41 +6,45 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/15 10:16:11 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/15 11:53:11 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
 #include <iostream>
 
-static void	test_password(std::list<std::string> args)
+void	ConnexionCommand::_test_password(void) const
 {
-	if (args.empty() || args.size() < 2) {
-		throw (IRCError(ERR_NEEDMOREPARAMS, args.front(), "PASS"));
+	if (_args.empty() || _args.size() < 2) {
+		throw (IRCError(ERR_NEEDMOREPARAMS, _args.front(), "PASS"));
 	}
 }
 
-static void test_nickname(std::list<std::string> args,
-	std::map<int, Client *> clientList)
+void ConnexionCommand::_test_nickname(std::map<int, Client *> clientList)
 {
+	std::string							username;
 	std::map<int, Client *>::iterator	it = clientList.begin();
 	std::map<int, Client *>::iterator	ite = clientList.end();
 	
-	if (args.empty() || args.size() < 2)
+	if (_args.empty() || _args.size() < 2)
 		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "NICK"));
 
 	// Verification of uniqueness
+	_args.pop_front();
+	username = _args.front();
+	_args.insert(_args.begin(), "NICK");
+	
 	while (it != ite)
 	{
-		if (args.front() == it->second->getNickName())
-			throw (IRCError(ERR_NICKNAMEINUSE, "client"));
+		if (!username.compare(it->second->getNickName()))
+			throw (IRCError(ERR_NICKNAMEINUSE, username));
 		it++;
 	}
 }
 
-static void test_username(std::list<std::string> args)
+void ConnexionCommand::_test_username(void) const
 {
-	if (args.empty() || args.size() < 5)
+	if (_args.empty() || _args.size() < 5)
 		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "USER"));
 }
 
@@ -96,10 +100,10 @@ void	ConnexionCommand::_registration(Client &c) const
 		|| c.getNickName().find(':') != std::string::npos)
 	{
 		c.removeStatus(CS_SETNICKNAME);
-		c.setHostName("");
+		// c.setHostName(""); //todo
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
-
+	
 	if (!(c.getStatusClient() & CS_SETPASS))
 	{
 		c.removeStatus(CS_FINISH_REGISTER);
@@ -147,8 +151,6 @@ void	ConnexionCommand::_registration(Client &c) const
 int	ConnexionCommand::_exec_nick(Client &c)
 {
 	_args.pop_front();
-	if (_nick_already_used)
-		throw (IRCError(ERR_NICKNAMEINUSE, c.getNickName()));
 	c.setNickName(_args.front());
 	c.addStatus(CS_SETNICKNAME);
 	if (c.getStatusClient() == CS_CONNECTED)
@@ -180,7 +182,7 @@ int	ConnexionCommand::_exec_user(Client &c)
 int	ConnexionCommand::_exec_quit(Client &c)
 {
 	_args.pop_front();
-	c.addStatus(CS_TERMINATED);
+	c.terminateConnection();
 	return (0);
 }
 
@@ -188,28 +190,15 @@ ConnexionCommand::ConnexionCommand(std::string msg,
 	const std::string password,
 	const std::map<int, Client *> clientList)
 	throw (IRCError)
-	: Command(msg), _password(password), _nick_already_used(false)
+	: Command(msg), _password(password)
 {
 	this->_type = CONNEXION;
-	if (!_args.front().compare(0, 4, "PASS", 4)) {
-		test_password(_args);
-	}
-	else if (!_args.front().compare(0, 4, "NICK", 4)) {
-		try
-		{
-			test_nickname(_args, clientList);
-		}
-		catch (IRCError &e)
-		{
-			if (e.getErr() == ERR_NICKNAMEINUSE)
-				_nick_already_used = true;
-			else
-				throw (e);
-		}
-	}
-	else if (!_args.front().compare(0, 4, "USER", 4)) {
-		test_username(_args);
-	}
+	if (!_args.front().compare(0, 4, "PASS", 4))
+		_test_password();
+	else if (!_args.front().compare(0, 4, "NICK", 4))
+		_test_nickname(clientList);
+	else if (!_args.front().compare(0, 4, "USER", 4))
+		_test_username();
 }
 
 ConnexionCommand::~ConnexionCommand(void)

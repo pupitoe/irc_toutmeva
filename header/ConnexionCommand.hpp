@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/15 10:10:54 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/15 11:52:39 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ class ConnexionCommand : public Command {
 
 	private :
 		std::string	_password;
-		bool		_nick_already_used;
+
+		void	_test_password(void) const;
+		void	_test_nickname(std::map<int, Client *> clientList);
+		void	_test_username(void) const;
 
 		int _exec_pass(Client &);
 		int _exec_nick(Client &);
