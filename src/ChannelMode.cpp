@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 22:16:17 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:44:41 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	Channel::modeBasic(bool *modeVar, int signe, char typeMode,
 	{
 		status = 0;
 		if (*modeVar != signe)
-			this->sendAll(":" + client_rqst->getNickName() + " MODE " +
+			this->sendAll(":" + client_rqst->getInfo() + " MODE " +
 				this->_name + " " + ((signe)? "+": "-") + typeMode + "\n");
 		*modeVar = signe;
 	}
@@ -62,7 +62,7 @@ int	Channel::mode_o(Client* client_rqst, int signe, std::string const& user)
 				this->_operators.end(), target_client));
 			else
 				return (status);
-			this->sendAll(":" + client_rqst->getNickName() + " MODE " +
+			this->sendAll(":" + client_rqst->getInfo() + " MODE " +
 				this->_name + " " + ((signe)? "+": "-") + "o " + user + "\n");
 		}
 		else
@@ -80,7 +80,7 @@ void	Channel::RPL_MODE_L(Client *client_rqst)
 
 	ss << this->_limit;
 	ss >> buffer;
-	this->sendAll(":" + client_rqst->getNickName() + " MODE " +
+	this->sendAll(":" + client_rqst->getInfo() + " MODE " +
 		this->_name + " +l " + buffer + "\n");
 }
 
@@ -104,7 +104,7 @@ int	Channel::mode_l(Client* client_rqst, int signe, std::string const& limit)
 			this->RPL_MODE_L(client_rqst);
 		}
 		else
-			this->sendAll(":" + client_rqst->getNickName() +
+			this->sendAll(":" + client_rqst->getInfo() +
 				" MODE " + this->_name + " -l\n");
 	}
 	else
@@ -156,14 +156,14 @@ int	Channel::mode_k(Client* client_rqst, int signe, std::string const& key)
 			if (status == SUCCESS)
 			{
 				this->_key = key;
-				this->sendAll(":" + client_rqst->getNickName()
+				this->sendAll(":" + client_rqst->getInfo()
 					+ " MODE " + this->_name + " +k " + key + "\n");
 			}
 		}
 		else
 		{
 			this->_key.erase();
-			this->sendAll(":" + client_rqst->getNickName()
+			this->sendAll(":" + client_rqst->getInfo()
 				+ " MODE " + this->_name + " -k *\n");
 		}
 	}

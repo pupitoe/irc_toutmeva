@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 10:13:10 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/14 15:38:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ class	Client
 		void				setLastPing(time_t ctime);
 		void				setSendPing(bool set);
 		bool				getSendPing(void) const;
+
+		std::string			getInfo(void) const;
 };
 
 Client	*getClientMap(std::string const& nickName,

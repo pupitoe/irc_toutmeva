@@ -171,3 +171,8 @@ time_t	Client::lastPingTime(time_t ctime) const
 {
 	return (ctime - this->_lastPing);
 }
+
+std::string			Client::getInfo(void) const
+{
+	return (this->_nickName + "!~" + this->_userName + "@" + this->_hostName);
+}
