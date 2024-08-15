@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 22:01:35 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/15 22:24:51 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,6 +295,27 @@ void	BotCommand::playRoundActFormat(unsigned int i,
 	this->sendPrivmsg(this->_cbot->getNickName(), rplMorfi);
 }
 
+void	BotCommand::playRoundActPush(std::string const& gameName,
+	int const *grid, int act)
+{
+	unsigned int	i;
+
+	std::srand(std::time(NULL));
+	act = std::rand() % act;
+	i = 0;
+	while (i < GRID_SIZE)
+	{
+		if (!grid[i] && act > 0)
+			act--;
+		else if (!grid[i])
+		{
+			this->playRoundActFormat(i, gameName);
+			i = GRID_SIZE;
+		}
+		i++;
+	}
+}
+
 void	BotCommand::playRoundAct(Morfi *game, std::string const& gameName)
 {
 	int const		*grid;
@@ -311,19 +332,7 @@ void	BotCommand::playRoundAct(Morfi *game, std::string const& gameName)
 		i++;
 	}
 	if (act)
-	{
-		std::srand(std::time(NULL));
-		act = std::rand() % act;
-		i = 0;
-		while (i < GRID_SIZE)
-		{
-			if (!grid[i] && act)
-				act--;
-			else if (!grid[i])
-				this->playRoundActFormat(i, gameName);
-			i++;
-		}
-	}
+		this->playRoundActPush(gameName, grid, act);
 }
 
 std::string	BotCommand::getUserName(std::string const& user) const
