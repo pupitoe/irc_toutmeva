@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 11:19:57 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/15 10:07:55 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ static enum type guessType(std::stringstream &input)
 	input >> cmd;
 	std::cout << cmd << std::endl;
 	if (!cmd.compare("PASS")|| !cmd.compare("NICK")
-		|| !cmd.compare("USER"))
+		|| !cmd.compare("USER") || !cmd.compare("QUIT"))
 		return (CONNEXION);
 	else if (!cmd.compare("JOIN") || !cmd.compare(0, 5, "PART")
 		|| !cmd.compare("TOPIC") || !cmd.compare(0, 6, "NAMES")

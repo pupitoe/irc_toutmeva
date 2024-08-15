@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/14 16:18:36 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/15 10:16:11 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,13 @@ int	ConnexionCommand::_exec_user(Client &c)
 	return (0);
 }
 
+int	ConnexionCommand::_exec_quit(Client &c)
+{
+	_args.pop_front();
+	c.addStatus(CS_TERMINATED);
+	return (0);
+}
+
 ConnexionCommand::ConnexionCommand(std::string msg,
 	const std::string password,
 	const std::map<int, Client *> clientList)
@@ -210,12 +217,14 @@ ConnexionCommand::~ConnexionCommand(void)
 
 int	ConnexionCommand::execute(Client &client)
 {
-	if (!_args.front().compare(0, 4, "PASS", 4))
+	if (!_args.front().compare("PASS"))
 		return (_exec_pass(client));
-	else if (!_args.front().compare(0, 4, "NICK", 4))
+	else if (!_args.front().compare("NICK"))
 		return (_exec_nick(client));
-	else if (!_args.front().compare(0, 4, "USER", 4))
+	else if (!_args.front().compare("USER"))
 		return (_exec_user(client));
+	else if (!_args.front().compare("QUIT"))
+		return (_exec_quit(client));
 	return (0);
 }
 
