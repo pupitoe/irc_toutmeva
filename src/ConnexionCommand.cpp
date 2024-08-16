@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 19:20:57 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:38:28 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int	ConnexionCommand::_execPass(Client &c)
 void	changeNickname(Client &c, std::string new_nickname)
 {
 	c.addRPLBuffer(":");
-	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(c.getInfo());
 	c.addRPLBuffer(" NICK ");
 	c.addRPLBuffer(new_nickname);
 	c.setNickName(new_nickname);
