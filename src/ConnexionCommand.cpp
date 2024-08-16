@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 20:58:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:03:32 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,12 +275,5 @@ int	ConnexionCommand::execute(Client &client)
 		return (this->ping(&client));
 	else if (_args.front() == "PONG")
 		return (this->pong(&client));
-	return (0);
-}
-
-int	ConnexionCommand::execute(Client *,
-	std::map<std::string, Channel *>&,
-	std::map<int, Client *>&)
-{
 	return (0);
 }

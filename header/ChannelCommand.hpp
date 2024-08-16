@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 20:55:52 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:02:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ class ChannelCommand : public Command
         ChannelCommand(std::string msg);
         ~ChannelCommand(void);
 
-        int execute(Client &client);
 		int	execute(Client *client, std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst);
 };

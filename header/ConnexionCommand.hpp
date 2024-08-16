@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 20:55:57 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:03:02 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ class ConnexionCommand : public Command
 		~ConnexionCommand(void);
 
 		int execute(Client &client);
-		int	execute(Client *client, std::map<std::string,
-			Channel *>& channels,
-			std::map<int, Client *>& clientLst);
 };
 
 #endif
