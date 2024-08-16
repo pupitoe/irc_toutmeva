@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 21:05:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 22:35:08 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ Client::Client(int const client_fd): _fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
-	this->_nickName = "mielpops/nesquik";
+	this->_nickName = "miwelpaupse/neskwuiksss";
 	this->_sendPing = false;
 	this->_bot = false;
 	std::cout << "client created: " << client_fd << std::endl;
