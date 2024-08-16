@@ -162,6 +162,8 @@ int	ChannelCommand::mode(Client *client,
 				status = this->modeFlags(client, channels[arg[MODE_CHANNEL]],
 					arg[MODE_FLAGS]);
 		}
+		else if (arg[MODE_CHANNEL][0] != '#')
+			status = SUCCESS;
 	}
 	this->errorMessage(status, client, arg[MODE_CHANNEL]);
 	return (SUCCESS);
