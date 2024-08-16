@@ -6,13 +6,11 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:47:34 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:13:22 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-
-#include <iostream>
 
 int	Channel::modeBasic(bool *modeVar, int signe, char typeMode,
 	Client *client_rqst)
