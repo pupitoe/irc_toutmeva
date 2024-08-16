@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 22:24:51 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:09:58 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,7 +245,10 @@ void	BotCommand::morfiGame(void)
 			this->morfiGameAct(arg, gameName);
 	}
 	else
+	{
 		this->sendPrivmsg(this->_user, ERROR_CREAT_GAME);
+		this->sendPrivmsg(this->_user, ERROR_PLACE_CASE);
+	}
 }
 
 void	BotCommand::execute(void)

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 22:23:10 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:11:49 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include "irc_tout_me_va.hpp"
 # include "Bot.hpp"
 
-# define ERROR_CREAT_GAME "send 'MORFI new [gameName]' to create a new game"
+# define ERROR_CREAT_GAME "send 'MORFI NEW [gameName]' to create a new game"
+# define ERROR_PLACE_CASE "send 'MORFI [P | PLACE] [gameName] [0->2][A->C]' to place case"
 
 class BotCommand
 {
