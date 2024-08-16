@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 16:12:51 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:19:51 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,20 @@ bool	BotCommand::checkCMD(std::string& cmd, std::string const& cmp)
 void	BotCommand::privmsg(void)
 {
 	std::string	dest;
-	std::string	buffer;
 	std::string	msg;
 
-	dest = this->_user;
-	buffer = this->getArg();
+	dest = this->getArg();
 	msg = this->getArg();
 	if (msg[0] == ':')
 		msg.erase(0, 1);
-	if (buffer[0] == '#')
-		dest = buffer;
-	buffer = "hello zizou";
+	if (dest[0] != '#')
+		dest = this->_user;
 	if (this->checkCMD(msg, "MORFI"))
 		this->game(msg, dest);
 	else if (this->_user == BOT_NAME && this->checkCMD(msg, "ROUND"))
 		this->gameRound(msg);
-	else if (this->_user != BOT_NAME)
-		this->sendPrivmsg(dest, buffer);
+	else if (this->_user != BOT_NAME && checkCMD(msg, "DAVID"))
+		this->sendPrivmsg(dest, "oh NO aHHHHHHHHHHHHHH");
 }
 
 void	BotCommand::invite(void)
