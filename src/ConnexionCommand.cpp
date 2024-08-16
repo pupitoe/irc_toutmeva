@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:27:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:37:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,8 @@ int	ConnexionCommand::ping(Client *client)
 		if (msg.empty())
 			this->ERR_NOORIGIN_MSG(client);
 		else
-			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+			client->addRPLBuffer("PONG " + (std::string)SERVERNAME
+				+ " :" + msg + "\n");
 	}
 	else
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
