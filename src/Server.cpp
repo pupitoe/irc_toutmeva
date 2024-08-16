@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 19:05:20 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 22:37:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,14 +352,15 @@ static enum type guessType(std::stringstream &input)
 	std::cout << cmd << std::endl;
 	if (!cmd.compare("PASS")|| !cmd.compare("NICK")
 		|| !cmd.compare("USER") || !cmd.compare("QUIT")
-		|| !cmd.compare("CAP"))
-		return (CONNEXION);
-	else if (!cmd.compare("JOIN") || !cmd.compare(0, 5, "PART")
-		|| !cmd.compare("TOPIC") || !cmd.compare(0, 6, "NAMES")
-		|| !cmd.compare("LIST") || !cmd.compare(0, 7, "INVITE")
-		|| !cmd.compare("KICK") || !cmd.compare(0, 5, "MODE")
-		|| !cmd.compare("PRIVMSG") || !cmd.compare(0, 5, "PING")
+		|| !cmd.compare("CAP") || !cmd.compare("PING")
 		|| !cmd.compare("PONG"))
+		return (CONNEXION);
+	else if (!cmd.compare("JOIN") || !cmd.compare("PART")
+		|| !cmd.compare("TOPIC") || !cmd.compare("NAMES")
+		|| !cmd.compare("LIST") || !cmd.compare("INVITE")
+		|| !cmd.compare("KICK") || !cmd.compare("MODE")
+		|| !cmd.compare("PRIVMSG") || !cmd.compare("WHO")
+		|| !cmd.compare("WHOIS"))
 		return (CHANNEL);
 	else if (cmd.empty())
 		return (EMPTY);
@@ -371,19 +372,14 @@ void	Server::parse(std::string cmd, Client &c)
 {
 	try
 	{
-		Command	*rqst = NULL;
 		std::stringstream preparsed_input(cmd);
 		enum type t = guessType(preparsed_input);
-		if (t == ERR){
+		if (t == ERR)
 			throw (IRCError(ERR_UNKNOWNCOMMAND, c.getNickName(), cmd));
-		}
 		else if (t == CONNEXION)
-			rqst = new ConnexionCommand(cmd, _password, this->_clientList, c);
+			ConnexionCommand(cmd, _password, this->_clientList, c).execute(c);
 		else if (t == CHANNEL)
-			rqst = new ChannelCommand(cmd);
-		if (rqst)
-			this->executeRequests(c, rqst);
-		delete (rqst);
+			ChannelCommand(cmd).execute(&c, this->_channels, this->_clientList);
 	}
 	catch (IRCError &e)
 	{
@@ -400,12 +396,4 @@ void	Server::parse(std::string cmd, Client &c)
 	{
 		std::cout << "Unhandled exception" << std::endl;
 	}
-}
-
-void	Server::executeRequests(Client& client, Command *rqst)
-{
-	if (rqst->getType() == CHANNEL)
-		rqst->execute(&client, this->_channels, this->_clientList);
-	else
-		rqst->execute(client);
 }

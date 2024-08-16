@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 01:00:12 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:02:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ class ChannelCommand : public Command
 		int	privmsg_exec_client(Client *client,
 			std::map<int, Client *>& clientLst, std::string const& target,
 			std::string const& message);
-		int	ping(Client *client);
-		int	pong(Client *client);
 
 		std::string	modePreParser(Channel *channelUse);
 
@@ -76,13 +74,10 @@ class ChannelCommand : public Command
 
 		std::string getPart(std::string str, size_t pos);
 
-		void	 ERR_NOORIGIN_MSG(Client *client);
-
     public :
         ChannelCommand(std::string msg);
         ~ChannelCommand(void);
 
-        int execute(Client &client);
 		int	execute(Client *client, std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst);
 };

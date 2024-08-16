@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:31 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/07/07 18:20:08 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:48:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ int	IRCSocket::ft_socket_bind(int const socket_fd, int port) {
 	status = SUCCESS;
 	std::memset(&address, 0, sizeof(address));
 	address.sin_family = AF_INET;
-	address.sin_port = htons(port); // verifier pourquoi faire ca en detail htons
-	address.sin_addr.s_addr = htonl(INADDR_ANY); // ca aussi ducoup
+	address.sin_port = htons(port);
+	address.sin_addr.s_addr = htonl(INADDR_ANY);
 	if (socket_fd != -1)
 	{
 		// to give an address and a port to our socket

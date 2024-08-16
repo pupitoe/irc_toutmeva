@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 19:15:03 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:03:02 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ class ConnexionCommand : public Command
 		int _execNick(Client &);
 		int _execUser(Client &);
 		int	_execQuit(Client &);
+		int	ping(Client *client);
+		int	pong(Client *client);
+		void	 ERR_NOORIGIN_MSG(Client *client);
 
 		void	_registration(Client &c) const;
 
@@ -44,9 +47,6 @@ class ConnexionCommand : public Command
 		~ConnexionCommand(void);
 
 		int execute(Client &client);
-		int	execute(Client *client, std::map<std::string,
-			Channel *>& channels,
-			std::map<int, Client *>& clientLst);
 };
 
 #endif

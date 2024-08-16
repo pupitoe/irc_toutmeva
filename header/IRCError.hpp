@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 17:51:05 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:16:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 # include <exception>
 # include <string>
+# include "irc_tout_me_va.hpp"
 # include "Client.hpp"
 
 # define ERR_UNKNOWNERROR		"400"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 18:42:22 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:23:46 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@ ChannelCommand::ChannelCommand(std::string msg) : Command(msg) {
 	//TODO Verifier ici les cmmd;
 	this->_type = CHANNEL;
 	std::cout << "channel creation" << std::endl;
-}
-
-int	ChannelCommand::execute(Client &)
-{
-	return (0);
 }
 
 ChannelCommand::~ChannelCommand(void) {
@@ -213,54 +208,11 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 		target_buffer = getPart(targets, i);
 	}
 	if (this->_nb_arg >= 3 && message.empty())
-		client->addRPLBuffer(":irctoutmevas 412 " + client->getNickName()
-			+ " :No text to send");
+		client->addRPLBuffer(":" + (std::string)SERVERNAME + " 412 "
+			+ client->getNickName() + " :No text to send");
 	else if (message.empty())
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, targets);
 	return (SUCCESS);
-}
-
-int	ChannelCommand::ping(Client *client)
-{
-	std::string	msg;
-
-	if (this->_args.size() > 0)
-	{
-		msg = this->getArg();
-		if (msg.empty())
-			this->ERR_NOORIGIN_MSG(client);
-		else
-			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
-	}
-	else
-		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
-	return (SUCCESS);
-}
-
-int	ChannelCommand::pong(Client *client)
-{
-	std::string	msg;
-
-	if (this->_args.size() > 0)
-	{
-		msg = this->getArg();
-		if (msg.empty())
-			this->ERR_NOORIGIN_MSG(client);
-		else if (client->getSendPing() && !msg.compare(0, 6, PING_WORD, 0, 6))
-		{
-			client->setLastPing(std::time(NULL));
-			client->setSendPing(false);
-		}
-	}
-	else
-		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
-	return (SUCCESS);
-}
-
-void	 ChannelCommand::ERR_NOORIGIN_MSG(Client *client)
-{
-	client->addRPLBuffer(":irctoutmevas 409 " + 
-		client->getNickName() + " :No origin specified\n");
 }
 
 int	ChannelCommand::execute(Client *client, std::map<std::string,
@@ -285,9 +237,5 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 		return (this->invite(client, channels, clientLst));
 	if (buffer == "PRIVMSG")
 		return (this->privmsg(client, channels, clientLst));
-	if (buffer == "PING")
-		return (this->ping(client));
-	if (buffer == "PONG")
-		return (this->pong(client));
 	return (SUCCESS);
 }

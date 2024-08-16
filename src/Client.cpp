@@ -6,18 +6,18 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:48:12 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 23:05:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 # include <iostream>
 
-Client::Client(int const client_fd): _client_fd(client_fd)
+Client::Client(int const client_fd): _fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
-	this->_nickName = "mielpops/nesquik";
+	this->_nickName = "miwelpaupse/neskwuiksss";
 	this->_sendPing = false;
 	this->_bot = false;
 	std::cout << "client created: " << client_fd << std::endl;
@@ -28,7 +28,7 @@ Client::~Client(void) {
 
 int		Client::getFd(void) const
 {
-	return (this->_client_fd);
+	return (this->_fd);
 }
 
 int	Client::getStatusClient(void) const 
@@ -100,13 +100,18 @@ bool	Client::getSendPing(void) const
 std::string	Client::getCommand(void)
 {
 	std::string	cmd;
+	size_t		len;
 
+	len = 0;
 	if (this->getCommandValible())
 	{
 		cmd = this->_bufferCommand.substr(0,
 			this->_bufferCommand.find_first_of('\n'));
 		this->_bufferCommand = this->_bufferCommand.c_str()
 			+ this->_bufferCommand.find_first_of('\n') + 1;
+		len = cmd.length();
+		if (len >= 1 && cmd[len - 1] == '\r')
+			cmd.erase(len - 1, 1);
 	}
 	else
 	{
