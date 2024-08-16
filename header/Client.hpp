@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 15:31:48 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:37:21 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ enum	CStatus
 	CS_SETNICKNAME = 1 << 1,
 	CS_SETUSER = 1 << 2,
 	CS_SETPASS = 1 << 3,
-	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER | CS_SETPASS,
+	CS_FINISH_REGISTER = CS_SETNICKNAME | CS_SETUSER,
 	CS_CONNECTED = 1 << 4
 };
 
@@ -38,7 +38,7 @@ class	Client
 		std::string	_nickName;
 		std::string	_userName;
 		std::string	_hostName;
-		std::string _userNameFull;
+		std::string _userRealName;
 		std::string	_serverName;
 
 		std::string	_bufferCommand;
@@ -60,8 +60,9 @@ class	Client
 		void	setNickName(std::string const& str);
 		void	setUserName(std::string const& str);
 		void	setHostName(std::string const& str);
-		void	setUserFullName(std::string const& str);
-		void	changeStatus(enum CStatus new_status);
+		void	setRealName(std::string const& str);
+		void	addStatus(enum CStatus status);
+		void	removeStatus(enum CStatus status);
 
 		void	setServerName(std::string const& str);
 
@@ -82,6 +83,8 @@ class	Client
 		void				setSendPing(bool set);
 		bool				getSendPing(void) const;
 		bool				getBot(void) const;
+
+		std::string			getInfo(void) const;
 };
 
 Client	*getClientMap(std::string const& nickName,

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/10 15:22:17 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/13 09:40:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,12 @@
 # include "Client.hpp"
 
 # define ERR_UNKNOWNERROR		"400"
-# define ERR_INPUTTOOLONG		"417"
-# define ERR_NEEDMOREPARAMS		"461"
 # define ERR_NOSUCHNICK			"401"
+# define ERR_INPUTTOOLONG		"417"
+# define ERR_NONICKNAMEGIVEN	"431"
+# define ERR_ERRONEUSNICKNAME	"432"
+# define ERR_NICKNAMEINUSE		"433"
+# define ERR_NEEDMOREPARAMS		"461"
 # define ERR_PASSWDMISMATCH		"464" // also used when no password provided
 
 // Don't forget to see if everything is correctly used.
@@ -37,8 +40,7 @@ class IRCError : public std::exception {
 
 		std::string	_gen_reply(void) const;
 	public :
-		IRCError(std::string err);
-		IRCError(std::string err, std::string str); // code err , infos
+		IRCError(std::string err, std::string str = "", std::string str2 = "");
 		~IRCError(void) throw();
 		IRCError(IRCError const &);
 

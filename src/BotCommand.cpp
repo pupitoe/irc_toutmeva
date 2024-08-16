@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:09:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:53:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,7 +347,7 @@ std::string	BotCommand::getUserName(std::string const& user) const
 	if (user.empty() == false)
 	{
 		start = (user[0] == ':')?1 : 0;
-		userName = user.substr(start, userName.find_first_of('!') - start);
+		userName = user.substr(start, user.find_first_of('!') - start);
 	}
 	return (userName);
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:25:25 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 20:24:51 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:46:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Channel::ERR_CHANOPRIVSNEEDED_MSG(Client *client)
 void	Channel::ERR_NOTONCHANNEL_MSG(Client *client)
 {
 	client->addRPLBuffer(":irctoutmevas 442 " + client->getNickName()
-		+ " " + this->_name + " :You're not channel operator\n");
+		+ " " + this->_name + ":You're not on that channel\n");
 }
 
 void	Channel::ERR_USERNOTINCHANNEL_MSG(Client *client,

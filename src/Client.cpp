@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:20:16by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:48:12 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ void	Client::setHostName(std::string const& str)
 	this->_hostName = str;
 }
 
-void	Client::setUserFullName(std::string const& str)
+void	Client::setRealName(std::string const& str)
 {
-	this->_userNameFull = str;
+	this->_userRealName = str;
 }
 
 void	Client::setServerName(std::string const& str)
@@ -66,8 +66,15 @@ void	Client::setServerName(std::string const& str)
 	this->_serverName = str;
 }
 
-void	Client::changeStatus(enum CStatus new_status) {
-	this->_status_connection |= new_status;
+void	Client::addStatus(enum CStatus status)
+{
+	this->_status_connection |= status;
+}
+
+void	Client::removeStatus(enum CStatus status)
+{
+	if (this->_status_connection & status) // JSUIS PAS SUR DU TOUT, A TESTER
+		this->_status_connection = this->_status_connection ^ status;
 }
 
 std::string const&	Client::getCommandBuffer(void) const
@@ -174,4 +181,9 @@ time_t	Client::lastPingTime(time_t ctime) const
 bool	Client::getBot(void) const
 {
 	return (this->_bot);
+}
+
+std::string			Client::getInfo(void) const
+{
+	return (this->_nickName + "!~" + this->_userName + "@" + this->_hostName);
 }

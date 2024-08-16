@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 00:59:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:46:30 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,7 +246,7 @@ int	ChannelCommand::pong(Client *client)
 		msg = this->getArg();
 		if (msg.empty())
 			this->ERR_NOORIGIN_MSG(client);
-		else if (client->getSendPing() && this->getArg() == "coucou")
+		else if (client->getSendPing() && !msg.compare(0, 6, PING_WORD, 0, 6))
 		{
 			client->setLastPing(std::time(NULL));
 			client->setSendPing(false);

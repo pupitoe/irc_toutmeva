@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 21:35:34 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:56:37 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ Bot::Bot(int const client_fd): Client(client_fd)
 	this->_nickName = BOT_NAME;
 	this->_bot = true;
 	this->_status_connection = CS_CONNECTED;
-	this->_hostName = "irctoutmevas";
-	this->_userName = BOT_NAME;
-	this->_userNameFull = BOT_NAME;
-	this->_serverName = "irctoutmevas";
+	this->_hostName = "fabio";
+	this->_userName = "flo";
+	this->_userRealName = "chris";
+	this->_serverName = SERVERNAME;
 }
 
 Bot::~Bot(void)
