@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 18:14:23 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 18:42:22 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,7 +281,7 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 {
 	std::string			buffer;
 
-	if (client->getStatusClient() & CS_CONNECTED)
+	if (!(client->getStatusClient() & CS_CONNECTED))
 		throw (IRCError(ERR_NOTREGISTERED, client->getNickName()));
 	buffer = this->getArg();
 	if (buffer == "JOIN")
