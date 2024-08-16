@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 19:54:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 20:50:59 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,14 +352,14 @@ static enum type guessType(std::stringstream &input)
 	std::cout << cmd << std::endl;
 	if (!cmd.compare("PASS")|| !cmd.compare("NICK")
 		|| !cmd.compare("USER") || !cmd.compare("QUIT")
-		|| !cmd.compare("CAP"))
-		return (CONNEXION);
-	else if (!cmd.compare("JOIN") || !cmd.compare(0, 5, "PART")
-		|| !cmd.compare("TOPIC") || !cmd.compare(0, 6, "NAMES")
-		|| !cmd.compare("LIST") || !cmd.compare(0, 7, "INVITE")
-		|| !cmd.compare("KICK") || !cmd.compare(0, 5, "MODE")
-		|| !cmd.compare("PRIVMSG") || !cmd.compare(0, 5, "PING")
+		|| !cmd.compare("CAP") || !cmd.compare("PING")
 		|| !cmd.compare("PONG"))
+		return (CONNEXION);
+	else if (!cmd.compare("JOIN") || !cmd.compare("PART")
+		|| !cmd.compare("TOPIC") || !cmd.compare("NAMES")
+		|| !cmd.compare("LIST") || !cmd.compare("INVITE")
+		|| !cmd.compare("KICK") || !cmd.compare("MODE")
+		|| !cmd.compare("PRIVMSG"))
 		return (CHANNEL);
 	else if (cmd.empty())
 		return (EMPTY);

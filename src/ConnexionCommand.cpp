@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 19:38:28 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 20:58:00 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,51 @@ ConnexionCommand::ConnexionCommand(std::string msg,
 		_testUsername(c);
 }
 
+int	ConnexionCommand::ping(Client *client)
+{
+	std::string	msg;
+
+	this->getArg();
+	if (this->_args.size() > 0)
+	{
+		msg = this->getArg();
+		if (msg.empty())
+			this->ERR_NOORIGIN_MSG(client);
+		else
+			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
+	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
+	return (SUCCESS);
+}
+
+int	ConnexionCommand::pong(Client *client)
+{
+	std::string	msg;
+
+	this->getArg();
+	if (this->_args.size() > 0)
+	{
+		msg = this->getArg();
+		if (msg.empty())
+			this->ERR_NOORIGIN_MSG(client);
+		else if (client->getSendPing() && !msg.compare(0, 6, PING_WORD, 0, 6))
+		{
+			client->setLastPing(std::time(NULL));
+			client->setSendPing(false);
+		}
+	}
+	else
+		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");
+	return (SUCCESS);
+}
+
+void	 ConnexionCommand::ERR_NOORIGIN_MSG(Client *client)
+{
+	client->addRPLBuffer(":irctoutmevas 409 " + 
+		client->getNickName() + " :No origin specified\n");
+}
+
 ConnexionCommand::~ConnexionCommand(void)
 {}
 
@@ -226,6 +271,10 @@ int	ConnexionCommand::execute(Client &client)
 		return (_execUser(client));
 	else if (!_args.front().compare("QUIT"))
 		return (_execQuit(client));
+	else if (_args.front() == "PING")
+		return (this->ping(&client));
+	else if (_args.front() == "PONG")
+		return (this->pong(&client));
 	return (0);
 }
 
@@ -233,6 +282,5 @@ int	ConnexionCommand::execute(Client *,
 	std::map<std::string, Channel *>&,
 	std::map<int, Client *>&)
 {
-	
 	return (0);
 }
