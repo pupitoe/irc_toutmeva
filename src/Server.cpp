@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 20:50:59 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 22:37:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,7 +359,8 @@ static enum type guessType(std::stringstream &input)
 		|| !cmd.compare("TOPIC") || !cmd.compare("NAMES")
 		|| !cmd.compare("LIST") || !cmd.compare("INVITE")
 		|| !cmd.compare("KICK") || !cmd.compare("MODE")
-		|| !cmd.compare("PRIVMSG"))
+		|| !cmd.compare("PRIVMSG") || !cmd.compare("WHO")
+		|| !cmd.compare("WHOIS"))
 		return (CHANNEL);
 	else if (cmd.empty())
 		return (EMPTY);
