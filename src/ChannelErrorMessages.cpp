@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:25:25 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 21:25:43 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:41:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ void	Channel::ERR_USERONCHANNEL_MSG(Client *client,
 		+ " :is already on channel\n");
 }
 
-void	Channel::ERR_BAT_JOIN_BOT(Client *client, std::string const& nick,
+void	Channel::ERR_BAD_JOIN_BOT(Client *client, std::string const& nick,
 	std::string const& channel)
 {
-	client->addRPLBuffer(":" + (std::string)SERVERNAME + " BADJOINCHAN " 
-	+ channel + " " + nick + "\n");
+	client->addRPLBuffer(":" + (std::string)SERVERNAME + " BADJOINCHAN "
+		+ channel + " " + nick + "\n");
 }

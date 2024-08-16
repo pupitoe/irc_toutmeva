@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 21:35:31 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:41:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int	Channel::join_check(Client *client_rqst, std::string const& key)
 		if (this->userGrade(key) == CH_OPERATOR)
 			return (SUCCESS);
 		this->eraseInviteLst(client_rqst);
-		this->ERR_BAT_JOIN_BOT(client_rqst, key, this->_name);
+		this->ERR_BAD_JOIN_BOT(client_rqst, key, this->_name);
 		return (FAIL);
 	}
 	if (this->inLst(client_rqst))

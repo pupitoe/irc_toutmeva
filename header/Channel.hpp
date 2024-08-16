@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/12 22:10:54 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:41:06 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class	Channel
 		void	ERR_USERNOTINCHANNEL_MSG(Client *client,
 			std::string const& nick);
 		void	ERR_USERONCHANNEL_MSG(Client *client, std::string const& nick);
-		void	ERR_BAT_JOIN_BOT(Client *client, std::string const& nick,
+		void	ERR_BAD_JOIN_BOT(Client *client, std::string const& nick,
 			std::string const& channel);
 
 		int	inLst(Client *client) const;
