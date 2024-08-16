@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 16:11:12 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:12:51 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	BotCommand::privmsg(void)
 		msg.erase(0, 1);
 	if (buffer[0] == '#')
 		dest = buffer;
-	std::cout << "BUFFER " << dest << " " << buffer << std::endl;
 	buffer = "hello zizou";
 	if (this->checkCMD(msg, "MORFI"))
 		this->game(msg, dest);
