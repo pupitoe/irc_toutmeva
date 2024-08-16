@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/13 10:17:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 17:56:14 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ std::string IRCError::getReply(void) const
 
 const char  *IRCError::what(void) const throw()
 {
-	return ("wip");
+	return (_str.c_str());
 }
 
 void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
@@ -53,27 +53,20 @@ std::string	IRCError::_gen_reply(void) const
 	res.append(_err);
 	res.append(" ");
 	if (_err == ERR_UNKNOWNERROR)
-	{
-		res.append("to write\n");
-	}
+		res.append(_str + " " + _str2 + " :Unexpected behaviour\n");
+	else if (_err == ERR_UNKNOWNCOMMAND)
+		res.append(_str + " " + _str2 + " :Unknown command\n");
 	else if (_err == ERR_ERRONEUSNICKNAME)
-	{
-		res.append(_str);
-		res.append(" ");
-		res.append(_str2);
-		res.append(" :Erroneus nickname\n");
-	}
+		res.append(_str + " " + _str2 + " :Erroneus nickname\n");
+	else if (_err == ERR_NOTREGISTERED)
+		res.append(_str + " :You have not registered\n");
 	else if (_err == ERR_NEEDMOREPARAMS)
-	{
-		res.append(_str);
-		res.append(" ");
-		res.append(_str2);
-		res.append(" :Not enough parameters\n");
-	}
+		res.append(_str + " " + _str2 + " :Not enough parameters\n");
 	else if (_err == ERR_PASSWDMISMATCH)
-	{
-		res.append(_str);
-		res.append(" :Password incorrect\n");
-	}
+		res.append(_str + " :Password incorrect\n");
+	else if (_err == ERR_NICKNAMEINUSE)
+		res.append(_str + " :Nickname is already in use\n");
+	else
+		res.append(" :error not implemented\n");
 	return (res);
 }

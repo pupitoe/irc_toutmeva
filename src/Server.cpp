@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:50:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:05:20 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void	Server::clientSendMessage(int const client_fd, Client& client)
 	std::string	buffer;
 
 	buffer = client.getRPL();
-	std::cout << "send to client: " << buffer << std::endl;
+	std::cout << "Sending to client: " << buffer << std::endl;
 	send(client_fd, buffer.c_str(), buffer.length(), 0);
 }
 
@@ -331,7 +331,8 @@ void	Server::userPing(void)
 	}
 }
 
-void	Server::execut(void) {
+void	Server::execut(void)
+{
 	this->useSelect();
 	this->searchClient();
 	this->clientRecv();
@@ -345,9 +346,13 @@ static enum type guessType(std::stringstream &input)
 {
 	std::string cmd;
 	input >> cmd;
+	for (unsigned int i = 0 ; cmd[i] != 0 ; i++) {
+		cmd[i] = std::toupper(cmd[i]);
+	}
 	std::cout << cmd << std::endl;
 	if (!cmd.compare("PASS")|| !cmd.compare("NICK")
-		|| !cmd.compare("USER"))
+		|| !cmd.compare("USER") || !cmd.compare("QUIT")
+		|| !cmd.compare("CAP"))
 		return (CONNEXION);
 	else if (!cmd.compare("JOIN") || !cmd.compare(0, 5, "PART")
 		|| !cmd.compare("TOPIC") || !cmd.compare(0, 6, "NAMES")
@@ -362,44 +367,45 @@ static enum type guessType(std::stringstream &input)
 }
 
 // Maybe I'll have to separate the exception handler from the parsing
-// elever les new
-void	Server::parse(std::string cmd, Client &c) {
-	try {
+void	Server::parse(std::string cmd, Client &c)
+{
+	try
+	{
 		Command	*rqst = NULL;
 		std::stringstream preparsed_input(cmd);
 		enum type t = guessType(preparsed_input);
-		if (t == ERR)
-			throw (Command::UnrecognizedType());
+		if (t == ERR){
+			throw (IRCError(ERR_UNKNOWNCOMMAND, c.getNickName(), cmd));
+		}
 		else if (t == CONNEXION)
-			rqst = new ConnexionCommand(cmd, _password, this->_clientList);
+			rqst = new ConnexionCommand(cmd, _password, this->_clientList, c);
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
 		if (rqst)
-		{
 			this->executeRequests(c, rqst);
-		}
+		delete (rqst);
 	}
-	catch (IRCError &e) {
+	catch (IRCError &e)
+	{
 		std::cout << e.what() << std::endl; // to remove, only used for tests.
 		c.addRPLBuffer(e.getReply());
-		if (e.getErr() == ERR_PASSWDMISMATCH){
-			std::cout << "fewoihgfiu" << std::endl;
+		if (e.getErr() == ERR_PASSWDMISMATCH)
 			c.terminateConnection();
-		}
 	}
-	catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+	catch (std::exception &e)
+	{
+		std::cout << "LOG :" << e.what() << std::endl;
 	}
-	catch (...) {
+	catch (...)
+	{
 		std::cout << "Unhandled exception" << std::endl;
 	}
 }
 
-void	Server::executeRequests(Client& client, Command *rqst) {
-	//Creer une fonction foreach pour les clients ?
+void	Server::executeRequests(Client& client, Command *rqst)
+{
 	if (rqst->getType() == CHANNEL)
 		rqst->execute(&client, this->_channels, this->_clientList);
 	else
 		rqst->execute(client);
-	delete (rqst);
 }

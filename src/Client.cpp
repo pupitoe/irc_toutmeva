@@ -73,7 +73,7 @@ void	Client::addStatus(enum CStatus status)
 
 void	Client::removeStatus(enum CStatus status)
 {
-	if (this->_status_connection & status) // JSUIS PAS SUR DU TOUT, A TESTER
+	if (this->_status_connection & status)
 		this->_status_connection = this->_status_connection ^ status;
 }
 
