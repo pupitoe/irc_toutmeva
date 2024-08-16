@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:43:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 22:57:19 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,21 @@ std::string	IRCError::_gen_reply(void) const
 	res.append(_err);
 	res.append(" ");
 	if (_err == ERR_UNKNOWNERROR)
-		res.append(_str + " " + _str2 + " :Unexpected behaviour\n");
+		res.append(_str + " " + _str2 + " :Unexpected behaviour");
 	else if (_err == ERR_UNKNOWNCOMMAND)
-		res.append(_str + " " + _str2 + " :Unknown command\n");
+		res.append(_str + " " + _str2 + " :Unknown command");
 	else if (_err == ERR_ERRONEUSNICKNAME)
-		res.append(_str + " " + _str2 + " :Erroneus nickname\n");
+		res.append(_str + " " + _str2 + " :Erroneus nickname");
 	else if (_err == ERR_NOTREGISTERED)
-		res.append(_str + " :You have not registered\n");
+		res.append(_str + " :You have not registered");
 	else if (_err == ERR_NEEDMOREPARAMS)
-		res.append(_str + " " + _str2 + " :Not enough parameters\n");
+		res.append(_str + " " + _str2 + " :Not enough parameters");
 	else if (_err == ERR_PASSWDMISMATCH)
-		res.append(_str + " :Password incorrect\n");
+		res.append(_str + " :Password incorrect");
 	else if (_err == ERR_NICKNAMEINUSE)
-		res.append(_str + " :Nickname is already in use\n");
+		res.append(_str + " :Nickname is already in use");
 	else
-		res.append(" :error not implemented\n");
+		res.append(" :error not implemented");
+	res.append("\r\n");
 	return (res);
 }
