@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:54:09 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 21:24:30 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:35:13 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	Morfi::winner(int caseWin)
 	i = 0;
 	while (i < GRID_SIZE && _grid[i])
 		i++;
-	if (i == GRID_SIZE)
+	if (i == GRID_SIZE && caseWin == CASE_NO_SET)
 		return (MO_NULL);
 	else if (caseWin == CASE_P1 || caseWin == CASE_P2)
 		return (this->_roundUser ^ (MO_P1 | MO_P2));
@@ -90,11 +90,9 @@ int	Morfi::winner(int caseWin)
 
 int	Morfi::finished(void)
 {
-	int				finished;
 	unsigned int	i;
 	int				buffer;
 
-	finished = MO_NOT_FINISH;
 	i = 0;
 	buffer = CASE_NO_SET;
 	while (i < 3 && !buffer)
