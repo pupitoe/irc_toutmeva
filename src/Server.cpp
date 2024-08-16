@@ -30,7 +30,28 @@ Server::Server(char *psw, int port) : _password(psw), _socket(port)
 	FD_ZERO(&this->_rfds_write);
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
+	this->addBot();
 	this->_status_server = SUCCESS;
+}
+
+void	Server::addBot(void) // cause des problem
+{
+	Client	*buffer;
+	int		botFd;
+
+	botFd = -666;
+	buffer = new (std::nothrow) Bot(botFd);
+	if (buffer)
+	{
+		try
+		{
+			this->_clientList.insert(std::pair<int, Client *>(botFd, buffer));
+		}
+		catch(const std::exception&)
+		{
+			delete buffer;
+		}
+	}
 }
 
 Server::~Server(void)
@@ -70,8 +91,16 @@ void	Server::addClient(int const fd)
 		if (buffer)
 		{
 			// add the new client fd to the table
-			FD_SET(fd, &this->_rfds);
-			this->_clientList.insert(std::pair<int, Client *>(fd, buffer));
+			try
+			{
+				this->_clientList.insert(std::pair<int, Client *>(fd, buffer));
+				FD_SET(fd, &this->_rfds);
+			}
+			catch(const std::exception& )
+			{
+				close(fd);
+				delete buffer;
+			}
 		}
 		else
 			close(fd);
@@ -110,9 +139,12 @@ void	Server::deletClient(int const fd)
 			closeChannel(it_old_channel->first, this->_channels);
 		}
 		// remove the client from the table
-		FD_CLR(fd, &this->_rfds);
 		delete this->_clientList[fd];
-		close(fd);
+		if (fd >= 0)
+		{
+			FD_CLR(fd, &this->_rfds);
+			close(fd);
+		}
 		this->_clientList.erase(fd);
 	}
 }
@@ -172,6 +204,25 @@ void	Server::clientRecv(void)
 	}
 }
 
+void	Server::sendBot(Client *bot)
+{
+	Bot			*cbot;
+	std::string	rplBuffer;
+	size_t		len;
+
+	cbot = dynamic_cast<Bot *>(bot);
+	rplBuffer = bot->getRPL();
+	if (bot)
+	{
+		while (rplBuffer.empty() == false)
+		{
+			len = rplBuffer.find_first_of('\n');
+			cbot->RPL(rplBuffer.substr(0, len));
+			rplBuffer.erase(0, ((len <= rplBuffer.length())? len + 1 :len));
+		}
+	}
+}
+
 void	Server::clientSend(void)
 {
 	std::map<int, Client*>::iterator	it;
@@ -182,9 +233,13 @@ void	Server::clientSend(void)
 		while (it != this->_clientList.end())
 		{
 			// to check if the requested fd is in the list
-			if (it->second->getRPLBuffer().empty() == false &&
-				FD_ISSET(it->first, &this->_rfds_write))
-				this->clientSendMessage(it->first, *it->second);
+			if (it->second->getRPLBuffer().empty() == false)
+			{
+				if (FD_ISSET(it->first, &this->_rfds_write))
+					this->clientSendMessage(it->first, *it->second);
+				else if (it->second->getBot())
+					this->sendBot(it->second);
+			}
 			it++;
 		}
 	}
@@ -208,22 +263,26 @@ void	Server::eraseClient(void)
 	}
 }
 
-void	Server::useSelect(void) {
+void	Server::useSelect(void)
+{
 	std::map<int, Client*>::iterator	buffer;
 	struct timeval						tv;
 	
 	if (this->_clientList.size() > 0)
 	{
-		tv.tv_sec = 0;
-		tv.tv_usec = 0;
-		this->_rfds_read = this->_rfds;
-		this->_rfds_write = this->_rfds;
-		this->_rfds_error = this->_rfds;
 		buffer = this->_clientList.end();
 		buffer--;
-		// find out who has communicated
-		select(buffer->first + 1, &this->_rfds_read,
-			&this->_rfds_write, &this->_rfds_error, &tv);
+		if (buffer->first >= 0)
+		{
+			tv.tv_sec = 0;
+			tv.tv_usec = 0;
+			this->_rfds_read = this->_rfds;
+			this->_rfds_write = this->_rfds;
+			this->_rfds_error = this->_rfds;
+			// find out who has communicated
+			select(buffer->first + 1, &this->_rfds_read,
+				&this->_rfds_write, &this->_rfds_error, &tv);
+		}
 	}
 }
 
@@ -258,7 +317,8 @@ void	Server::userPing(void)
 	while (it != ite)
 	{
 		client = it->second;
-		if (client->lastPingTime(ctime) > MAX_TIME_PING)
+		if (client->getBot() == false
+			&& client->lastPingTime(ctime) > MAX_TIME_PING)
 		{
 			if (client->getSendPing())
 				client->terminateConnection();

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
 /*   Updated: 2024/08/16 15:41:58 by ggiboury         ###   ########.fr       */
@@ -44,6 +44,8 @@ class Command
 		void	errorMessage(int error, Client *client,
 			std::string const& channelName);
 
+		std::string	getArg(void);
+
 	public :
 		Command(std::string msg) 
 			throw (IRCError);
@@ -60,5 +62,8 @@ class Command
 };
 
 std::ostream   &operator<<(std::ostream &, Command const &);
+void			ft_split_word(std::string const& msg,
+	std::list<std::string>& args);
+std::string		ft_getArg(std::list<std::string>& arg);
 
 # endif

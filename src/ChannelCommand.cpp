@@ -27,18 +27,6 @@ ChannelCommand::~ChannelCommand(void) {
 	
 }
 
-std::string	ChannelCommand::getArg(void)
-{
-	std::string	buffer;
-	
-	if (this->_args.size())
-	{
-		buffer = this->_args.front();
-		this->_args.pop_front();
-	}
-	return (buffer);
-}
-
 int	ChannelCommand::kick_channel(Client* user_rqts,
 	std::string const& channelName, std::string const& userKick,
 	std::string const& comment, std::map<std::string, Channel *>& channels)
@@ -258,12 +246,11 @@ int	ChannelCommand::pong(Client *client)
 		msg = this->getArg();
 		if (msg.empty())
 			this->ERR_NOORIGIN_MSG(client);
-		else if (client->getSendPing() && this->getArg() == "coucou")
+		else if (client->getSendPing() && !msg.compare(0, 6, PING_WORD, 0, 6))
 		{
 			client->setLastPing(std::time(NULL));
 			client->setSendPing(false);
 		}
-			client->addRPLBuffer("PONG irctoutmevas :" + msg + "\n");
 	}
 	else
 		this->errorMessage(std::atoi(ERR_NEEDMOREPARAMS), client, "");

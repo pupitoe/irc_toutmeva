@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 10:13:10 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:37:21 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ enum	CStatus
 
 class	Client
 {
-	private:
+	protected:
 		int const	_client_fd;
 		int			_status_connection;
 
@@ -47,10 +47,11 @@ class	Client
 		time_t		_lastPing;
 
 		bool		_sendPing;
+		bool		_bot;
 
 	public:
 		Client(int const client_fd);
-		~Client(void);
+		virtual ~Client(void);
 		
 		int		getStatusClient(void) const;
 		int		getFd(void) const;
@@ -69,6 +70,7 @@ class	Client
 		std::string			getCommand(void);
 		bool				getCommandValible(void);
 		void				addCommandBuffer(char const *cmd);
+		void				addCommandBuffer(std::string const& cmd);
 
 		void				addRPLBuffer(std::string const& rpl);
 		std::string const&	getRPLBuffer(void) const;
@@ -80,6 +82,9 @@ class	Client
 		void				setLastPing(time_t ctime);
 		void				setSendPing(bool set);
 		bool				getSendPing(void) const;
+		bool				getBot(void) const;
+
+		std::string			getInfo(void) const;
 };
 
 Client	*getClientMap(std::string const& nickName,

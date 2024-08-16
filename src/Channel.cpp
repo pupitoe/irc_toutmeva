@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 23:53:35 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:46:01 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,10 @@ int	Channel::part(Client *client_rqst, std::string const& reason,
 			this->ERR_NOTONCHANNEL_MSG(client_rqst);
 		return (ECHAN_NOT_REGISTERED);
 	}
+	if (quitServe == false && (*buffer)->getBot() && this->_client.size() > 1)
+		return (BOT_NOT_PART);
 	if (quitServe == false)
-		this->sendAll(":" + client_rqst->getNickName() + " PART " + this->_name
+		this->sendAll(":" + client_rqst->getInfo() + " PART " + this->_name
 			+ ((reason.empty())? "": " " + reason) + "\n");
 	this->_client.erase(buffer);
 	buffer = std::find(this->_operators.begin(),
@@ -79,7 +81,8 @@ void	Channel::RPL_NAMREPLY(Client *client)
 	std::string						buffer;
 	std::list<Client *>::iterator	it;
 
-	buffer = ": 353 " + client->getNickName() + " = " + this->_name + " :";
+	buffer = ":irctoutmevas 353 " + client->getNickName()
+		+ " = " + this->_name + " :";
 	it = this->_client.begin();
 	while (it != this->_client.end())
 	{
@@ -121,6 +124,14 @@ void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 
 int	Channel::join_check(Client *client_rqst, std::string const& key)
 {
+	if (client_rqst->getBot() == true)
+	{
+		if (this->userGrade(key) == CH_OPERATOR)
+			return (SUCCESS);
+		this->eraseInviteLst(client_rqst);
+		this->ERR_BAT_JOIN_BOT(client_rqst, key, this->_name);
+		return (FAIL);
+	}
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
 	if (this->_limit && this->countClient() >= this->_limit)
@@ -152,13 +163,15 @@ int	Channel::join(Client *client_rqst, std::string const& key)
 	if (this->_super_user_set == false)
 		this->join_super_user(client_rqst);
 	this->_client.push_back(client_rqst);
-	this->sendAll(":" + client_rqst->getNickName() + " JOIN " + this->_name
+	this->sendAll(":" + client_rqst->getInfo() + " JOIN " + this->_name
 		+ "\n");
 	if (this->_topic.empty() == false)
 		this->topicRPL(client_rqst);
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
 	this->eraseInviteLst(client_rqst);
+	if (client_rqst->getBot())
+		this->mode_o(this->getClient(key), MORE, client_rqst->getNickName());
 	return (GOOD_REGISTER);
 }
 
@@ -213,7 +226,7 @@ void	Channel::kickActiv(Client* client_rqst, std::string const& userKick,
 	user = this->getClient(userKick);	
 	if (user)
 	{
-		buffer = ":" + client_rqst->getNickName() + " KICK "
+		buffer = ":" + client_rqst->getInfo() + " KICK "
 			+ this->_name + " " + user->getNickName() + " ";
 		if (comment.empty())
 			buffer += "a moderator kick u sorry\n";
@@ -279,7 +292,7 @@ void	Channel::topicChange(Client* client_rqst, std::string const& newTopic)
 		this->_topic = newTopic.c_str();
 		this->_topic_usr = client_rqst->getNickName() + " " + buffer;
 	}
-	this->sendAll(":" + client_rqst->getNickName()
+	this->sendAll(":" + client_rqst->getInfo()
 		+ " TOPIC " + this->_name + " :" + this->_topic + "\n");
 }
 
@@ -357,7 +370,7 @@ void	Channel::sendInvitClient(Client* client_rqst,
 		if (std::find(this->_invite_lst.begin(), this->_invite_lst.end(),
 				buffer) == this->_invite_lst.end())
 			this->_invite_lst.push_back(buffer);
-		buffer->addRPLBuffer(":" + client_rqst->getNickName() + " INVITE "
+		buffer->addRPLBuffer(":" + client_rqst->getInfo() + " INVITE "
 			+ userName + " " + this->_name + "\n");
 	}
 	else
@@ -422,6 +435,6 @@ int		Channel::sendMsg(Client* client_rqst, std::string const& message,
 void	RPL_PRIVMSG(Client *client_rqst, Client *dest,
 	std::string const& message, std::string const& target)
 {
-	dest->addRPLBuffer(":" + client_rqst->getNickName() + " PRIVMSG "
+	dest->addRPLBuffer(":" + client_rqst->getInfo() + " PRIVMSG "
 		+ target + " :" + message + "\n");
 }

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/11 16:51:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:37:58 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "ConnexionCommand.hpp"
 # include "ChannelCommand.hpp"
 # include <Channel.hpp>
+# include "Bot.hpp"
 
 # define SIZE_MESSAGE_BUFFER 1024
 # define MAX_TIME_PING 60
@@ -65,6 +66,10 @@ class	Server
 		void	useSelect(void);
 
 		void	userPing(void);
+
+		void	addBot(void);
+
+		void	sendBot(Client *bot);
 
 	public:
 		Server(void);
