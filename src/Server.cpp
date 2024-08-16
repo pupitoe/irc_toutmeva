@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 19:05:20 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:54:24 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,19 +371,14 @@ void	Server::parse(std::string cmd, Client &c)
 {
 	try
 	{
-		Command	*rqst = NULL;
 		std::stringstream preparsed_input(cmd);
 		enum type t = guessType(preparsed_input);
-		if (t == ERR){
+		if (t == ERR)
 			throw (IRCError(ERR_UNKNOWNCOMMAND, c.getNickName(), cmd));
-		}
 		else if (t == CONNEXION)
-			rqst = new ConnexionCommand(cmd, _password, this->_clientList, c);
+			ConnexionCommand(cmd, _password, this->_clientList, c).execute(c);
 		else if (t == CHANNEL)
-			rqst = new ChannelCommand(cmd);
-		if (rqst)
-			this->executeRequests(c, rqst);
-		delete (rqst);
+			ChannelCommand(cmd).execute(&c, this->_channels, this->_clientList);
 	}
 	catch (IRCError &e)
 	{
@@ -400,12 +395,4 @@ void	Server::parse(std::string cmd, Client &c)
 	{
 		std::cout << "Unhandled exception" << std::endl;
 	}
-}
-
-void	Server::executeRequests(Client& client, Command *rqst)
-{
-	if (rqst->getType() == CHANNEL)
-		rqst->execute(&client, this->_channels, this->_clientList);
-	else
-		rqst->execute(client);
 }

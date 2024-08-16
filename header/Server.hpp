@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:37:58 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:53:44 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ class	Server
 		void	clientRecv(void);
 		void	clientSend(void);
 		void	parseInput(void);
-		void	executeRequests(Client& client, Command *rqst);
 		void	eraseClient(void);
 
 		void	useSelect(void);
