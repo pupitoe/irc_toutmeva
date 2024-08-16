@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 19:38:28 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 22:52:27 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,19 +56,19 @@ static void	addMOTD(Client &c)
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :- ");
 	c.addRPLBuffer(SERVERNAME);
-	c.addRPLBuffer(" Message of the day -\n");
+	c.addRPLBuffer(" Message of the day -\r\n");
 
 	c.addRPLBuffer(":");
 	c.addRPLBuffer(SERVERNAME);
 	c.addRPLBuffer(" 372 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :- Bienvenue sur ft_webserv x)\n");
+	c.addRPLBuffer(" :- Bienvenue sur ft_webserv x)\r\n");
 
 	c.addRPLBuffer(":");
 	c.addRPLBuffer(SERVERNAME);
 	c.addRPLBuffer(" 376 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :End of /MOTD command\n");
+	c.addRPLBuffer(" :End of /MOTD command\r\n");
 }
 
 void	ConnexionCommand::_registration(Client &c) const
@@ -89,6 +89,12 @@ void	ConnexionCommand::_registration(Client &c) const
 	}
 	c.addStatus(CS_CONNECTED);
 	c.removeStatus(CS_FINISH_REGISTER);
+	c.addRPLBuffer(":");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" NICK ");
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer("\r\n");
+	
 	// RPL WELCOME
 	c.addRPLBuffer(":");
 	c.addRPLBuffer(SERVERNAME);
@@ -98,30 +104,30 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer("ft_irc");
 	c.addRPLBuffer(" Network ");
 	c.addRPLBuffer(c.getNickName()); // Modulable comme on le souhaite
-	c.addRPLBuffer("\n");
+	c.addRPLBuffer("\r\n");
 
 	//RPL YOUR HOST
 	c.addRPLBuffer(":irctoutmevas 002 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :Your host is absent, running version 1.2.3.4\n");
+	c.addRPLBuffer(" :Your host is absent, running version 1.2.3.4\r\n");
 
 	// RPL CREATED
 	c.addRPLBuffer(":irctoutmevas 003 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\n");
+	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\r\n");
 
 	// RPL MYINFO
 	c.addRPLBuffer(":irctoutmevas 004 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :absent 1.2.3.4");
 	c.addRPLBuffer(" :itkol");
-	c.addRPLBuffer("\n");
+	c.addRPLBuffer("\r\n");
 
 	// RPL ISUPPORT
 	c.addRPLBuffer(":irctoutmevas 005 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :MODES");
-	c.addRPLBuffer(" :are supported by this server\n");
+	c.addRPLBuffer(" :are supported by this server\r\n");
 
 	//RPL MOTD
 	addMOTD(c);
@@ -155,6 +161,7 @@ void	changeNickname(Client &c, std::string new_nickname)
 	c.addRPLBuffer(c.getInfo());
 	c.addRPLBuffer(" NICK ");
 	c.addRPLBuffer(new_nickname);
+	c.addRPLBuffer("\r\n");
 	c.setNickName(new_nickname);
 }
 
