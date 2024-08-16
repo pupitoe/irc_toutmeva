@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 18:25:25 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/13 23:51:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:46:57 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,11 @@ void	Channel::ERR_USERONCHANNEL_MSG(Client *client,
 {
 	client->addRPLBuffer(":irctoutmevas 443 " + client->getNickName() +
 		" " + nick +  + " " + this->_name + " :is already on channel\n");
+}
+
+void	Channel::ERR_BAT_JOIN_BOT(Client *client, std::string const& nick,
+	std::string const& channel)
+{
+	client->addRPLBuffer(":irctoutmevas BADJOINCHAN " + channel + " "
+		+ nick + "\n");
 }

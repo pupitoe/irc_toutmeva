@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 21:52:07 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:37:43 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ class Command {
 		void	errorMessage(int error, Client *client,
 			std::string const& channelName);
 
+		std::string	getArg(void);
+
 	public :
 		Command(std::string msg) 
 			throw (Command::UnrecognizedType, IRCError);
@@ -63,5 +65,8 @@ class Command {
 };
 
 std::ostream   &operator<<(std::ostream &, Command const &);
+void			ft_split_word(std::string const& msg,
+	std::list<std::string>& args);
+std::string		ft_getArg(std::list<std::string>& arg);
 
 # endif

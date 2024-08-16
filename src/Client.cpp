@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/26 20:20:16by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:48:12 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ Client::Client(int const client_fd): _client_fd(client_fd)
 	this->_lastPing = std::time(NULL);
 	this->_nickName = "mielpops/nesquik";
 	this->_sendPing = false;
+	this->_bot = false;
 	std::cout << "client created: " << client_fd << std::endl;
 }
 
@@ -126,6 +127,11 @@ void	Client::addCommandBuffer(char const *cmd)
 	this->_bufferCommand += cmd;
 }
 
+void	Client::addCommandBuffer(std::string const& cmd)
+{
+	this->_bufferCommand += cmd;
+}
+
 void	Client::addRPLBuffer(std::string const& rpl)
 {
 	this->_bufferRPL += rpl;
@@ -170,6 +176,11 @@ Client	*getClientMap(std::string const& nickName,
 time_t	Client::lastPingTime(time_t ctime) const
 {
 	return (ctime - this->_lastPing);
+}
+
+bool	Client::getBot(void) const
+{
+	return (this->_bot);
 }
 
 std::string			Client::getInfo(void) const

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 21:59:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/12 15:07:50 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,36 +43,44 @@ static bool	isCommand(std::string str) {
  * 	2b. Else, parse normally.
  * */
 Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
-	std::string			word;
-	std::stringstream	str(msg);
 
 	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
-	std::cout << "cmd all: " << msg << std::endl;	
+	std::cout << "cmd all: " << msg << std::endl;
+
 	//Command
-	str >> word;
+	ft_split_word(msg, this->_args);
+	std::string&	word = this->_args.front();
 	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
-		word[i] = std::toupper(word[i]);
+		word[i] = std::toupper(this->_args.front()[i]);
 	}
 	if (!isCommand(word))
 		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
-	_args.push_back(word);
-	
+	this->_type = EMPTY;
+	if (this->_args.size())
+		this->_command_name = word;
+	this->_nb_arg = this->_args.size();
+}
+
+void	ft_split_word(std::string const& msg, std::list<std::string>& args)
+{
+	std::string			word;
+	std::stringstream	str(msg);
+
+	str >> word;
+	args.push_back(word);
+
 	//Parameters
 	while (str >> word) {
 		if (word[0] == ':') {
 			if (str.tellg() > 0 && (size_t)str.tellg() < str.str().length())
 				word.append(str.str().substr(str.tellg(), str.str().size()));
 			word.erase(0, 1);
-			_args.push_back(word);
+			args.push_back(word);
 			break ;
 		}
-		_args.push_back(word);
+		args.push_back(word);
 	}
-	this->_type = EMPTY;
-	if (this->_args.size())
-		this->_command_name = this->_args.front();
-	this->_nb_arg = this->_args.size();
 }
 
 Command::Command(Command const &ref) : _args(ref.getArgs()),
@@ -109,4 +117,21 @@ void	Command::errorMessage(int error, Client *client,
 	else if (error == ERR_NOSUCHCHANNEL)
 		client->addRPLBuffer(":irctoutmevas 403 " + client->getNickName()
 			+ " " + channelName + " :No such channel\n");
+}
+
+std::string	Command::getArg(void)
+{
+	return (ft_getArg(this->_args));
+}
+
+std::string	ft_getArg(std::list<std::string>& args)
+{
+	std::string	buffer;
+	
+	if (args.size())
+	{
+		buffer = args.front();
+		args.pop_front();
+	}
+	return (buffer);
 }

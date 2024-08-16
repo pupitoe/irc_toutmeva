@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/14 15:44:08 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:46:01 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	Channel::part(Client *client_rqst, std::string const& reason,
 			this->ERR_NOTONCHANNEL_MSG(client_rqst);
 		return (ECHAN_NOT_REGISTERED);
 	}
+	if (quitServe == false && (*buffer)->getBot() && this->_client.size() > 1)
+		return (BOT_NOT_PART);
 	if (quitServe == false)
 		this->sendAll(":" + client_rqst->getInfo() + " PART " + this->_name
 			+ ((reason.empty())? "": " " + reason) + "\n");
@@ -122,6 +124,14 @@ void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 
 int	Channel::join_check(Client *client_rqst, std::string const& key)
 {
+	if (client_rqst->getBot() == true)
+	{
+		if (this->userGrade(key) == CH_OPERATOR)
+			return (SUCCESS);
+		this->eraseInviteLst(client_rqst);
+		this->ERR_BAT_JOIN_BOT(client_rqst, key, this->_name);
+		return (FAIL);
+	}
 	if (this->inLst(client_rqst))
 		return (ECHAN_ALREADY_REGISTERED);
 	if (this->_limit && this->countClient() >= this->_limit)
@@ -160,6 +170,8 @@ int	Channel::join(Client *client_rqst, std::string const& key)
 	this->RPL_NAMREPLY(client_rqst);
 	this->RPL_ENDOFNAMES(client_rqst);
 	this->eraseInviteLst(client_rqst);
+	if (client_rqst->getBot())
+		this->mode_o(this->getClient(key), MORE, client_rqst->getNickName());
 	return (GOOD_REGISTER);
 }
 
