@@ -6,21 +6,21 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/15 16:58:15 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 18:16:06 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
 #include <iostream>
 
-void	ConnexionCommand::_test_password(void) const
+void	ConnexionCommand::_testPassword(void) const
 {
 	if (_args.empty() || _args.size() < 2) {
-		throw (IRCError(ERR_NEEDMOREPARAMS, _args.front(), "PASS"));
+		throw (IRCError(ERR_NEEDMOREPARAMS, _args.front()));
 	}
 }
 
-void ConnexionCommand::_test_nickname(std::map<int, Client *> clientList)
+void ConnexionCommand::_testNickname(std::map<int, Client *> clientList)
 {
 	std::string							username;
 	std::map<int, Client *>::iterator	it = clientList.begin();
@@ -42,7 +42,7 @@ void ConnexionCommand::_test_nickname(std::map<int, Client *> clientList)
 	}
 }
 
-void ConnexionCommand::_test_username(void) const
+void ConnexionCommand::_testUsername(void) const
 {
 	if (_args.empty() || _args.size() < 5)
 		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "USER"));
@@ -126,7 +126,7 @@ void	ConnexionCommand::_registration(Client &c) const
 	addMOTD(c);
 }
 
-int	ConnexionCommand::_exec_pass(Client &c)
+int	ConnexionCommand::_execPass(Client &c)
 {
 	if (c.getStatusClient() == CS_CONNECTED)
 		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
@@ -148,21 +148,32 @@ int	ConnexionCommand::_exec_pass(Client &c)
 	return (0);
 }
 
-int	ConnexionCommand::_exec_nick(Client &c)
+void	changeNickname(Client &c, std::string new_nickname)
+{
+	c.addRPLBuffer(":");
+	c.addRPLBuffer(c.getNickName());
+	c.addRPLBuffer(" NICK ");
+	c.addRPLBuffer(new_nickname);
+	c.setNickName(new_nickname);
+}
+
+int	ConnexionCommand::_execNick(Client &c)
 {
 	_args.pop_front();
-	c.setNickName(_args.front());
 	c.addStatus(CS_SETNICKNAME);
-	if (c.getStatusClient() == CS_CONNECTED)
-		; // changing nickname, condition written for clarity;
-	else if (c.getStatusClient() == CS_FINISH_REGISTER
-		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))
+	if (c.getStatusClient() & CS_CONNECTED)
+		changeNickname(c, _args.front());
+	else if (c.getStatusClient() & CS_FINISH_REGISTER
+		|| c.getStatusClient() & (CS_FINISH_REGISTER | CS_SETPASS))
+	{	
+		c.setNickName(_args.front());
 		_registration(c);
+	}
 	return (0);
 }
 
 // https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
-int	ConnexionCommand::_exec_user(Client &c)
+int	ConnexionCommand::_execUser(Client &c)
 {
 	_args.pop_front();
 	c.setUserName(_args.front());
@@ -179,7 +190,7 @@ int	ConnexionCommand::_exec_user(Client &c)
 	return (0);
 }
 
-int	ConnexionCommand::_exec_quit(Client &c)
+int	ConnexionCommand::_execQuit(Client &c)
 {
 	_args.pop_front();
 	c.terminateConnection();
@@ -194,11 +205,11 @@ ConnexionCommand::ConnexionCommand(std::string msg,
 {
 	this->_type = CONNEXION;
 	if (!_args.front().compare(0, 4, "PASS", 4))
-		_test_password();
+		_testPassword();
 	else if (!_args.front().compare(0, 4, "NICK", 4))
-		_test_nickname(clientList);
+		_testNickname(clientList);
 	else if (!_args.front().compare(0, 4, "USER", 4))
-		_test_username();
+		_testUsername();
 }
 
 ConnexionCommand::~ConnexionCommand(void)
@@ -207,13 +218,13 @@ ConnexionCommand::~ConnexionCommand(void)
 int	ConnexionCommand::execute(Client &client)
 {
 	if (!_args.front().compare("PASS"))
-		return (_exec_pass(client));
+		return (_execPass(client));
 	else if (!_args.front().compare("NICK"))
-		return (_exec_nick(client));
+		return (_execNick(client));
 	else if (!_args.front().compare("USER"))
-		return (_exec_user(client));
+		return (_execUser(client));
 	else if (!_args.front().compare("QUIT"))
-		return (_exec_quit(client));
+		return (_execQuit(client));
 	return (0);
 }
 

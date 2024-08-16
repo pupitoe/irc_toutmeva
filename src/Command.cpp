@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/11 21:59:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 18:00:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ static bool	isCommand(std::string str) {
  *	2a. If it begins with ":" , then the rest of msg is final param
  * 	2b. Else, parse normally.
  * */
-Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
+Command::Command(std::string msg) throw (IRCError) {
 	std::string			word;
 	std::stringstream	str(msg);
 
 	if (msg.length() > MESSAGES_LIMIT)
 		throw (IRCError(ERR_INPUTTOOLONG));
-	std::cout << "cmd all: " << msg << std::endl;	
+	std::cout << "cmd all: " << msg << std::endl << "FIN COMM"<< std::endl;	
 	//Command
 	str >> word;
 	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
@@ -76,27 +76,24 @@ Command::Command(std::string msg) throw (Command::UnrecognizedType, IRCError) {
 }
 
 Command::Command(Command const &ref) : _args(ref.getArgs()),
-	_type(ref.getType()) {
+	_type(ref.getType())
+{}
 
+Command::~Command(void)
+{}
+
+std::list<std::string>	Command::getArgs(void) const
+{
+	return (_args);
 }
 
-Command::~Command(void) {
-
-}
-
-std::list<std::string>	Command::getArgs(void) const {
-	return (_args); // A modifier, copie partielle
-}
-
-cmd_type	Command::getType(void) const {
+cmd_type	Command::getType(void) const
+{
 	return (_type);
 }
 
-const char	*Command::UnrecognizedType::what(void) const throw() {
-	return ("Type of command received invalid.");
-};
-
-std::ostream	&operator<<(std::ostream &out, Command const &c) {
+std::ostream	&operator<<(std::ostream &out, Command const &c)
+{
 	return (out << c.getArgs().front());
 }
 

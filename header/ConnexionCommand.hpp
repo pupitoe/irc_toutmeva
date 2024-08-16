@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/15 11:52:39 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 17:19:36 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,20 @@
 # include <IRCError.hpp>
 # include <string>
 
-class ConnexionCommand : public Command {
+class ConnexionCommand : public Command
+{
 
 	private :
 		std::string	_password;
 
-		void	_test_password(void) const;
-		void	_test_nickname(std::map<int, Client *> clientList);
-		void	_test_username(void) const;
+		void	_testPassword(void) const;
+		void	_testNickname(std::map<int, Client *> clientList);
+		void	_testUsername(void) const;
 
-		int _exec_pass(Client &);
-		int _exec_nick(Client &);
-		int _exec_user(Client &);
-		int	_exec_quit(Client &);
+		int _execPass(Client &);
+		int _execNick(Client &);
+		int _execUser(Client &);
+		int	_execQuit(Client &);
 
 		void	_registration(Client &c) const;
 

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/12 21:52:07 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 15:41:58 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ enum type {
 /*
 * Polymorphic class
 * */
-class Command {
+class Command
+{
 
 	protected :
 		std::string 			_command_name;
@@ -45,7 +46,7 @@ class Command {
 
 	public :
 		Command(std::string msg) 
-			throw (Command::UnrecognizedType, IRCError);
+			throw (IRCError);
 		Command(Command const &);
 		virtual ~Command(void);
 
@@ -56,10 +57,6 @@ class Command {
 		virtual int	execute(Client *client,
 			std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst) = 0;
-
-		class UnrecognizedType : public std::exception {
-			const char	*what(void) const throw();
-		};
 };
 
 std::ostream   &operator<<(std::ostream &, Command const &);
