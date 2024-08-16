@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:37:21 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:05:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ enum	CStatus
 class	Client
 {
 	protected:
-		int const	_client_fd;
+		int const	_fd;
 		int			_status_connection;
 
 		std::string	_nickName;

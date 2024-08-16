@@ -6,14 +6,14 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:48:12 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:05:55 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 # include <iostream>
 
-Client::Client(int const client_fd): _client_fd(client_fd)
+Client::Client(int const client_fd): _fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
@@ -28,7 +28,7 @@ Client::~Client(void) {
 
 int		Client::getFd(void) const
 {
-	return (this->_client_fd);
+	return (this->_fd);
 }
 
 int	Client::getStatusClient(void) const 
