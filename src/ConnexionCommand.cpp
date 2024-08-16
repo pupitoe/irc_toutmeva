@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:03:32 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:27:56 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,24 +101,24 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer("\n");
 
 	//RPL YOUR HOST
-	c.addRPLBuffer(":irctoutmevas 002 ");
+	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 002 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Your host is absent, running version 1.2.3.4\n");
 
 	// RPL CREATED
-	c.addRPLBuffer(":irctoutmevas 003 ");
+	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 003 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :This server was created Mon, 31 Jul 4159 26:53:58 UTC\n");
 
 	// RPL MYINFO
-	c.addRPLBuffer(":irctoutmevas 004 ");
+	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 004 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :absent 1.2.3.4");
 	c.addRPLBuffer(" :itkol");
 	c.addRPLBuffer("\n");
 
 	// RPL ISUPPORT
-	c.addRPLBuffer(":irctoutmevas 005 ");
+	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 005 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :MODES");
 	c.addRPLBuffer(" :are supported by this server\n");
@@ -254,7 +254,7 @@ int	ConnexionCommand::pong(Client *client)
 
 void	 ConnexionCommand::ERR_NOORIGIN_MSG(Client *client)
 {
-	client->addRPLBuffer(":irctoutmevas 409 " + 
+	client->addRPLBuffer(":" + (std::string)SERVERNAME + " 409 " + 
 		client->getNickName() + " :No origin specified\n");
 }
 

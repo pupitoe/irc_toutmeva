@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 17:56:14 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:28:05 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ const char  *IRCError::what(void) const throw()
 
 void	ERR_NOSUCHNICK_MSG(Client *client, std::string const& nick)
 {
-	client->addRPLBuffer(":irctoutmevas 401 " + client->getNickName() +
+	client->addRPLBuffer(":" + (std::string)SERVERNAME + " 401 " + client->getNickName() +
 		" " + nick + " :No such nick\n");
 }
 
 std::string	IRCError::_gen_reply(void) const
 {
-	std::string	res(":irctoutmevas ");
+	std::string	res(":" + (std::string)SERVERNAME + " ");
 
 	res.append(_err);
 	res.append(" ");

@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 00:51:08 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 16:13:22 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/16 21:26:17 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,10 @@ int	Channel::mode_k_analyse(Client* client_rqst, std::string const& key)
 	if (error.empty() == false)
 	{
 		status = FAIL;
-		client_rqst->addRPLBuffer(":irctoutmevas 696 "
+		client_rqst->addRPLBuffer(":" + (std::string)SERVERNAME + " 696 "
 			+ client_rqst->getNickName() + " "
 			+ this->_name + " k "+ parameter + " :" + error);
-		client_rqst->addRPLBuffer(":irctoutmevas 525 "
+		client_rqst->addRPLBuffer(":" + (std::string)SERVERNAME + " 525 "
 			+ client_rqst->getNickName() + " "
 			+ this->_name + " :Key is not well-formed\n");
 	}
@@ -194,7 +194,7 @@ int	Channel::mode(Client* client_rqst)
 		modes += 't';
 	if (this->_invite_only)
 		modes += 'i';
-	client_rqst->addRPLBuffer(":irctoutmevas 324 "
+	client_rqst->addRPLBuffer(":" + (std::string)SERVERNAME + " 324 "
 		+ client_rqst->getNickName() + " " + this->_name + " :"
 		+ ((modes.length() > 1)? modes: "") + args + "\n");
 	RPL_CREATIONTIME(client_rqst);
@@ -219,7 +219,7 @@ int Channel::mode_other(Client *client_rqst, char flag)
 	if (this->inOpLst(client_rqst))
 	{
 		status = SUCCESS;
-		client_rqst->addRPLBuffer(":irctoutmevas 472 "
+		client_rqst->addRPLBuffer(":" + (std::string)SERVERNAME + " 472 "
 			+ client_rqst->getNickName() + " "
 			+ flag + " :is unknown mode char to me\n");
 	}
