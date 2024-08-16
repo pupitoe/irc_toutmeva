@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 18:52:57 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:05:20 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,7 +318,7 @@ void	Server::parse(std::string cmd, Client &c)
 			throw (IRCError(ERR_UNKNOWNCOMMAND, c.getNickName(), cmd));
 		}
 		else if (t == CONNEXION)
-			rqst = new ConnexionCommand(cmd, _password, this->_clientList);
+			rqst = new ConnexionCommand(cmd, _password, this->_clientList, c);
 		else if (t == CHANNEL)
 			rqst = new ChannelCommand(cmd);
 		if (rqst)

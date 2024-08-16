@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 17:19:36 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:15:03 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CONNEXIONCOMMAND_HPP
 
 # include <Command.hpp>
+# include <Client.hpp>
 # include <IRCError.hpp>
 # include <string>
 
@@ -25,7 +26,7 @@ class ConnexionCommand : public Command
 
 		void	_testPassword(void) const;
 		void	_testNickname(std::map<int, Client *> clientList);
-		void	_testUsername(void) const;
+		void	_testUsername(Client &c) const;
 
 		int _execPass(Client &);
 		int _execNick(Client &);
@@ -37,7 +38,8 @@ class ConnexionCommand : public Command
 	public :
 		ConnexionCommand(std::string msg,
 			const std::string password,
-			const std::map<int, Client *>)
+			const std::map<int, Client *>,
+			Client &c)
 			throw (IRCError);
 		~ConnexionCommand(void);
 

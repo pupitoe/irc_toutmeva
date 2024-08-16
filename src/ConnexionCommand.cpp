@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 18:16:06 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/16 19:20:57 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void ConnexionCommand::_testNickname(std::map<int, Client *> clientList)
 	}
 }
 
-void ConnexionCommand::_testUsername(void) const
+void ConnexionCommand::_testUsername(Client &c) const
 {
 	if (_args.empty() || _args.size() < 5)
-		throw (IRCError(ERR_NEEDMOREPARAMS, "client", "USER"));
+		throw (IRCError(ERR_NEEDMOREPARAMS, c.getNickName(), "USER"));
 }
 
 static void	addMOTD(Client &c)
@@ -88,6 +88,7 @@ void	ConnexionCommand::_registration(Client &c) const
 		throw IRCError(ERR_PASSWDMISMATCH, c.getNickName());
 	}
 	c.addStatus(CS_CONNECTED);
+	c.removeStatus(CS_FINISH_REGISTER);
 	// RPL WELCOME
 	c.addRPLBuffer(":");
 	c.addRPLBuffer(SERVERNAME);
@@ -163,12 +164,11 @@ int	ConnexionCommand::_execNick(Client &c)
 	c.addStatus(CS_SETNICKNAME);
 	if (c.getStatusClient() & CS_CONNECTED)
 		changeNickname(c, _args.front());
-	else if (c.getStatusClient() & CS_FINISH_REGISTER
-		|| c.getStatusClient() & (CS_FINISH_REGISTER | CS_SETPASS))
-	{	
+	else if (c.getStatusClient() & CS_FINISH_REGISTER)
 		c.setNickName(_args.front());
+	if (c.getStatusClient() == CS_FINISH_REGISTER
+		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))
 		_registration(c);
-	}
 	return (0);
 }
 
@@ -199,7 +199,8 @@ int	ConnexionCommand::_execQuit(Client &c)
 
 ConnexionCommand::ConnexionCommand(std::string msg,
 	const std::string password,
-	const std::map<int, Client *> clientList)
+	const std::map<int, Client *> clientList,
+	Client &c)
 	throw (IRCError)
 	: Command(msg), _password(password)
 {
@@ -209,7 +210,7 @@ ConnexionCommand::ConnexionCommand(std::string msg,
 	else if (!_args.front().compare(0, 4, "NICK", 4))
 		_testNickname(clientList);
 	else if (!_args.front().compare(0, 4, "USER", 4))
-		_testUsername();
+		_testUsername(c);
 }
 
 ConnexionCommand::~ConnexionCommand(void)
