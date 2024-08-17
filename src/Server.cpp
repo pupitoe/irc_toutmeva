@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 15:40:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:44:48 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	Server::searchClient(void)
 	
 	if (this->_status_server == SUCCESS)
 	{
-		new_client = accept(this->_socket.getSocketFd(), NULL, 0);
+		new_client = accept(this->_socket.getSocketFd(), NULL, NULL);
 		if (new_client != -1)
 		{
 			this->addClient(new_client);
