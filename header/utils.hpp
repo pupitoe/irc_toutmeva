@@ -6,14 +6,12 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/17 18:18:14 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:19:00 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:31:58 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_HPP
 # define UTILS_HPP
-
-# include <cstdlib>
 
 # define SUCCESS 0
 # define FAIL 1

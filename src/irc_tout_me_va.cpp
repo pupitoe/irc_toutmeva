@@ -6,15 +6,12 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:17:40 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:30:47 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <irc_tout_me_va.hpp>
-#include <Server.hpp>
-#include <ft_error.hpp>
-#include <iostream>
-#include <signal.h>
+
 
 int	g_exiting = 0;
 
