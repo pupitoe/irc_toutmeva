@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:54:39 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:25:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ ChannelCommand::~ChannelCommand(void)
 {
 }
 
-int	ChannelCommand::kick_channel(Client* user_rqts,
+int	ChannelCommand::kickChannel(Client* user_rqts,
 	std::string const& channelName, std::string const& userKick,
 	std::string const& comment, std::map<std::string, Channel *>& channels)
 {
@@ -55,7 +55,7 @@ int	ChannelCommand::kick(Client *client,
 	{
 		status = this->channelFormating(channel);
 		if (status == SUCCESS)
-			status = this->kick_channel(client, channel, buffer_user_name,
+			status = this->kickChannel(client, channel, buffer_user_name,
 				comment, channels);
 		this->errorMessage(status, client, channel);
 		i++;
@@ -66,7 +66,7 @@ int	ChannelCommand::kick(Client *client,
 	return (SUCCESS);
 }
 
-int	ChannelCommand::topic_channel(Client* user_rqts,
+int	ChannelCommand::topicChannel(Client* user_rqts,
 	std::string const& channelName, std::string const& newTopic,
 	int topicHaveArg, std::map<std::string, Channel *>& channels)
 {
@@ -96,7 +96,7 @@ int	ChannelCommand::topic(Client *client,
 	{
 		status = this->channelFormating(channelName);
 		if (status == SUCCESS)
-			status = this->topic_channel(client,
+			status = this->topicChannel(client,
 				channelName, newTopic, topicHaveArg, channels);
 		this->errorMessage(status, client, channelName);
 	}
@@ -131,7 +131,7 @@ int	ChannelCommand::invite(Client *client, std::map<std::string,
 	return (SUCCESS);
 }
 
-int	ChannelCommand::privmsg_exec_channel(Client *client,
+int	ChannelCommand::privmsgExecChannel(Client *client,
 	std::map<std::string, Channel *>& channels,
 	std::string const& target, std::string const& message)
 {
@@ -151,7 +151,7 @@ int	ChannelCommand::privmsg_exec_channel(Client *client,
 	return (status);
 }
 
-int	ChannelCommand::privmsg_exec_client(Client *client,
+int	ChannelCommand::privmsgExecClient(Client *client,
 	std::map<int, Client *>& clientLst, std::string const& target,
 	std::string const& message)
 {
@@ -170,7 +170,7 @@ int	ChannelCommand::privmsg_exec_client(Client *client,
 	return (status);
 }
 
-int	ChannelCommand::privmsg_exec(Client *client,
+int	ChannelCommand::privmsgExec(Client *client,
 	std::map<std::string, Channel *>& channels,
 	std::map<int, Client *>& clientLst, std::string const& target,
 	std::string const& message)
@@ -179,9 +179,9 @@ int	ChannelCommand::privmsg_exec(Client *client,
 
 	status = SUCCESS;
 	if (!target.compare(0, 1, "#") || !target.compare(0, 2, "@#"))
-		status = this->privmsg_exec_channel(client, channels, target, message);	
+		status = this->privmsgExecChannel(client, channels, target, message);	
 	else
-		status = this->privmsg_exec_client(client, clientLst, target, message);
+		status = this->privmsgExecClient(client, clientLst, target, message);
 	return (status);
 }
 
@@ -200,7 +200,7 @@ int	ChannelCommand::privmsg(Client *client, std::map<std::string,
 	target_buffer = getPart(targets, i);
 	while (i < 100 && target_buffer.empty() == false && !message.empty())
 	{
-		status = this->privmsg_exec(client, channels, clientLst,
+		status = this->privmsgExec(client, channels, clientLst,
 			target_buffer, message);
 		this->errorMessage(status, client, target_buffer);
 		i++;

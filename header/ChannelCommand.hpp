@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 19:06:43 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:25:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ class ChannelCommand : public Command
 			int &signe, int caracter) const;
 		int	privmsg(Client *client, std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst);
-		int	privmsg_exec(Client *client,
+		int	privmsgExec(Client *client,
 			std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst, std::string const& target,
 			std::string const& message);
-		int	privmsg_exec_channel(Client *client,
+		int	privmsgExecChannel(Client *client,
 			std::map<std::string, Channel *>& channels,
 			std::string const& target, std::string const& message);
-		int	privmsg_exec_client(Client *client,
+		int	privmsgExecClient(Client *client,
 			std::map<int, Client *>& clientLst, std::string const& target,
 			std::string const& message);
 
@@ -69,15 +69,15 @@ class ChannelCommand : public Command
 
 		int	channelFormating(std::string const& name);
 
-		int	join_channel(Client* user_rqts, std::string const& channelName,
+		int	joinChannel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels, std::string const& key);
-		int	part_channel(Client* user_rqts, std::string const& channelName,
+		int	partChannel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels,
 			std::string const& reason);
-		int	kick_channel(Client* user_rqts, std::string const& channelName,
+		int	kickChannel(Client* user_rqts, std::string const& channelName,
 			std::string const& userKick, std::string const& comment,
 			std::map<std::string, Channel *>& channels);
-		int	topic_channel(Client* user_rqts,
+		int	topicChannel(Client* user_rqts,
 			std::string const& channelName, std::string const& newTopic,
 			int topicHaveArg, std::map<std::string, Channel *>& channels);
 

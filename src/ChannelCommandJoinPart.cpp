@@ -40,7 +40,7 @@ int	ChannelCommand::channelFormating(std::string const& name)
 	return (status);
 }
 
-int	ChannelCommand::join_channel(Client* user_rqts,
+int	ChannelCommand::joinChannel(Client* user_rqts,
 	std::string const& channelName, std::map<std::string, Channel *>& channels,
 	std::string const& key)
 {
@@ -90,7 +90,7 @@ int	ChannelCommand::join(Client *client,
 	{
 		status = this->channelFormating(buffer_channel_name);
 		if (status == SUCCESS)
-			status = this->join_channel(client, buffer_channel_name,
+			status = this->joinChannel(client, buffer_channel_name,
 				channels, channels_key);
 		this->errorMessage(status, client, channels_name);
 		i++;
@@ -117,7 +117,7 @@ int	ChannelCommand::part(Client *client,
 	while (i < 100 && buffer_channel_name.empty() == false)
 	{
 		std::cout << getPart(channels_name, i) << std::endl;
-		status = this->part_channel(client, buffer_channel_name, channels,
+		status = this->partChannel(client, buffer_channel_name, channels,
 			reason);
 		this->errorMessage(status, client, channels_name);
 		i++;
@@ -128,7 +128,7 @@ int	ChannelCommand::part(Client *client,
 	return (0);
 }
 
-int	ChannelCommand::part_channel(Client* user_rqts,
+int	ChannelCommand::partChannel(Client* user_rqts,
 	std::string const& channelName, std::map<std::string, Channel *>& channels,
 	std::string const& reason)
 {
