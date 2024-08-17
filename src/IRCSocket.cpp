@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCSocket.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:31 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 19:48:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:12:12 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,22 +70,22 @@ IRCSocket::IRCSocket(int port)
 	throw (IRCSocket::FailedToCreate, IRCSocket::PortInvalid) {
 	if (!this->port_is_valid(port))
 		throw (IRCSocket::PortInvalid());
-	this->_socket_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-	if (this->_socket_fd == -1 || this->ft_setsocket(this->_socket_fd) == FAIL
-		|| this->ft_socket_bind(this->_socket_fd, port) == FAIL)
+	this->_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
+	if (this->_fd == -1 || this->ft_setsocket(this->_fd) == FAIL
+		|| this->ft_socket_bind(this->_fd, port) == FAIL)
 	{
-		if (this->_socket_fd != -1)
-			close(this->_socket_fd);
+		if (this->_fd != -1)
+			close(this->_fd);
 		throw (IRCSocket::FailedToCreate());
 	}
 }
 
 IRCSocket::~IRCSocket(void) {
-	close(this->_socket_fd);
+	close(this->_fd);
 }
 
-int IRCSocket::getSocketFd(void) const {
-	return (_socket_fd);
+int IRCSocket::getFd(void) const {
+	return (_fd);
 }
 
 const char	*IRCSocket::FailedToCreate::what(void) const throw () {

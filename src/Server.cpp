@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:06:39 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:12:12 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	Server::searchClient(void)
 	
 	if (this->_status == SUCCESS)
 	{
-		new_client = accept(this->_socket.getSocketFd(), NULL, 0);
+		new_client = accept(this->_socket.getFd(), NULL, 0);
 		if (new_client != -1)
 		{
 			this->addClient(new_client);
