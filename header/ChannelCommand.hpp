@@ -6,19 +6,26 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:21:08 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:55:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNELCOMMAND_HPP
 # define CHANNELCOMMAND_HPP
 
-# include <Command.hpp>
 # include <string>
-# include <sstream>
 # include <iostream>
 # include <cstring>
+
+# include "Command.hpp"
 # include "utils.hpp"
+
+# define MODE_CHANNEL 0
+# define MODE_FLAGS 1
+# define RESERV_BITS 255U
+# define FLAG_USED 1
+# define FLAG_NO_USED 2
+# define MODE_SIGNE_BIT (1 << 9)
 
 typedef struct s_modePreParserUtils
 {

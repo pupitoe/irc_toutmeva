@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BotCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 16:19:51 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:58:25 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void	BotCommand::sendRound(std::string const& gameName)
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 2));
 }
 
-bool	BotCommand::morfiCheckCreatGame(void)
+bool	BotCommand::morfiCheckcreateGame(void)
 {
 	bool	ret;
 
@@ -226,9 +226,9 @@ void	BotCommand::morfiGame(void)
 	{
 		arg = this->getArg();
 		gameName = this->getArg();
-		if (arg == "NEW" && !gameName.empty() && this->morfiCheckCreatGame())
+		if (arg == "NEW" && !gameName.empty() && this->morfiCheckcreateGame())
 		{
-			if (this->_cbot->creatGame(this->_user, gameName))
+			if (this->_cbot->createGame(this->_user, gameName))
 			{
 				this->sendPrivmsg(this->_user,
 					"a new part has been created with "

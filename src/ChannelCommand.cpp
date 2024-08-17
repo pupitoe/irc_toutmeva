@@ -6,20 +6,19 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 17:45:30 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:54:39 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ChannelCommand.hpp>
 
-ChannelCommand::ChannelCommand(std::string msg) : Command(msg) {
-	//TODO Verifier ici les cmmd;
+ChannelCommand::ChannelCommand(std::string msg) : Command(msg)
+{
 	this->_type = CHANNEL;
-	std::cout << "channel creation" << std::endl;
 }
 
-ChannelCommand::~ChannelCommand(void) {
-	
+ChannelCommand::~ChannelCommand(void)
+{
 }
 
 int	ChannelCommand::kick_channel(Client* user_rqts,

@@ -12,13 +12,6 @@
 
 #include <ChannelCommand.hpp>
 
-# define MODE_CHANNEL 0
-# define MODE_FLAGS 1
-# define RESERV_BITS 255U
-# define FLAG_USED 1
-# define FLAG_NO_USED 2
-# define MODE_SIGNE_BIT (1 << 9)
-
 int	ChannelCommand::modeFlagsUse(Client *client, Channel *channel, int mode,
 	std::string& arg)
 {	
