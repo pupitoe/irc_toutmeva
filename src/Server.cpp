@@ -85,7 +85,7 @@ void	Server::searchClient(void)
 	
 	if (this->_status == SUCCESS)
 	{
-		new_client = accept(this->_socket.getFd(), NULL, 0);
+		new_client = accept(this->_socket.getSocketFd(), NULL, NULL);
 		if (new_client != -1)
 			this->addClient(new_client);
 	}
