@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:41 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:12:48 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:21:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <exception>
 # include <unistd.h>
 
-# include "irc_tout_me_va.hpp" // SUCCESS/FAIL VAR
+# include "utils.hpp" // SUCCESS/FAIL VAR
 # include "ft_error.hpp"
 
 # define SIZE_QUEUE 100

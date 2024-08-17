@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:12:12 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:28:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,6 +362,8 @@ void	Server::parse(std::string cmd, Client &c)
 {
 	try
 	{
+		if (cmd.length() > MESSAGES_LIMIT)
+			throw (IRCError(ERR_INPUTTOOLONG, c.getNickName()));
 		std::stringstream preparsed_input(cmd);
 		enum type t = guessType(preparsed_input);
 		if (t == ERR)

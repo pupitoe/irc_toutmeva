@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BotCommand.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:11:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:21:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <Command.hpp>
 # include <string>
 # include <iostream>
-# include "irc_tout_me_va.hpp"
+# include "utils.hpp"
 # include "Bot.hpp"
 
 # define ERROR_CREAT_GAME "send 'MORFI NEW [gameName]' to create a new game"

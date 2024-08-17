@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:06:53 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:17:40 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <Server.hpp>
 #include <ft_error.hpp>
 #include <iostream>
-#include <vector>
 #include <signal.h>
 
 int	g_exiting = 0;

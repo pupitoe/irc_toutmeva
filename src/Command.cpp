@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:27:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:28:26 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ static bool	isCommand(std::string str) {
  * 	2b. Else, parse normally.
  * */
 Command::Command(std::string msg) throw (IRCError) {
-	if (msg.length() > MESSAGES_LIMIT)
-		throw (IRCError(ERR_INPUTTOOLONG));
 	std::cout << "cmd all: " << msg << std::endl << "FIN COMM"<< std::endl;	
 	//Command
 	ft_split_word(msg, this->_args);
