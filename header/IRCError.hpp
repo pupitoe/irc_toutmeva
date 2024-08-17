@@ -6,16 +6,16 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:21:08 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:41:41 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef IRCERROR_HPP
 # define IRCERROR_HPP
 
 # include <exception>
 # include <string>
+
 # include "utils.hpp"
 # include "Client.hpp"
 
@@ -31,9 +31,8 @@
 # define ERR_ALREADYREGISTERED	"462"
 # define ERR_PASSWDMISMATCH		"464" // also used when no password provided
 
-// Don't forget to see if everything is correctly used.
-class IRCError : public std::exception {
-
+class IRCError : public std::exception
+{
 	private :
 		std::string	_err;
 		std::string	_str;
@@ -43,6 +42,7 @@ class IRCError : public std::exception {
 		IRCError(void);
 
 		std::string	_gen_reply(void) const;
+		
 	public :
 		IRCError(std::string err, std::string str = "", std::string str2 = "");
 		~IRCError(void) throw();

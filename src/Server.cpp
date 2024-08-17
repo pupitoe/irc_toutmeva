@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:28:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:42:55 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,6 @@ void	Server::addBot(void) // cause des problem
 			delete buffer;
 		}
 	}
-}
-
-fd_set	Server::getFdSet(void) const
-{
-	return (this->_rfds);
-}
-
-Client	*Server::getClient(int const fd)
-{
-	Client	*buffer;
-
-	buffer = NULL;
-	if (this->_clientList.find(fd) != this->_clientList.end())
-		buffer = this->_clientList.find(fd)->second;
-	return (buffer);
 }
 
 void	Server::addClient(int const fd)

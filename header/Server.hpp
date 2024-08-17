@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:09:14 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:20:09 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:42:32 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,6 @@ class	Server
 	public:
 		Server(char *psw, int port);
 		~Server(void);
-
-		fd_set	getFdSet(void) const;
-		Client	*getClient(int const fd);
 
 		int		getStatus(void) const;
 
