@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 22:57:19 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 00:16:05 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ std::string	IRCError::_gen_reply(void) const
 	else if (_err == ERR_PASSWDMISMATCH)
 		res.append(_str + " :Password incorrect");
 	else if (_err == ERR_NICKNAMEINUSE)
-		res.append(_str + " :Nickname is already in use");
+		res.append(" * " + _str + " :Nickname is already in use");
 	else
 		res.append(" :error not implemented");
 	res.append("\r\n");
