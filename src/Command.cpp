@@ -3,20 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Command.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:27:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:14:14 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Command.hpp>
-#include <iostream>
 
-#include <sstream>
-#include <algorithm>
-
-static bool	isCommand(std::string str) {
+static bool	isCommand(std::string str)
+{
 	unsigned int	i = 0;
 	while (str[i]) {
 		if (str[i] < 65 || str[i] > 90)
@@ -42,18 +39,16 @@ static bool	isCommand(std::string str) {
  *	2a. If it begins with ":" , then the rest of msg is final param
  * 	2b. Else, parse normally.
  * */
-Command::Command(std::string msg) throw (IRCError) {
-	if (msg.length() > MESSAGES_LIMIT)
-		throw (IRCError(ERR_INPUTTOOLONG));
-	std::cout << "cmd all: " << msg << std::endl << "FIN COMM"<< std::endl;	
-	//Command
+Command::Command(std::string msg)
+	throw (IRCError)
+{
 	ft_split_word(msg, this->_args);
-	std::string&	word = this->_args.front();
+	std::string	&word = this->_args.front();
 	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
 		word[i] = std::toupper(this->_args.front()[i]);
 	}
 	if (!isCommand(word))
-		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
+		throw (IRCError(ERR_UNKNOWNERROR));
 	this->_type = EMPTY;
 	if (this->_args.size())
 		this->_command_name = word;
@@ -68,7 +63,6 @@ void	ft_split_word(std::string const& msg, std::list<std::string>& args)
 	str >> word;
 	args.push_back(word);
 
-	//Parameters
 	while (str >> word) {
 		if (word[0] == ':') {
 			if (str.tellg() > 0 && (size_t)str.tellg() < str.str().length())
@@ -96,11 +90,6 @@ std::list<std::string>	Command::getArgs(void) const
 cmd_type	Command::getType(void) const
 {
 	return (_type);
-}
-
-std::ostream	&operator<<(std::ostream &out, Command const &c)
-{
-	return (out << c.getArgs().front());
 }
 
 void	Command::errorMessage(int error, Client *client,
@@ -132,3 +121,8 @@ std::string	ft_getArg(std::list<std::string>& args)
 	}
 	return (buffer);
 }
+
+// std::ostream	&operator<<(std::ostream &out, Command const &c)
+// {
+// 	return (out << c.getArgs().front());
+// }

@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 23:15:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:24:31 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
-#include <iostream>
 
 void	ConnexionCommand::_testPassword(void) const
 {
@@ -78,11 +77,10 @@ void	ConnexionCommand::_registration(Client &c) const
 		|| c.getNickName().find(':') != std::string::npos)
 	{
 		c.removeStatus(CS_SETNICKNAME);
-		// c.setHostName(""); //todo,
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
 	
-	if (!(c.getStatusClient() & CS_SETPASS))
+	if (!(c.getStatus() & CS_SETPASS))
 	{
 		c.removeStatus(CS_FINISH_REGISTER);
 		throw IRCError(ERR_PASSWDMISMATCH, c.getNickName());
@@ -100,10 +98,8 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer(SERVERNAME);
 	c.addRPLBuffer(" 001 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :Welcome to the ");
-	c.addRPLBuffer("ft_irc");
-	c.addRPLBuffer(" Network ");
-	c.addRPLBuffer(c.getNickName()); // Modulable comme on le souhaite
+	c.addRPLBuffer(" :Welcome to the ft_irc_42 Network, ");
+	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer("\r\n");
 
 	//RPL YOUR HOST
@@ -119,15 +115,14 @@ void	ConnexionCommand::_registration(Client &c) const
 	// RPL MYINFO
 	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 004 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :absent 1.2.3.4");
-	c.addRPLBuffer(" :itkol");
-	c.addRPLBuffer("\r\n");
+	c.addRPLBuffer(" ");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" 1.2.3.4 * itkol klo\r\n");
 
 	// RPL ISUPPORT
 	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 005 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :MODES");
-	c.addRPLBuffer(" :are supported by this server\r\n");
+	c.addRPLBuffer(" MODES :are supported by this server\r\n");
 
 	//RPL MOTD
 	addMOTD(c);
@@ -135,9 +130,9 @@ void	ConnexionCommand::_registration(Client &c) const
 
 int	ConnexionCommand::_execPass(Client &c)
 {
-	if (c.getStatusClient() == CS_CONNECTED)
+	if (c.getStatus() == CS_CONNECTED)
 		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
-	if (c.getStatusClient() == CS_SETUSER || c.getStatusClient() == CS_SETNICKNAME)
+	if (c.getStatus() == CS_SETUSER || c.getStatus() == CS_SETNICKNAME)
 	{
 		c.removeStatus(CS_SETUSER);
 		c.removeStatus(CS_SETNICKNAME);
@@ -150,7 +145,6 @@ int	ConnexionCommand::_execPass(Client &c)
 		c.removeStatus(CS_SETPASS);
 		return (0);
 	}
-	//Verifications a terminer
 	c.addStatus(CS_SETPASS);
 	return (0);
 }
@@ -169,19 +163,21 @@ int	ConnexionCommand::_execNick(Client &c)
 {
 	_args.pop_front();
 	c.addStatus(CS_SETNICKNAME);
-	if (c.getStatusClient() & CS_CONNECTED)
+	if (c.getStatus() & CS_CONNECTED)
 		changeNickname(c, _args.front());
-	else if (c.getStatusClient() & CS_FINISH_REGISTER)
+	else if (c.getStatus() & CS_FINISH_REGISTER)
 		c.setNickName(_args.front());
-	if (c.getStatusClient() == CS_FINISH_REGISTER
-		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))
+	if (c.getStatus() == CS_FINISH_REGISTER
+		|| c.getStatus() == (CS_FINISH_REGISTER | CS_SETPASS))
 		_registration(c);
 	return (0);
 }
 
-// https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
+// src : https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
 int	ConnexionCommand::_execUser(Client &c)
 {
+	if (c.getStatus() & CS_CONNECTED)
+		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
 	_args.pop_front();
 	c.setUserName(_args.front());
 	_args.pop_front();
@@ -191,8 +187,8 @@ int	ConnexionCommand::_execUser(Client &c)
 	_args.pop_front();
 	c.setRealName(_args.front());
 	c.addStatus(CS_SETUSER);
-	if (c.getStatusClient() == CS_FINISH_REGISTER
-		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))	
+	if (c.getStatus() == CS_FINISH_REGISTER
+		|| c.getStatus() == (CS_FINISH_REGISTER | CS_SETPASS))	
 		_registration(c);
 	return (0);
 }

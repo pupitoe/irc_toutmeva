@@ -6,16 +6,11 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 18:14:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:03:24 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <irc_tout_me_va.hpp>
-#include <Server.hpp>
-#include <ft_error.hpp>
-#include <iostream>
-#include <vector>
-#include <signal.h>
 
 int	g_exiting = 0;
 
@@ -25,7 +20,8 @@ void	handler(int)
 	g_exiting = 1;
 }
 
-bool	is_number(char *str){
+bool	is_number(char *str)
+{
 	int	i = 0;
 
 	while (str[i]){
@@ -53,12 +49,13 @@ int	main(int argc, char **argv)
 		if (server.getStatus() == SUCCESS)
 		{
 			while (!g_exiting)
-				server.execut();
+				server.execute();
 		}
-		return (0);
+		return (SUCCESS);
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 	}
+	return (FAIL);
 }

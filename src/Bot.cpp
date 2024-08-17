@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Bot.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 15:23:40 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:06:50 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Bot.hpp>
 #include <BotCommand.hpp>
 
-Bot::Bot(int const client_fd): Client(client_fd)
+Bot::Bot(void): Client()
 {
 	this->_nickName = BOT_NAME;
 	this->_bot = true;
@@ -35,10 +35,7 @@ Bot::~Bot(void)
 
 void	Bot::RPL(std::string const str)
 {
-	BotCommand	cmd(str, this);
-
-	cmd.execute();
-	std::cout << "RPL BOT STR: " << str << std::endl;
+	BotCommand(str, this).execute();
 }
 
 std::map<std::string, Morfi*>&	Bot::getMorfi(void)
@@ -56,7 +53,7 @@ int	Bot::getMorfiStat(std::string const& target)
 	return (game->second->getRound());
 }
 
-bool	Bot::creatGame(std::string const& target, std::string const gameName)
+bool	Bot::createGame(std::string const& target, std::string const gameName)
 {
 	Morfi	*buffer;
 	bool	status;

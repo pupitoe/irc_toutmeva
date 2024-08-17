@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 15:38:41 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:19:45 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	Channel::inOpLst(Client *client) const
 		!= this->_operators.end());
 }
 
-int	Channel::inInvitLst(Client *client) const
+int	Channel::inInviteList(Client *client) const
 {
 	return (std::find(this->_invite_lst.begin(),
 		this->_invite_lst.end(), client) != this->_invite_lst.end());
@@ -100,7 +100,7 @@ void	Channel::RPL_ENDOFNAMES(Client *client)
 		+ client->getNickName() + " " + this->_name + " :End of NAMES list\n");
 }
 
-void	Channel::join_super_user(Client* client_rqst)
+void	Channel::joinSuperUser(Client* client_rqst)
 {
 	std::stringstream	ss;
 
@@ -118,7 +118,7 @@ void	Channel::RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
 		+ " " + this->_name + " :Cannot join channel (+" + type +")\n");
 }
 
-int	Channel::join_check(Client *client_rqst, std::string const& key)
+int	Channel::joinCheck(Client *client_rqst, std::string const& key)
 {
 	if (client_rqst->getBot() == true)
 	{
@@ -135,7 +135,7 @@ int	Channel::join_check(Client *client_rqst, std::string const& key)
 		this->RPL_JOIN_MSG_ERR(client_rqst, "471", 'l');
 		return (ERR_CHANNELISFULL);
 	}
-	if (this->_invite_only && this->inInvitLst(client_rqst) == false)
+	if (this->_invite_only && this->inInviteList(client_rqst) == false)
 	{
 		this->RPL_JOIN_MSG_ERR(client_rqst, "473", 'i');
 		return (ERR_INVITEONLYCHAN);
@@ -153,11 +153,11 @@ int	Channel::join(Client *client_rqst, std::string const& key)
 {
 	int status;
 
-	status = this->join_check(client_rqst, key);
+	status = this->joinCheck(client_rqst, key);
 	if (status)
 		return (status);
 	if (this->_super_user_set == false)
-		this->join_super_user(client_rqst);
+		this->joinSuperUser(client_rqst);
 	this->_client.push_back(client_rqst);
 	this->sendAll(":" + client_rqst->getInfo() + " JOIN " + this->_name
 		+ "\n");
@@ -225,7 +225,7 @@ void	Channel::kickActiv(Client* client_rqst, std::string const& userKick,
 		buffer = ":" + client_rqst->getInfo() + " KICK "
 			+ this->_name + " " + user->getNickName() + " ";
 		if (comment.empty())
-			buffer += "a moderator kick u sorry\n";
+			buffer += "A moderator kick u, sorry, not sorry\n";
 		else
 			buffer += comment + "\n";
 		this->sendAll(buffer);
@@ -354,7 +354,7 @@ void	closeChannel(std::string const& channelName,
 	}
 }
 
-void	Channel::sendInvitClient(Client* client_rqst,
+void	Channel::sendInviteClient(Client* client_rqst,
 	std::string const& userName, std::map<int, Client *>& clientsLst)
 {
 	Client	*buffer;
@@ -388,7 +388,7 @@ int	Channel::invite(Client* client_rqst, std::string const& userName,
 			if (!this->getClient(userName))
 			{
 				status = SUCCESS;
-				this->sendInvitClient(client_rqst, userName, clientsLst);
+				this->sendInviteClient(client_rqst, userName, clientsLst);
 			}
 			else
 				this->ERR_USERONCHANNEL_MSG(client_rqst, userName);

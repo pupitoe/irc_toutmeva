@@ -3,22 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:02:56 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:25:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNELCOMMAND_HPP
 # define CHANNELCOMMAND_HPP
 
-# include <Command.hpp>
 # include <string>
-# include <sstream>
 # include <iostream>
 # include <cstring>
-# include "irc_tout_me_va.hpp"
+# include <algorithm>
+
+# include "Command.hpp"
+# include "Channel.hpp"
+# include "utils.hpp"
+
+# define MODE_CHANNEL 0
+# define MODE_FLAGS 1
+# define RESERV_BITS 255U
+# define FLAG_USED 1
+# define FLAG_NO_USED 2
+# define MODE_SIGNE_BIT (1 << 9)
 
 typedef struct s_modePreParserUtils
 {
@@ -45,14 +54,14 @@ class ChannelCommand : public Command
 			int &signe, int caracter) const;
 		int	privmsg(Client *client, std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst);
-		int	privmsg_exec(Client *client,
+		int	privmsgExec(Client *client,
 			std::map<std::string, Channel *>& channels,
 			std::map<int, Client *>& clientLst, std::string const& target,
 			std::string const& message);
-		int	privmsg_exec_channel(Client *client,
+		int	privmsgExecChannel(Client *client,
 			std::map<std::string, Channel *>& channels,
 			std::string const& target, std::string const& message);
-		int	privmsg_exec_client(Client *client,
+		int	privmsgExecClient(Client *client,
 			std::map<int, Client *>& clientLst, std::string const& target,
 			std::string const& message);
 
@@ -60,15 +69,15 @@ class ChannelCommand : public Command
 
 		int	channelFormating(std::string const& name);
 
-		int	join_channel(Client* user_rqts, std::string const& channelName,
+		int	joinChannel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels, std::string const& key);
-		int	part_channel(Client* user_rqts, std::string const& channelName,
+		int	partChannel(Client* user_rqts, std::string const& channelName,
 			std::map<std::string, Channel *>& channels,
 			std::string const& reason);
-		int	kick_channel(Client* user_rqts, std::string const& channelName,
+		int	kickChannel(Client* user_rqts, std::string const& channelName,
 			std::string const& userKick, std::string const& comment,
 			std::map<std::string, Channel *>& channels);
-		int	topic_channel(Client* user_rqts,
+		int	topicChannel(Client* user_rqts,
 			std::string const& channelName, std::string const& newTopic,
 			int topicHaveArg, std::map<std::string, Channel *>& channels);
 

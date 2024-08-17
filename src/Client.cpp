@@ -3,35 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 23:05:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:53:19 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
-# include <iostream>
 
-Client::Client(int const client_fd): _fd(client_fd)
+Client::Client(void)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
-	this->_nickName = "miwelpaupse/neskwuiksss";
+	this->_nickName = "a";
 	this->_sendPing = false;
 	this->_bot = false;
-	std::cout << "client created: " << client_fd << std::endl;
 }
 
-Client::~Client(void) {
-}
-
-int		Client::getFd(void) const
+Client::~Client(void)
 {
-	return (this->_fd);
 }
 
-int	Client::getStatusClient(void) const 
+int	Client::getStatus(void) const 
 {
 	return (this->_status_connection);
 }
@@ -103,7 +97,7 @@ std::string	Client::getCommand(void)
 	size_t		len;
 
 	len = 0;
-	if (this->getCommandValible())
+	if (this->getCommandValided())
 	{
 		cmd = this->_bufferCommand.substr(0,
 			this->_bufferCommand.find_first_of('\n'));
@@ -121,7 +115,7 @@ std::string	Client::getCommand(void)
 	return (cmd);
 }
 
-bool	Client::getCommandValible(void)
+bool	Client::getCommandValided(void)
 {
 	return (this->_bufferCommand.find_first_of('\n')
 		< this->_bufferCommand.length());

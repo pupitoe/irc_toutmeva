@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+         #
+#    By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/05/27 11:52:59 by tlassere          #+#    #+#              #
-#    Updated: 2024/08/13 20:55:04 by tlassere         ###   ########.fr        #
+#    Updated: 2024/08/17 18:23:33 by ggiboury         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,6 @@ SOURCES_MAIN	::= irc_tout_me_va $(SOURCES_UTIL)
 SOURCES			::= $(foreach buffer, $(SOURCES_MAIN), $(SOURCES_PATH)$(buffer).cpp)
 OBJS			::= $(SOURCES:.cpp=.o)
 HEADERS			::= header/
-HEADERS_CONTENT	::= $(HEADERS)irc_tout_me_va.hpp 
 CXXFLAGS		::= -Wall -Wextra -Werror -std=c++98 -g3
 CXX				::= c++
 
@@ -29,7 +28,7 @@ all: $(NAME)
 .cpp.o :
 	$(CXX) $(CXXFLAGS) -I$(HEADERS) -c -o $@ $<
 
-$(NAME): $(OBJS) $(HEADERS_CONTENT)
+$(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 clean:

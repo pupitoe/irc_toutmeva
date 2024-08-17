@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 15:39:13 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:21:45 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-# include "Client.hpp"
-# include "irc_tout_me_va.hpp"
-# include "IRCError.hpp"
 # include <list>
 # include <string>
 # include <algorithm>
@@ -23,32 +20,15 @@
 # include <ctime>
 # include <sstream>
 
+# include "Client.hpp"
+# include "utils.hpp"
+# include "IRCError.hpp"
+
 # define MODE_ADD 1
 # define MODE_REMOVE 0
 # define LIMIT_USER_IN_CHANNEL 4048
 
 typedef	unsigned int	userlimit;
-
-enum	retChannel
-{
-	ECHAN_BAD_ALLOC = 2,
-	ECHAN_ALREADY_REGISTERED,
-	ECHAN_NOT_REGISTERED,
-	ERR_NOSUCHCHANNEL,
-	ERR_BADCHANNELKEY,
-	ERR_CHANNELISFULL,
-	ERR_INVITEONLYCHAN,
-	ERR_BADCHANMASK,
-	ERR_CHANOPRIVSNEEDED,
-	RPL_TOPIC,
-	RPL_TOPICWHOTIME,
-	RPL_NAMREPLY,
-	RPL_ENDOFNAMES,
-
-	GOOD_REGISTER,
-	GOOD_PART,
-	BOT_NOT_PART
-};
 
 enum	userChannelGrade
 {
@@ -87,16 +67,16 @@ class	Channel
 
 		int	inLst(Client *client) const;
 		int	inOpLst(Client *client) const;
-		int	inInvitLst(Client *client) const;
+		int	inInviteList(Client *client) const;
 
 		void	RPL_NAMREPLY(Client *client);
 		void	RPL_ENDOFNAMES(Client *client);
 		void	RPL_CREATIONTIME(Client* client_rqst);
 
 
-		void	join_super_user(Client* client_rqst);
-		int	userGrade(std::string const& nickName);
-		int	join_check(Client *client_rqst, std::string const& key);
+		void	joinSuperUser(Client* client_rqst);
+		int		userGrade(std::string const& nickName);
+		int		joinCheck(Client *client_rqst, std::string const& key);
 
 		void	kickActiv(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
@@ -111,7 +91,7 @@ class	Channel
 
 		int		modeBasic(bool *modeVar, int signe, char typeMode,
 			Client *client_rqst);
-		void	sendInvitClient(Client* client_rqst,
+		void	sendInviteClient(Client* client_rqst,
 			std::string const& userName, std::map<int, Client *>& clientsLst);
 		void	RPL_MODE_L(Client *client_rqst);
 		void	RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,

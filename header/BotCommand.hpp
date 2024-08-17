@@ -3,20 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   BotCommand.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:11:49 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:12:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BOTCOMMAND_HPP
 # define BOTCOMMAND_HPP
 
-# include <Command.hpp>
 # include <string>
 # include <iostream>
-# include "irc_tout_me_va.hpp"
+
+# include "Command.hpp"
+# include "utils.hpp"
 # include "Bot.hpp"
 
 # define ERROR_CREAT_GAME "send 'MORFI NEW [gameName]' to create a new game"
@@ -46,7 +47,7 @@ class BotCommand
 		void	playRoundActFormat(unsigned int i, std::string const& gameName);
 
 		void	morfiGame(void);
-		bool	morfiCheckCreatGame(void);
+		bool	morfiCheckCreateGame(void);
 		void	morfiGameAct(std::string& arg, std::string& gameName);
 		std::string	getLineMorfi(int const *grid, int line) const;
 		void	morfiGamePlace(Morfi *game, std::string const& gameName);

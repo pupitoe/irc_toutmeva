@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 21:05:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:29:35 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-# include <queue>
 # include <map>
 # include <string>
 # include <ctime>
@@ -32,7 +31,6 @@ enum	CStatus
 class	Client
 {
 	protected:
-		int const	_fd;
 		int			_status_connection;
 
 		std::string	_nickName;
@@ -50,11 +48,10 @@ class	Client
 		bool		_bot;
 
 	public:
-		Client(int const client_fd);
+		Client(void);
 		virtual ~Client(void);
 		
-		int		getStatusClient(void) const;
-		int		getFd(void) const;
+		int		getStatus(void) const;
 		void	terminateConnection(void);
 
 		void	setNickName(std::string const& str);
@@ -68,7 +65,7 @@ class	Client
 
 		std::string const&	getCommandBuffer(void) const;
 		std::string			getCommand(void);
-		bool				getCommandValible(void);
+		bool				getCommandValided(void);
 		void				addCommandBuffer(char const *cmd);
 		void				addCommandBuffer(std::string const& cmd);
 

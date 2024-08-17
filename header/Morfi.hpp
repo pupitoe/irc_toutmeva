@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Morfi.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 20:51:51 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/15 21:23:36 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:39:37 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <cstdlib>
 # include <ctime>
 # include <cstring>
-# include "irc_tout_me_va.hpp"
+# include "utils.hpp"
 
 # define CASE_NO_SET 0
 # define CASE_P1 1

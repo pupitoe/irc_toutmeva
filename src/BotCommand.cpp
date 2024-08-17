@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BotCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 16:19:51 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:13:33 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 BotCommand::BotCommand(std::string msg, Bot *cbot): _cbot(cbot)
 {
-	std::cout << "Bot cmd" << std::endl;
 	ft_split_word(msg, this->_args);
 	this->_user = this->getUserName(this->getArg());
 	this->_cmd = this->getArg();
@@ -69,7 +68,6 @@ void	BotCommand::invite(void)
 	channelTarget = this->getArg();
 	this->_cbot->addCommandBuffer("JOIN " + channelTarget
 		+ " " + this->_user + "\n");
-	//this->sendPrivmsg(this->_user, "tkt frefro");
 }
 
 void	BotCommand::badJoinChan(void)
@@ -202,7 +200,7 @@ void	BotCommand::sendRound(std::string const& gameName)
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 2));
 }
 
-bool	BotCommand::morfiCheckCreatGame(void)
+bool	BotCommand::morfiCheckCreateGame(void)
 {
 	bool	ret;
 
@@ -226,9 +224,9 @@ void	BotCommand::morfiGame(void)
 	{
 		arg = this->getArg();
 		gameName = this->getArg();
-		if (arg == "NEW" && !gameName.empty() && this->morfiCheckCreatGame())
+		if (arg == "NEW" && !gameName.empty() && this->morfiCheckCreateGame())
 		{
-			if (this->_cbot->creatGame(this->_user, gameName))
+			if (this->_cbot->createGame(this->_user, gameName))
 			{
 				this->sendPrivmsg(this->_user,
 					"a new part has been created with "

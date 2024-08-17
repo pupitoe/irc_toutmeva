@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:02:39 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:12:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ class Command;
 
 # include <string>
 # include <exception>
-# include <map>
+# include <sstream>
+# include <list>
+# include <algorithm>
 
 # include <IRCError.hpp>
-# include <Channel.hpp>
+
+# define MESSAGES_LIMIT 512
 
 enum type {
 	ERR,
@@ -28,7 +31,7 @@ enum type {
 	CONNEXION,
 	CHANNEL
 }	typedef cmd_type;
-# define MESSAGES_LIMIT 512
+
 /*
 * Polymorphic class
 * */
@@ -38,7 +41,7 @@ class Command
 	protected :
 		std::string 			_command_name;
 		std::list<std::string>	_args;
-		cmd_type				_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
+		cmd_type				_type;
 		size_t					_nb_arg;
 
 		void	errorMessage(int error, Client *client,
@@ -56,9 +59,10 @@ class Command
 		virtual enum type getType(void) const;
 };
 
-std::ostream   &operator<<(std::ostream &, Command const &);
 void			ft_split_word(std::string const& msg,
 	std::list<std::string>& args);
 std::string		ft_getArg(std::list<std::string>& arg);
+
+// std::ostream   &operator<<(std::ostream &, Command const &);
 
 # endif
