@@ -6,16 +6,17 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:40:17 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:58:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:12:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BOTCOMMAND_HPP
 # define BOTCOMMAND_HPP
 
-# include <Command.hpp>
 # include <string>
 # include <iostream>
+
+# include "Command.hpp"
 # include "utils.hpp"
 # include "Bot.hpp"
 
@@ -46,7 +47,7 @@ class BotCommand
 		void	playRoundActFormat(unsigned int i, std::string const& gameName);
 
 		void	morfiGame(void);
-		bool	morfiCheckcreateGame(void);
+		bool	morfiCheckCreateGame(void);
 		void	morfiGameAct(std::string& arg, std::string& gameName);
 		std::string	getLineMorfi(int const *grid, int line) const;
 		void	morfiGamePlace(Morfi *game, std::string const& gameName);

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:58:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:12:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void	BotCommand::sendRound(std::string const& gameName)
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 2));
 }
 
-bool	BotCommand::morfiCheckcreateGame(void)
+bool	BotCommand::morfiCheckCreateGame(void)
 {
 	bool	ret;
 
@@ -226,7 +226,7 @@ void	BotCommand::morfiGame(void)
 	{
 		arg = this->getArg();
 		gameName = this->getArg();
-		if (arg == "NEW" && !gameName.empty() && this->morfiCheckcreateGame())
+		if (arg == "NEW" && !gameName.empty() && this->morfiCheckCreateGame())
 		{
 			if (this->_cbot->createGame(this->_user, gameName))
 			{
