@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/07/28 18:14:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:06:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main(int argc, char **argv)
 		if (server.getStatus() == SUCCESS)
 		{
 			while (!g_exiting)
-				server.execut();
+				server.execute();
 		}
 		return (0);
 	}

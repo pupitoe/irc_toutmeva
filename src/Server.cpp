@@ -3,29 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 15:40:15 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:06:39 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(void) : _socket(0) {
-	_password = "1234";
-	// set the fd table at 0
-	FD_ZERO(&this->_rfds);
-	FD_ZERO(&this->_rfds_error);
-	FD_ZERO(&this->_rfds_read);
-	FD_ZERO(&this->_rfds_write);
-	this->_status_server = SUCCESS;
-}
-
 Server::~Server(void)
 {
 	while (this->_clientList.begin() != this->_clientList.end())
-		this->deletClient(this->_clientList.begin()->first, true);
+		this->deleteClient(this->_clientList.begin()->first, true);
 	while (this->_channels.begin() != this->_channels.end())
 	{
 		delete (this->_channels.begin()->second);
@@ -42,7 +32,7 @@ Server::Server(char *psw, int port) : _password(psw), _socket(port)
 	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
 	// SOCK_STREAM permet de creer un flux binaire n
 	this->addBot();
-	this->_status_server = SUCCESS;
+	this->_status = SUCCESS;
 }
 
 void	Server::addBot(void) // cause des problem
@@ -84,7 +74,7 @@ void	Server::addClient(int const fd)
 {
 	Client	*buffer;
 
-	if (this->_status_server == SUCCESS
+	if (this->_status == SUCCESS
 		&& this->_clientList.find(fd) == this->_clientList.end())
 	{
 		buffer = new (std::nothrow) Client(fd);
@@ -111,7 +101,7 @@ void	Server::searchClient(void)
 {
 	int	new_client;
 	
-	if (this->_status_server == SUCCESS)
+	if (this->_status == SUCCESS)
 	{
 		new_client = accept(this->_socket.getSocketFd(), NULL, 0);
 		if (new_client != -1)
@@ -121,12 +111,12 @@ void	Server::searchClient(void)
 	}
 }
 
-void	Server::deletClient(int const fd, bool serverTerminate)
+void	Server::deleteClient(int const fd, bool serverTerminate)
 {
 	std::map<std::string, Channel *>::iterator	it_channel;
 	std::map<std::string, Channel *>::iterator	it_old_channel;
 
-	if ( this->_status_server == SUCCESS
+	if ( this->_status == SUCCESS
 		&& this->_clientList.find(fd) != this->_clientList.end())
 	{
 		it_channel = this->_channels.begin();
@@ -151,7 +141,7 @@ void	Server::deletClient(int const fd, bool serverTerminate)
 
 int		Server::getStatus(void) const
 {
-	return (this->_status_server);
+	return (this->_status);
 }
 
 void	Server::clientRecvMessage(int const client_fd, Client& client)
@@ -255,9 +245,9 @@ void	Server::eraseClient(void)
 	{
 		itNext = it;
 		itNext++;
-		if (it->second->getStatusClient() == CS_TERMINATED)
+		if (it->second->getStatus() == CS_TERMINATED)
 		{
-			this->deletClient(it->first, false);
+			this->deleteClient(it->first, false);
 		}
 		it = itNext;
 	}
@@ -331,7 +321,7 @@ void	Server::userPing(void)
 	}
 }
 
-void	Server::execut(void)
+void	Server::execute(void)
 {
 	this->useSelect();
 	this->searchClient();

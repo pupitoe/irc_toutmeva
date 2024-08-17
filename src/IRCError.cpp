@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRCError.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 00:16:05 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 17:41:34 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,24 @@ std::string	IRCError::_gen_reply(void) const
 	res.append(" ");
 	if (_err == ERR_UNKNOWNERROR)
 		res.append(_str + " " + _str2 + " :Unexpected behaviour");
+	else if (_err == ERR_NOSUCHNICK)
+		res.append(_str + " " + _str2 + " :No such nick/channel");
+	else if (_err == ERR_INPUTTOOLONG)
+		res.append(_str + " :Input line was too long.");
 	else if (_err == ERR_UNKNOWNCOMMAND)
 		res.append(_str + " " + _str2 + " :Unknown command");
 	else if (_err == ERR_ERRONEUSNICKNAME)
 		res.append(_str + " " + _str2 + " :Erroneus nickname");
+	else if (_err == ERR_NICKNAMEINUSE)
+		res.append(_str + " " + _str2 + " :Nickname is already in use");
 	else if (_err == ERR_NOTREGISTERED)
 		res.append(_str + " :You have not registered");
 	else if (_err == ERR_NEEDMOREPARAMS)
 		res.append(_str + " " + _str2 + " :Not enough parameters");
+	else if (_err == ERR_ALREADYREGISTERED)
+		res.append(_str + " :You may not reregister");
 	else if (_err == ERR_PASSWDMISMATCH)
 		res.append(_str + " :Password incorrect");
-	else if (_err == ERR_NICKNAMEINUSE)
-		res.append(" * " + _str + " :Nickname is already in use");
 	else
 		res.append(" :error not implemented");
 	res.append("\r\n");

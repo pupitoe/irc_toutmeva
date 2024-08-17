@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 23:15:24 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 17:46:26 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	ConnexionCommand::_registration(Client &c) const
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
 	
-	if (!(c.getStatusClient() & CS_SETPASS))
+	if (!(c.getStatus() & CS_SETPASS))
 	{
 		c.removeStatus(CS_FINISH_REGISTER);
 		throw IRCError(ERR_PASSWDMISMATCH, c.getNickName());
@@ -135,9 +135,9 @@ void	ConnexionCommand::_registration(Client &c) const
 
 int	ConnexionCommand::_execPass(Client &c)
 {
-	if (c.getStatusClient() == CS_CONNECTED)
+	if (c.getStatus() == CS_CONNECTED)
 		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
-	if (c.getStatusClient() == CS_SETUSER || c.getStatusClient() == CS_SETNICKNAME)
+	if (c.getStatus() == CS_SETUSER || c.getStatus() == CS_SETNICKNAME)
 	{
 		c.removeStatus(CS_SETUSER);
 		c.removeStatus(CS_SETNICKNAME);
@@ -169,12 +169,12 @@ int	ConnexionCommand::_execNick(Client &c)
 {
 	_args.pop_front();
 	c.addStatus(CS_SETNICKNAME);
-	if (c.getStatusClient() & CS_CONNECTED)
+	if (c.getStatus() & CS_CONNECTED)
 		changeNickname(c, _args.front());
-	else if (c.getStatusClient() & CS_FINISH_REGISTER)
+	else if (c.getStatus() & CS_FINISH_REGISTER)
 		c.setNickName(_args.front());
-	if (c.getStatusClient() == CS_FINISH_REGISTER
-		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))
+	if (c.getStatus() == CS_FINISH_REGISTER
+		|| c.getStatus() == (CS_FINISH_REGISTER | CS_SETPASS))
 		_registration(c);
 	return (0);
 }
@@ -182,6 +182,8 @@ int	ConnexionCommand::_execNick(Client &c)
 // https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
 int	ConnexionCommand::_execUser(Client &c)
 {
+	if (c.getStatus() & CS_CONNECTED)
+		throw (IRCError(ERR_ALREADYREGISTERED, c.getNickName()));
 	_args.pop_front();
 	c.setUserName(_args.front());
 	_args.pop_front();
@@ -191,8 +193,8 @@ int	ConnexionCommand::_execUser(Client &c)
 	_args.pop_front();
 	c.setRealName(_args.front());
 	c.addStatus(CS_SETUSER);
-	if (c.getStatusClient() == CS_FINISH_REGISTER
-		|| c.getStatusClient() == (CS_FINISH_REGISTER | CS_SETPASS))	
+	if (c.getStatus() == CS_FINISH_REGISTER
+		|| c.getStatus() == (CS_FINISH_REGISTER | CS_SETPASS))	
 		_registration(c);
 	return (0);
 }

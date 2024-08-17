@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 21:05:55 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 17:44:45 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class	Client
 		Client(int const client_fd);
 		virtual ~Client(void);
 		
-		int		getStatusClient(void) const;
+		int		getStatus(void) const;
 		int		getFd(void) const;
 		void	terminateConnection(void);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 23:05:00 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:00:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ Client::Client(int const client_fd): _fd(client_fd)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
-	this->_nickName = "miwelpaupse/neskwuiksss";
+	this->_nickName = "*";
 	this->_sendPing = false;
 	this->_bot = false;
 	std::cout << "client created: " << client_fd << std::endl;
 }
 
-Client::~Client(void) {
-}
+Client::~Client(void)
+{}
 
 int		Client::getFd(void) const
 {
 	return (this->_fd);
 }
 
-int	Client::getStatusClient(void) const 
+int	Client::getStatus(void) const 
 {
 	return (this->_status_connection);
 }

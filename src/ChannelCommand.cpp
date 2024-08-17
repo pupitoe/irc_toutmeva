@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ChannelCommand.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:49 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:23:46 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 17:45:30 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int	ChannelCommand::execute(Client *client, std::map<std::string,
 {
 	std::string			buffer;
 
-	if (!(client->getStatusClient() & CS_CONNECTED))
+	if (!(client->getStatus() & CS_CONNECTED))
 		throw (IRCError(ERR_NOTREGISTERED, client->getNickName()));
 	buffer = this->getArg();
 	if (buffer == "JOIN")
