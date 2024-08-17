@@ -6,12 +6,11 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 17:46:26 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:31:07 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ConnexionCommand.hpp>
-#include <iostream>
 
 void	ConnexionCommand::_testPassword(void) const
 {

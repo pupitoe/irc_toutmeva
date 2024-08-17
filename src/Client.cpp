@@ -6,12 +6,11 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:08:57 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:28:16 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
-# include <iostream>
 
 Client::Client(void)
 {
@@ -23,7 +22,8 @@ Client::Client(void)
 }
 
 Client::~Client(void)
-{}
+{
+}
 
 int	Client::getStatus(void) const 
 {

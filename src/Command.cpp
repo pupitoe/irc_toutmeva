@@ -6,15 +6,11 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 19:04:23 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:30:27 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Command.hpp>
-#include <iostream>
-
-#include <sstream>
-#include <algorithm>
 
 static bool	isCommand(std::string str) {
 	unsigned int	i = 0;
@@ -95,11 +91,6 @@ cmd_type	Command::getType(void) const
 	return (_type);
 }
 
-std::ostream	&operator<<(std::ostream &out, Command const &c)
-{
-	return (out << c.getArgs().front());
-}
-
 void	Command::errorMessage(int error, Client *client,
 	std::string const& channelName)
 {
@@ -129,3 +120,8 @@ std::string	ft_getArg(std::list<std::string>& args)
 	}
 	return (buffer);
 }
+
+// std::ostream	&operator<<(std::ostream &out, Command const &c)
+// {
+// 	return (out << c.getArgs().front());
+// }
