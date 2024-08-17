@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 21:39:03 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:24:31 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,7 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer(SERVERNAME);
 	c.addRPLBuffer(" 001 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :Welcome to the ");
-	c.addRPLBuffer("ft_irc 42");
-	c.addRPLBuffer(" Network, ");
+	c.addRPLBuffer(" :Welcome to the ft_irc_42 Network, ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer("\r\n");
 
@@ -119,15 +117,12 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" ");
 	c.addRPLBuffer(SERVERNAME);
-	c.addRPLBuffer(" 1.2.3.4");
-	c.addRPLBuffer(" * itkol lko");
-	c.addRPLBuffer("\r\n");
+	c.addRPLBuffer(" 1.2.3.4 * itkol klo\r\n");
 
 	// RPL ISUPPORT
 	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 005 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :MODES");
-	c.addRPLBuffer(" :are supported by this server\r\n");
+	c.addRPLBuffer(" MODES :are supported by this server\r\n");
 
 	//RPL MOTD
 	addMOTD(c);
