@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:10:08 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:06:50 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,7 @@ Bot::~Bot(void)
 
 void	Bot::RPL(std::string const str)
 {
-	BotCommand	cmd(str, this);
-
-	cmd.execute();
-	std::cout << "RPL BOT STR: " << str << std::endl;
+	BotCommand(str, this).execute();
 }
 
 std::map<std::string, Morfi*>&	Bot::getMorfi(void)

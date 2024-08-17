@@ -6,13 +6,14 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 19:30:27 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:14:14 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Command.hpp>
 
-static bool	isCommand(std::string str) {
+static bool	isCommand(std::string str)
+{
 	unsigned int	i = 0;
 	while (str[i]) {
 		if (str[i] < 65 || str[i] > 90)
@@ -38,10 +39,11 @@ static bool	isCommand(std::string str) {
  *	2a. If it begins with ":" , then the rest of msg is final param
  * 	2b. Else, parse normally.
  * */
-Command::Command(std::string msg) throw (IRCError) {
-	//Command
+Command::Command(std::string msg)
+	throw (IRCError)
+{
 	ft_split_word(msg, this->_args);
-	std::string&	word = this->_args.front();
+	std::string	&word = this->_args.front();
 	for (unsigned int i = 0 ; word[i] != 0 ; i++) {
 		word[i] = std::toupper(this->_args.front()[i]);
 	}
@@ -61,7 +63,6 @@ void	ft_split_word(std::string const& msg, std::list<std::string>& args)
 	str >> word;
 	args.push_back(word);
 
-	//Parameters
 	while (str >> word) {
 		if (word[0] == ':') {
 			if (str.tellg() > 0 && (size_t)str.tellg() < str.str().length())

@@ -116,7 +116,6 @@ int	ChannelCommand::part(Client *client,
 	buffer_channel_name = getPart(channels_name, i);
 	while (i < 100 && buffer_channel_name.empty() == false)
 	{
-		std::cout << getPart(channels_name, i) << std::endl;
 		status = this->partChannel(client, buffer_channel_name, channels,
 			reason);
 		this->errorMessage(status, client, channels_name);

@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:12:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:13:33 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 BotCommand::BotCommand(std::string msg, Bot *cbot): _cbot(cbot)
 {
-	std::cout << "Bot cmd" << std::endl;
 	ft_split_word(msg, this->_args);
 	this->_user = this->getUserName(this->getArg());
 	this->_cmd = this->getArg();
@@ -69,7 +68,6 @@ void	BotCommand::invite(void)
 	channelTarget = this->getArg();
 	this->_cbot->addCommandBuffer("JOIN " + channelTarget
 		+ " " + this->_user + "\n");
-	//this->sendPrivmsg(this->_user, "tkt frefro");
 }
 
 void	BotCommand::badJoinChan(void)

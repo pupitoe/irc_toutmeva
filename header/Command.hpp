@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 19:31:48 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:12:52 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ class Command
 	protected :
 		std::string 			_command_name;
 		std::list<std::string>	_args;
-		cmd_type				_type; // Verifier a la fin si c'est toujours utile d'avoir cet attribut
+		cmd_type				_type;
 		size_t					_nb_arg;
 
 		void	errorMessage(int error, Client *client,

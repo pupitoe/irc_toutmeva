@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:28:16 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:29:35 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ std::string	Client::getCommand(void)
 	size_t		len;
 
 	len = 0;
-	if (this->getCommandValible())
+	if (this->getCommandValided())
 	{
 		cmd = this->_bufferCommand.substr(0,
 			this->_bufferCommand.find_first_of('\n'));
@@ -115,7 +115,7 @@ std::string	Client::getCommand(void)
 	return (cmd);
 }
 
-bool	Client::getCommandValible(void)
+bool	Client::getCommandValided(void)
 {
 	return (this->_bufferCommand.find_first_of('\n')
 		< this->_bufferCommand.length());

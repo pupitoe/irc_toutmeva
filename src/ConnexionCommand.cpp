@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:12:08 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 19:31:07 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:39:03 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void	ConnexionCommand::_registration(Client &c) const
 		|| c.getNickName().find(':') != std::string::npos)
 	{
 		c.removeStatus(CS_SETNICKNAME);
-		// c.setHostName(""); //todo,
 		throw (IRCError(ERR_ERRONEUSNICKNAME, "*", "*"));
 	}
 	
@@ -100,9 +99,9 @@ void	ConnexionCommand::_registration(Client &c) const
 	c.addRPLBuffer(" 001 ");
 	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer(" :Welcome to the ");
-	c.addRPLBuffer("ft_irc");
-	c.addRPLBuffer(" Network ");
-	c.addRPLBuffer(c.getNickName()); // Modulable comme on le souhaite
+	c.addRPLBuffer("ft_irc 42");
+	c.addRPLBuffer(" Network, ");
+	c.addRPLBuffer(c.getNickName());
 	c.addRPLBuffer("\r\n");
 
 	//RPL YOUR HOST
@@ -118,8 +117,10 @@ void	ConnexionCommand::_registration(Client &c) const
 	// RPL MYINFO
 	c.addRPLBuffer(":" + (std::string)SERVERNAME + " 004 ");
 	c.addRPLBuffer(c.getNickName());
-	c.addRPLBuffer(" :absent 1.2.3.4");
-	c.addRPLBuffer(" :itkol");
+	c.addRPLBuffer(" ");
+	c.addRPLBuffer(SERVERNAME);
+	c.addRPLBuffer(" 1.2.3.4");
+	c.addRPLBuffer(" * itkol lko");
 	c.addRPLBuffer("\r\n");
 
 	// RPL ISUPPORT
@@ -149,7 +150,6 @@ int	ConnexionCommand::_execPass(Client &c)
 		c.removeStatus(CS_SETPASS);
 		return (0);
 	}
-	//Verifications a terminer
 	c.addStatus(CS_SETPASS);
 	return (0);
 }
@@ -178,7 +178,7 @@ int	ConnexionCommand::_execNick(Client &c)
 	return (0);
 }
 
-// https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
+// src : https://datatracker.ietf.org/doc/html/rfc1459#section-4.1.3
 int	ConnexionCommand::_execUser(Client &c)
 {
 	if (c.getStatus() & CS_CONNECTED)

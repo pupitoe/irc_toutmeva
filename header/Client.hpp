@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:33:44 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:29:35 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ class	Client
 
 		std::string const&	getCommandBuffer(void) const;
 		std::string			getCommand(void);
-		bool				getCommandValible(void);
+		bool				getCommandValided(void);
 		void				addCommandBuffer(char const *cmd);
 		void				addCommandBuffer(std::string const& cmd);
 

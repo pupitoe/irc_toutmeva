@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:10:26 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:46:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,11 @@ Server::Server(char *psw, int port) : _password(psw), _socket(port)
 	FD_ZERO(&this->_rfds_error);
 	FD_ZERO(&this->_rfds_read);
 	FD_ZERO(&this->_rfds_write);
-	// pour cree un point de communication (AF_INET c'est le protocol IPV4)
-	// SOCK_STREAM permet de creer un flux binaire n
 	this->addBot();
 	this->_status = SUCCESS;
 }
 
-void	Server::addBot(void) // cause des problem
+void	Server::addBot(void)
 {
 	Client	*buffer;
 	int		botFd;
@@ -65,13 +63,12 @@ void	Server::addClient(int const fd)
 		buffer = new (std::nothrow) Client();
 		if (buffer)
 		{
-			// add the new client fd to the table
 			try
 			{
 				this->_clientList.insert(std::pair<int, Client *>(fd, buffer));
 				FD_SET(fd, &this->_rfds);
 			}
-			catch(const std::exception& )
+			catch(const std::exception &e)
 			{
 				close(fd);
 				delete buffer;
@@ -90,9 +87,7 @@ void	Server::searchClient(void)
 	{
 		new_client = accept(this->_socket.getFd(), NULL, 0);
 		if (new_client != -1)
-		{
 			this->addClient(new_client);
-		}
 	}
 }
 
@@ -101,7 +96,7 @@ void	Server::deleteClient(int const fd, bool serverTerminate)
 	std::map<std::string, Channel *>::iterator	it_channel;
 	std::map<std::string, Channel *>::iterator	it_old_channel;
 
-	if ( this->_status == SUCCESS
+	if (this->_status == SUCCESS
 		&& this->_clientList.find(fd) != this->_clientList.end())
 	{
 		it_channel = this->_channels.begin();
@@ -113,7 +108,6 @@ void	Server::deleteClient(int const fd, bool serverTerminate)
 			it_old_channel->second->eraseInviteLst(this->_clientList[fd]);
 			closeChannel(it_old_channel->first, this->_channels);
 		}
-		// remove the client from the table
 		delete this->_clientList[fd];
 		if (fd >= 0)
 		{
@@ -138,17 +132,10 @@ void	Server::clientRecvMessage(int const client_fd, Client& client)
 	while (ret_recv == SIZE_MESSAGE_BUFFER)
 	{
 		ret_recv = recv(client_fd, buffer, SIZE_MESSAGE_BUFFER, MSG_DONTWAIT);
-		// return the message only if the connection is still open (otherwise it crashes)
 		if (ret_recv > 0)
-		{
-			//send(client_fd, buffer, std::strlen(buffer), 0);
 			client.addCommandBuffer(buffer);
-		}
 		else if (ret_recv == 0)
-		{
-			//FD_CLR(client_fd, &this->_rfds_read);
 			client.terminateConnection();
-		}
 		std::memset(buffer, 0, SIZE_MESSAGE_BUFFER);
 	}
 }
@@ -158,7 +145,6 @@ void	Server::clientSendMessage(int const client_fd, Client& client)
 	std::string	buffer;
 
 	buffer = client.getRPL();
-	std::cout << "Sending to client: " << buffer << std::endl;
 	send(client_fd, buffer.c_str(), buffer.length(), 0);
 }
 
@@ -171,7 +157,6 @@ void	Server::clientRecv(void)
 		it = this->_clientList.begin();
 		while (it != this->_clientList.end())
 		{
-			// to check if the requested fd is in the list
 			if (FD_ISSET(it->first, &this->_rfds_read))
 				this->clientRecvMessage(it->first, *it->second);
 			it++;
@@ -187,7 +172,7 @@ void	Server::sendBot(Client *bot)
 
 	cbot = dynamic_cast<Bot *>(bot);
 	rplBuffer = bot->getRPL();
-	if (bot)
+	if (cbot)
 	{
 		while (rplBuffer.empty() == false)
 		{
@@ -207,7 +192,6 @@ void	Server::clientSend(void)
 		it = this->_clientList.begin();
 		while (it != this->_clientList.end())
 		{
-			// to check if the requested fd is in the list
 			if (it->second->getRPLBuffer().empty() == false)
 			{
 				if (FD_ISSET(it->first, &this->_rfds_write))
@@ -269,11 +253,9 @@ void	Server::parseInput(void) {
 	it = this->_clientList.begin();
 	ite = this->_clientList.end();
 	while (it != ite){
-		std::string tkt; // a enveler ca
 		client = it->second;
-		while (client->getCommandValible()){
-			tkt = client->getCommand();		
-			this->parse(tkt, *client);
+		while (client->getCommandValided()){
+			this->parse(client->getCommand(), *client);
 		}
 		it++;
 	}
@@ -324,7 +306,6 @@ static enum type guessType(std::stringstream &input)
 	for (unsigned int i = 0 ; cmd[i] != 0 ; i++) {
 		cmd[i] = std::toupper(cmd[i]);
 	}
-	std::cout << cmd << std::endl;
 	if (!cmd.compare("PASS")|| !cmd.compare("NICK")
 		|| !cmd.compare("USER") || !cmd.compare("QUIT")
 		|| !cmd.compare("CAP") || !cmd.compare("PING")
@@ -342,7 +323,6 @@ static enum type guessType(std::stringstream &input)
 	return (ERR);
 }
 
-// Maybe I'll have to separate the exception handler from the parsing
 void	Server::parse(std::string cmd, Client &c)
 {
 	try
@@ -360,7 +340,6 @@ void	Server::parse(std::string cmd, Client &c)
 	}
 	catch (IRCError &e)
 	{
-		std::cout << e.what() << std::endl; // to remove, only used for tests.
 		c.addRPLBuffer(e.getReply());
 		if (e.getErr() == ERR_PASSWDMISMATCH)
 			c.terminateConnection();
@@ -368,6 +347,7 @@ void	Server::parse(std::string cmd, Client &c)
 	catch (std::exception &e)
 	{
 		std::cout << "LOG :" << e.what() << std::endl;
+		throw (e);
 	}
 	catch (...)
 	{
