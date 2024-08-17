@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 21:11:59 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:03:24 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	handler(int)
 	g_exiting = 1;
 }
 
-bool	is_number(char *str){
+bool	is_number(char *str)
+{
 	int	i = 0;
 
 	while (str[i]){

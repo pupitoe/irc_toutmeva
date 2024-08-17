@@ -6,13 +6,14 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 15:13:31 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:12:12 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:03:10 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRCSocket.hpp"
 
-int	IRCSocket::ft_setsocket(int const socket_fd) {
+int	IRCSocket::ft_setsocket(int const socket_fd)
+{
 	int	status;
 	int	active_opt;
 
@@ -37,7 +38,8 @@ int	IRCSocket::ft_setsocket(int const socket_fd) {
 	return (status);
 }
 
-int	IRCSocket::ft_socket_bind(int const socket_fd, int port) {
+int	IRCSocket::ft_socket_bind(int const socket_fd, int port)
+{
 	int					status;
 	struct sockaddr_in	address;
 
@@ -62,12 +64,14 @@ int	IRCSocket::ft_socket_bind(int const socket_fd, int port) {
 * List of available port can be found on wikipedia.
 * We can't use values under 1024 because rights.
 * */ 
-bool	IRCSocket::port_is_valid(int p) {
+bool	IRCSocket::port_is_valid(int p)
+{
 	return (p == 194 || (p >= 6665 && p <= 6669));
 }
 
 IRCSocket::IRCSocket(int port)
-	throw (IRCSocket::FailedToCreate, IRCSocket::PortInvalid) {
+	throw (IRCSocket::FailedToCreate, IRCSocket::PortInvalid)
+{
 	if (!this->port_is_valid(port))
 		throw (IRCSocket::PortInvalid());
 	this->_fd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
@@ -80,11 +84,13 @@ IRCSocket::IRCSocket(int port)
 	}
 }
 
-IRCSocket::~IRCSocket(void) {
+IRCSocket::~IRCSocket(void)
+{
 	close(this->_fd);
 }
 
-int IRCSocket::getFd(void) const {
+int IRCSocket::getFd(void) const
+{
 	return (_fd);
 }
 
