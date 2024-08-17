@@ -137,7 +137,7 @@ int	ChannelCommand::part_channel(Client* user_rqts,
 	status = ERR_NOSUCHCHANNEL;
 	if (channelExist(channelName, channels) == true)
 	{
-		status = channels[channelName]->part(user_rqts, reason, false);
+		status = channels[channelName]->part(user_rqts, reason);
 		closeChannel(channelName, channels);
 	}
 	return (status);
