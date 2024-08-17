@@ -6,16 +6,13 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:21:08 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:06:54 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 # define CHANNEL_HPP
 
-# include "Client.hpp"
-# include "utils.hpp"
-# include "IRCError.hpp"
 # include <list>
 # include <string>
 # include <algorithm>
@@ -23,32 +20,15 @@
 # include <ctime>
 # include <sstream>
 
+# include "Client.hpp"
+# include "utils.hpp"
+# include "IRCError.hpp"
+
 # define MODE_ADD 1
 # define MODE_REMOVE 0
 # define LIMIT_USER_IN_CHANNEL 4048
 
 typedef	unsigned int	userlimit;
-
-enum	retChannel
-{
-	ECHAN_BAD_ALLOC = 2,
-	ECHAN_ALREADY_REGISTERED,
-	ECHAN_NOT_REGISTERED,
-	ERR_NOSUCHCHANNEL,
-	ERR_BADCHANNELKEY,
-	ERR_CHANNELISFULL,
-	ERR_INVITEONLYCHAN,
-	ERR_BADCHANMASK,
-	ERR_CHANOPRIVSNEEDED,
-	RPL_TOPIC,
-	RPL_TOPICWHOTIME,
-	RPL_NAMREPLY,
-	RPL_ENDOFNAMES,
-
-	GOOD_REGISTER,
-	GOOD_PART,
-	BOT_NOT_PART
-};
 
 enum	userChannelGrade
 {

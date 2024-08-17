@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:50:18 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:04:23 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static bool	isCommand(std::string str) {
  * 	2b. Else, parse normally.
  * */
 Command::Command(std::string msg) throw (IRCError) {
-	std::cout << "cmd all: " << msg << std::endl << "FIN COMM"<< std::endl;	
 	//Command
 	ft_split_word(msg, this->_args);
 	std::string&	word = this->_args.front();

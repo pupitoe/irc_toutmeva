@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:26:44 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:49:42 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:03:46 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ class Command;
 
 # include <string>
 # include <exception>
+# include <list>
 
 # include <IRCError.hpp>
-# include <Channel.hpp>
 
 # define MESSAGES_LIMIT 512
 

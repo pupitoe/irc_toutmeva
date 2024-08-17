@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:47:40 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:06:27 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CONNEXIONCOMMAND_HPP
 
 # include <string>
+# include <algorithm>
 
 # include "Command.hpp"
 # include "Client.hpp"

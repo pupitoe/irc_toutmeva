@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:11:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:55:32 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:06:43 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 # include <string>
 # include <iostream>
 # include <cstring>
+# include <algorithm>
 
 # include "Command.hpp"
+# include "Channel.hpp"
 # include "utils.hpp"
 
 # define MODE_CHANNEL 0
