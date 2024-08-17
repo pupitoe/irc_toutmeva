@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 22:37:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:29:11 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@ Server::Server(void) : _socket(0) {
 	FD_ZERO(&this->_rfds_read);
 	FD_ZERO(&this->_rfds_write);
 	this->_status_server = SUCCESS;
+}
+
+Server::~Server(void)
+{
+	while (this->_clientList.begin() != this->_clientList.end())
+		this->deletClient(this->_clientList.begin()->first, true);
+	while (this->_channels.begin() != this->_channels.end())
+	{
+		delete (this->_channels.begin()->second);
+		this->_channels.erase(this->_channels.begin());
+	}
 }
 
 Server::Server(char *psw, int port) : _password(psw), _socket(port)
@@ -51,17 +62,6 @@ void	Server::addBot(void) // cause des problem
 		{
 			delete buffer;
 		}
-	}
-}
-
-Server::~Server(void)
-{
-	while (this->_clientList.begin() != this->_clientList.end())
-		this->deletClient(this->_clientList.begin()->first);
-	while (this->_channels.begin() != this->_channels.end())
-	{
-		delete (this->_channels.begin()->second);
-		this->_channels.erase(this->_channels.begin());
 	}
 }
 
@@ -121,7 +121,7 @@ void	Server::searchClient(void)
 	}
 }
 
-void	Server::deletClient(int const fd)
+void	Server::deletClient(int const fd, bool serverTerminate)
 {
 	std::map<std::string, Channel *>::iterator	it_channel;
 	std::map<std::string, Channel *>::iterator	it_old_channel;
@@ -130,7 +130,7 @@ void	Server::deletClient(int const fd)
 		&& this->_clientList.find(fd) != this->_clientList.end())
 	{
 		it_channel = this->_channels.begin();
-		while (it_channel != this->_channels.end())
+		while (!serverTerminate && it_channel != this->_channels.end())
 		{
 			it_old_channel = it_channel;
 			it_channel++;
@@ -257,7 +257,7 @@ void	Server::eraseClient(void)
 		itNext++;
 		if (it->second->getStatusClient() == CS_TERMINATED)
 		{
-			this->deletClient(it->first);
+			this->deletClient(it->first, false);
 		}
 		it = itNext;
 	}
