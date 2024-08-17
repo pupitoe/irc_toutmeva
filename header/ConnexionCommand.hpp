@@ -3,40 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   ConnexionCommand.hpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 21:09:33 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/16 21:03:02 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:47:40 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONNEXIONCOMMAND_HPP
 # define CONNEXIONCOMMAND_HPP
 
-# include <Command.hpp>
-# include <Client.hpp>
-# include <IRCError.hpp>
 # include <string>
+
+# include "Command.hpp"
+# include "Client.hpp"
+# include "IRCError.hpp"
 
 class ConnexionCommand : public Command
 {
-
 	private :
 		std::string	_password;
 
-		void	_testPassword(void) const;
-		void	_testNickname(std::map<int, Client *> clientList);
-		void	_testUsername(Client &c) const;
+		void		_testPassword(void) const;
+		void		_testNickname(std::map<int, Client *> clientList);
+		void		_testUsername(Client &c) const;
 
-		int _execPass(Client &);
-		int _execNick(Client &);
-		int _execUser(Client &);
-		int	_execQuit(Client &);
-		int	ping(Client *client);
-		int	pong(Client *client);
-		void	 ERR_NOORIGIN_MSG(Client *client);
+		int 		_execPass(Client &);
+		int 		_execNick(Client &);
+		int			_execUser(Client &);
+		int			_execQuit(Client &);
+		
+		int			ping(Client *client);
+		int			pong(Client *client);
+		void		ERR_NOORIGIN_MSG(Client *client);
 
-		void	_registration(Client &c) const;
+		void		_registration(Client &c) const;
 
 	public :
 		ConnexionCommand(std::string msg,
