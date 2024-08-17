@@ -6,30 +6,24 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:00:52 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:08:57 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 # include <iostream>
 
-Client::Client(int const client_fd): _fd(client_fd)
+Client::Client(void)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
 	this->_nickName = "*";
 	this->_sendPing = false;
 	this->_bot = false;
-	std::cout << "client created: " << client_fd << std::endl;
 }
 
 Client::~Client(void)
 {}
-
-int		Client::getFd(void) const
-{
-	return (this->_fd);
-}
 
 int	Client::getStatus(void) const 
 {

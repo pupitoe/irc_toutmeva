@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:15 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:58:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:09:49 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class	Bot: public Client
 		std::map<std::string, Morfi*> _morfiGames;
 
 	public:
-		Bot(int const client_fd);
+		Bot(void);
 		~Bot(void);
 
 		void		RPL(std::string const str);

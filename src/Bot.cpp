@@ -6,14 +6,14 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:58:25 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:10:08 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Bot.hpp>
 #include <BotCommand.hpp>
 
-Bot::Bot(int const client_fd): Client(client_fd)
+Bot::Bot(void): Client()
 {
 	this->_nickName = BOT_NAME;
 	this->_bot = true;

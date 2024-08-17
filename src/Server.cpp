@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:42:55 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:10:26 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	Server::addBot(void) // cause des problem
 	int		botFd;
 
 	botFd = -666;
-	buffer = new (std::nothrow) Bot(botFd);
+	buffer = new (std::nothrow) Bot();
 	if (buffer)
 	{
 		try
@@ -62,7 +62,7 @@ void	Server::addClient(int const fd)
 	if (this->_status == SUCCESS
 		&& this->_clientList.find(fd) == this->_clientList.end())
 	{
-		buffer = new (std::nothrow) Client(fd);
+		buffer = new (std::nothrow) Client();
 		if (buffer)
 		{
 			// add the new client fd to the table

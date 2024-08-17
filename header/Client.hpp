@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:34:36 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:08:53 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ enum	CStatus
 class	Client
 {
 	protected:
-		int const	_fd;
 		int			_status_connection;
 
 		std::string	_nickName;
@@ -49,11 +48,10 @@ class	Client
 		bool		_bot;
 
 	public:
-		Client(int const client_fd);
+		Client(void);
 		virtual ~Client(void);
 		
 		int		getStatus(void) const;
-		int		getFd(void) const;
 		void	terminateConnection(void);
 
 		void	setNickName(std::string const& str);
