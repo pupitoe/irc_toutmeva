@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 11:39:58 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 19:06:54 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:21:45 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,16 @@ class	Channel
 
 		int	inLst(Client *client) const;
 		int	inOpLst(Client *client) const;
-		int	inInvitLst(Client *client) const;
+		int	inInviteList(Client *client) const;
 
 		void	RPL_NAMREPLY(Client *client);
 		void	RPL_ENDOFNAMES(Client *client);
 		void	RPL_CREATIONTIME(Client* client_rqst);
 
 
-		void	join_super_user(Client* client_rqst);
-		int	userGrade(std::string const& nickName);
-		int	join_check(Client *client_rqst, std::string const& key);
+		void	joinSuperUser(Client* client_rqst);
+		int		userGrade(std::string const& nickName);
+		int		joinCheck(Client *client_rqst, std::string const& key);
 
 		void	kickActiv(Client* client_rqst, std::string const& userKick,
 			std::string const& comment);
@@ -91,7 +91,7 @@ class	Channel
 
 		int		modeBasic(bool *modeVar, int signe, char typeMode,
 			Client *client_rqst);
-		void	sendInvitClient(Client* client_rqst,
+		void	sendInviteClient(Client* client_rqst,
 			std::string const& userName, std::map<int, Client *>& clientsLst);
 		void	RPL_MODE_L(Client *client_rqst);
 		void	RPL_JOIN_MSG_ERR(Client *client_rqst, std::string const& error,
