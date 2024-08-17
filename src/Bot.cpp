@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 22:57:41 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 15:56:37 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:23:40 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ Bot::~Bot(void)
 		delete this->_morfiGames.begin()->second;
 		this->_morfiGames.erase(this->_morfiGames.begin());
 	}
-	
 }
 
 void	Bot::RPL(std::string const str)

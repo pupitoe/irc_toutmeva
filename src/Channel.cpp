@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 20:47:12 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/16 21:41:06 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/17 15:38:41 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,20 @@ Channel::~Channel(void)
 {
 }
 
-int	Channel::part(Client *client_rqst, std::string const& reason,
-	bool quitServe)
+int	Channel::part(Client *client_rqst, std::string const& reason)
 {
 	std::list<Client *>::iterator	buffer;
 
 	buffer = std::find(this->_client.begin(), this->_client.end(), client_rqst);
 	if (buffer == this->_client.end())
 	{
-		if (quitServe == false)
-			this->ERR_NOTONCHANNEL_MSG(client_rqst);
+		this->ERR_NOTONCHANNEL_MSG(client_rqst);
 		return (ECHAN_NOT_REGISTERED);
 	}
-	if (quitServe == false && (*buffer)->getBot() && this->_client.size() > 1)
+	if ((*buffer)->getBot() && this->_client.size() > 1)
 		return (BOT_NOT_PART);
-	if (quitServe == false)
-		this->sendAll(":" + client_rqst->getInfo() + " PART " + this->_name
-			+ ((reason.empty())? "": " " + reason) + "\n");
+	this->sendAll(":" + client_rqst->getInfo() + " PART " + this->_name
+		+ ((reason.empty())? "": " " + reason) + "\n");
 	this->_client.erase(buffer);
 	buffer = std::find(this->_operators.begin(),
 		this->_operators.end(), client_rqst);
