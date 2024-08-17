@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:37:27 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 21:29:35 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:53:19 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ Client::Client(void)
 {
 	this->_status_connection = CS_NOTHING;
 	this->_lastPing = std::time(NULL);
-	this->_nickName = "*";
+	this->_nickName = "a";
 	this->_sendPing = false;
 	this->_bot = false;
 }

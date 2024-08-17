@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:20:00 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 17:41:34 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 21:56:04 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ std::string	IRCError::_gen_reply(void) const
 	else if (_err == ERR_ERRONEUSNICKNAME)
 		res.append(_str + " " + _str2 + " :Erroneus nickname");
 	else if (_err == ERR_NICKNAMEINUSE)
-		res.append(_str + " " + _str2 + " :Nickname is already in use");
+		res.append(" * " + _str + " :Nickname is already in use");
 	else if (_err == ERR_NOTREGISTERED)
 		res.append(_str + " :You have not registered");
 	else if (_err == ERR_NEEDMOREPARAMS)
