@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 15:14:12 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:41:41 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:44:35 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,13 @@ class IRCError : public std::exception
 		std::string	_err;
 		std::string	_str;
 		std::string	_str2;
-		std::string	_repl;
 
 		IRCError(void);
 
 		std::string	_gen_reply(void) const;
 		
 	public :
-		IRCError(std::string err, std::string str = "", std::string str2 = "");
+		IRCError(std::string err, std::string str = "*", std::string str2 = "*");
 		~IRCError(void) throw();
 		IRCError(IRCError const &);
 
