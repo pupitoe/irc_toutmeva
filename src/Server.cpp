@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 21:46:49 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 22:45:03 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	Server::searchClient(void)
 	
 	if (this->_status == SUCCESS)
 	{
-		new_client = accept(this->_socket.getSocketFd(), NULL, NULL);
+		new_client = accept(this->_socket.getFd(), NULL, NULL);
 		if (new_client != -1)
 			this->addClient(new_client);
 	}
