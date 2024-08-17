@@ -6,14 +6,13 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:13:37 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 17:44:45 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:34:36 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-# include <queue>
 # include <map>
 # include <string>
 # include <ctime>
