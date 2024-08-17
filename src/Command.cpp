@@ -6,7 +6,7 @@
 /*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 20:52:29 by ggiboury          #+#    #+#             */
-/*   Updated: 2024/08/17 18:28:26 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:50:18 by ggiboury         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Command::Command(std::string msg) throw (IRCError) {
 		word[i] = std::toupper(this->_args.front()[i]);
 	}
 	if (!isCommand(word))
-		throw (IRCError(ERR_UNKNOWNERROR)); // ??? Or 472
+		throw (IRCError(ERR_UNKNOWNERROR));
 	this->_type = EMPTY;
 	if (this->_args.size())
 		this->_command_name = word;
