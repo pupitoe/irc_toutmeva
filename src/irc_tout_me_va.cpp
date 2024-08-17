@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   irc_tout_me_va.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 11:59:50 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 18:30:47 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:51:27 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <irc_tout_me_va.hpp>
-
 
 int	g_exiting = 0;
 
@@ -51,10 +50,11 @@ int	main(int argc, char **argv)
 			while (!g_exiting)
 				server.execute();
 		}
-		return (0);
+		return (SUCCESS);
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
+	return (SUCCESS);
 }
