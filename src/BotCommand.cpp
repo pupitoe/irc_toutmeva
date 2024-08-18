@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/18 13:59:12 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/18 14:30:35 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,7 @@ std::string	BotCommand::getLineMorfi(int const *grid, int line) const
 		while (i < 3)
 		{
 			if (grid[i + line * 3])
-			{
 				lineRet[2 + i * 4] = PLACE(grid[i + line * 3]);
-			}
 			i++;
 		}
 	}
