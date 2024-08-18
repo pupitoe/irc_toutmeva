@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   BotCommand.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ggiboury <ggiboury@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 00:43:16 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 21:13:33 by ggiboury         ###   ########.fr       */
+/*   Updated: 2024/08/18 13:59:12 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,9 @@ std::string	BotCommand::getLineMorfi(int const *grid, int line) const
 		while (i < 3)
 		{
 			if (grid[i + line * 3])
+			{
 				lineRet[2 + i * 4] = PLACE(grid[i + line * 3]);
+			}
 			i++;
 		}
 	}
@@ -178,7 +180,6 @@ void	BotCommand::sendRoundHeader(std::string const& gameName, Morfi *morfi,
 		else
 			this->sendPrivmsg(targets, "FINISH WINNER "
 				+ buffer + " FOR " + gameName);
-		this->_cbot->deleteGame(gameName);
 	}
 	else
 		this->sendPrivmsg(targets, "ROUND " + morfi->getUserRound() + " FOR "
@@ -188,6 +189,7 @@ void	BotCommand::sendRoundHeader(std::string const& gameName, Morfi *morfi,
 void	BotCommand::sendRound(std::string const& gameName)
 {
 	int const	*grid;
+	int			gameWin;
 	std::string	targets;
 	Morfi*		morfi = this->_cbot->getMorfi()[gameName];
 
@@ -198,6 +200,9 @@ void	BotCommand::sendRound(std::string const& gameName)
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 0));
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 1));
 	this->sendPrivmsg(targets, this->getLineMorfi(grid, 2));
+	gameWin = morfi->finished();
+	if (gameWin == MO_P1 || gameWin == MO_P2 || gameWin == MO_NULL)
+		this->_cbot->deleteGame(gameName);
 }
 
 bool	BotCommand::morfiCheckCreateGame(void)
