@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/17 22:45:03 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/18 10:18:42 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	Server::clientSendMessage(int const client_fd, Client& client)
 	std::string	buffer;
 
 	buffer = client.getRPL();
-	send(client_fd, buffer.c_str(), buffer.length(), 0);
+	send(client_fd, buffer.c_str(), buffer.length(), MSG_DONTWAIT);
 }
 
 void	Server::clientRecv(void)
