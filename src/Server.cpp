@@ -6,7 +6,7 @@
 /*   By: tlassere <tlassere@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/29 15:17:43 by tlassere          #+#    #+#             */
-/*   Updated: 2024/08/18 10:18:42 by tlassere         ###   ########.fr       */
+/*   Updated: 2024/08/30 00:13:42 by tlassere         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ Server::Server(char *psw, int port) : _password(psw), _socket(port)
 	FD_ZERO(&this->_rfds_error);
 	FD_ZERO(&this->_rfds_read);
 	FD_ZERO(&this->_rfds_write);
+	FD_SET(this->_socket.getFd(), &this->_rfds);
 	this->addBot();
 	this->_status = SUCCESS;
 }
@@ -226,23 +227,25 @@ void	Server::useSelect(void)
 {
 	std::map<int, Client*>::iterator	buffer;
 	struct timeval						tv;
+	int									maxfd;
 	
+	maxfd = this->_socket.getFd();
 	if (this->_clientList.size() > 0)
 	{
 		buffer = this->_clientList.end();
 		buffer--;
-		if (buffer->first >= 0)
-		{
-			tv.tv_sec = 0;
-			tv.tv_usec = 0;
-			this->_rfds_read = this->_rfds;
-			this->_rfds_write = this->_rfds;
-			this->_rfds_error = this->_rfds;
-			// find out who has communicated
-			select(buffer->first + 1, &this->_rfds_read,
-				&this->_rfds_write, &this->_rfds_error, &tv);
-		}
+		maxfd = (maxfd < buffer->first)? buffer->first: maxfd;
 	}
+	tv.tv_sec = 0;
+	tv.tv_usec = 0;
+	this->_rfds_read = this->_rfds;
+	this->_rfds_write = this->_rfds;
+	this->_rfds_error = this->_rfds;
+	// find out who has communicated
+	select(maxfd + 1, &this->_rfds_read,
+		&this->_rfds_write, &this->_rfds_error, &tv);
+	if (FD_ISSET(this->_socket.getFd(), &this->_rfds_read))
+		this->searchClient();
 }
 
 void	Server::parseInput(void) {
@@ -291,7 +294,6 @@ void	Server::userPing(void)
 void	Server::execute(void)
 {
 	this->useSelect();
-	this->searchClient();
 	this->clientRecv();
 	this->parseInput();
 	this->userPing();
